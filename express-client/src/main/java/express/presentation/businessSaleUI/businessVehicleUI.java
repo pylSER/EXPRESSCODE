@@ -24,7 +24,6 @@ import javax.swing.table.TableColumnModel;
 import express.businessLogic.IDKeeper;
 import express.businessLogic.infoManageBL.Vehicle;
 import express.businesslogicService.businessSaleBLService.VehicleBusinessSaleblService;
-import express.data.vehicleAndDriverData.VehicleIO;
 import express.dataService.vehicleAndDriverDataService.VehicleDataService;
 import express.po.UserRole;
 import express.po.VehicleInfoPO;

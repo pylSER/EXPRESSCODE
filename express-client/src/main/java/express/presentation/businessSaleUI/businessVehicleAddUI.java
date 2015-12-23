@@ -16,7 +16,6 @@ import javax.swing.table.DefaultTableModel;
 
 import express.businessLogic.infoManageBL.Vehicle;
 import express.businesslogicService.businessSaleBLService.VehicleBusinessSaleblService;
-import express.data.vehicleAndDriverData.VehicleIO;
 import express.vo.VehicleInfoVO;
 
 public class businessVehicleAddUI extends JDialog{
