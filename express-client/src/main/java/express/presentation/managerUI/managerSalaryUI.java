@@ -1,0 +1,248 @@
+package express.presentation.managerUI;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+
+import express.businessLogic.infoManageBL.SalaryManager;
+import express.businesslogicService.managerBLService.SalaryManagerBLService;
+import express.po.Strategy;
+import express.po.UserRole;
+import express.vo.SalaryStrategyVO;
+
+public class managerSalaryUI extends JPanel {
+
+	private JComboBox positioncb;
+	private JPanel panel;
+	private JPanel[] p;
+	private JTextField[] tf;
+	private JButton ok, exit;
+	private Border border;
+	private boolean complete = true;
+	private SalaryManagerBLService smb;
+
+	public managerSalaryUI() {
+		setLayout(null);
+		this.setBounds(0, 0, 850, 700);
+		this.setBackground(Color.WHITE);
+
+		Font font = new Font("楷体", Font.PLAIN, 18);
+		Font font0 = new Font("楷体", Font.BOLD, 19);
+		Font f = new Font("仿宋", Font.PLAIN, 16);
+		int width = 220;
+		int height = 30;
+
+		String[] pos = { "司机", "快递员", "管理员", "总经理", "财务人员", "中转中心仓库管理人员",
+				"中转中心业务员", "营业厅业务员" };
+		String[] way = { "计次", "提成", "按月" };
+		String[] values = new String[8];
+
+		p = new JPanel[8];
+		JLabel[] l = new JLabel[8];
+		JLabel[] label = new JLabel[8];
+		JLabel[] lab = new JLabel[8];
+		tf = new JTextField[8];
+		Listener lis = new Listener();
+		Foclistener foc = new Foclistener();
+
+		smb = new SalaryManager();
+		ArrayList<SalaryStrategyVO> strarr = smb.getSalaryStrategyList();
+		if (strarr != null) {
+			for (int i = 0; i < 8; i++) {
+				SalaryStrategyVO temp = strarr.get(i);
+				UserRole posit = temp.getPosition();
+				if (posit.equals(UserRole.Admin)) {
+					values[2] = temp.getValue() + "";
+				} else if (posit.equals(UserRole.BusinessSale)) {
+					values[7] = temp.getValue() + "";
+				} else if (posit.equals(UserRole.DeliverMan)) {
+					values[1] = temp.getValue() + "";
+				} else if (posit.equals(UserRole.Driver)) {
+					values[0] = temp.getValue() + "";
+				} else if (posit.equals(UserRole.Financial)
+						|| posit.equals(UserRole.Financial_highest)) {
+					values[4] = temp.getValue() + "";
+				} else if (posit.equals(UserRole.Manager)) {
+					values[3] = temp.getValue() + "";
+				} else if (posit.equals(UserRole.TransCenterRepo)) {
+					values[5] = temp.getValue() + "";
+				} else if (posit.equals(UserRole.TransCenterSale)) {
+					values[6] = temp.getValue() + "";
+				}
+			}
+		}
+
+		panel = new JPanel();
+		panel.setBounds(30, 30, 790, 560);
+		panel.setBorder(BorderFactory.createMatteBorder(4, 0, 0, 0, Color.GRAY));
+		this.add(panel);
+
+		for (int i = 0; i < 8; i++) {
+			p[i] = new JPanel();
+			p[i].setLayout(null);
+			p[i].setBorder(BorderFactory.createMatteBorder(0, 0, 4, 0,
+					Color.GRAY));
+			p[i].setPreferredSize(new Dimension(790, 64));
+
+			l[i] = new JLabel(pos[i]);
+			l[i].setBounds(10, 16, width, height);
+			l[i].setFont(font0);
+			p[i].add(l[i]);
+
+			lab[i] = new JLabel();
+			lab[i].setBounds(580, 16, 100, height);
+			lab[i].setFont(font);
+			label[i] = new JLabel();
+			label[i].setBounds(240, 16, 100, height);
+			label[i].setFont(font);
+
+			if (i == 0) {
+				label[i].setText(way[0]);
+				lab[i].setText("元/次");
+			} else if (i == 1) {
+				label[i].setText(way[1]);
+				lab[i].setText("%");
+			} else {
+				label[i].setText(way[2]);
+				lab[i].setText("元/月");
+			}
+			p[i].add(label[i]);
+			p[i].add(lab[i]);
+
+			tf[i] = new JTextField();
+			tf[i].setBounds(340, 16, width, height);
+			tf[i].setFont(f);
+			tf[i].setText(values[i]);
+			tf[i].addFocusListener(foc);
+			p[i].add(tf[i]);
+
+			panel.add(p[i]);
+
+		}
+
+		ok = new JButton("确认");
+		ok.setBounds(230, 620, 100, 30);
+		ok.addMouseListener(lis);
+		ok.setFont(font);
+		this.add(ok);
+
+		exit = new JButton("取消");
+		exit.setBounds(400, 620, 100, 30);
+		exit.addMouseListener(lis);
+		exit.setFont(font);
+		this.add(exit);
+	}
+
+	private class Foclistener implements FocusListener {
+
+		@Override
+		public void focusGained(FocusEvent e) {
+			// TODO Auto-generated method stub
+			for (int i = 0; i < 8; i++) {
+				if (e.getSource() == tf[i])
+					tf[i].setBorder(border);
+			}
+		}
+
+		@Override
+		public void focusLost(FocusEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+
+	private class Listener implements MouseListener {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			requestFocus();
+			if (e.getSource() == exit) {
+				for (int i = 0; i < 8; i++) {
+					// tf[i].setText("");
+					tf[i].setBorder(border);
+				}
+			} else if (e.getSource() == ok) {
+				for (int i = 0; i < 8; i++) {
+					if (tf[i].getText().isEmpty()) {
+						complete = false;
+						tf[i].setBorder(new LineBorder(Color.RED));
+					}
+				}
+				if (complete) {
+					UserRole[] role = { UserRole.Driver, UserRole.DeliverMan,
+							UserRole.Admin, UserRole.Manager,
+							UserRole.Financial, UserRole.TransCenterRepo,
+							UserRole.TransCenterSale, UserRole.BusinessSale };
+					SalaryStrategyVO[] vo = new SalaryStrategyVO[8];
+					for (int i = 0; i < 8; i++) {
+						if (i == 0)
+							vo[i] = new SalaryStrategyVO(role[i],
+									Strategy.COUNT_BY_TIME,
+									Double.parseDouble(tf[i].getText()));
+						if (i == 1)
+							vo[i] = new SalaryStrategyVO(role[i],
+									Strategy.PERCENT, Double.parseDouble(tf[i]
+											.getText()));
+						else
+							vo[i] = new SalaryStrategyVO(role[i],
+									Strategy.FIXED, Double.parseDouble(tf[i]
+											.getText()));
+						smb.changeSalaryStrategy(vo[i]);
+					}
+					JOptionPane.showMessageDialog(null, "生成成功", "提示",
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(null, "信息未填写完整", "提示",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			complete = true;
+			updateUI();
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+}
