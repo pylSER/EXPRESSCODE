@@ -34,9 +34,9 @@ public interface AdjustRepoBLService {
 	 * @param newPosition
 	 * @return 将旧的位置替换为新的位置
 	 */
-	public boolean adjustRepo(String orgID, RepoPositionVO oldPosition,
-			RepoPositionVO newPosition);
-	
+	public boolean adjustRepo(String orgID, RepoPosition oldPosition,
+			RepoPosition newPosition);
+
 	/**
 	 * 
 	 * @param orgID
@@ -44,7 +44,7 @@ public interface AdjustRepoBLService {
 	 * @return 返回选中区的所有排号，“第n排”
 	 */
 	public String[] getRow(String orgID, Area area);
-	
+
 	/**
 	 * 
 	 * @param orgID
@@ -55,10 +55,33 @@ public interface AdjustRepoBLService {
 	public String[] getPosition(String orgID, Area area, int row);
 
 	/**
+	 * 
+	 * @param orgID
+	 * @param orderID
+	 * @return
+	 */
+	public boolean checkIn(String orgID, String orderID);
+
+	/**
+	 * 
+	 * @param orgID
+	 * @return
+	 */
+	public String[] getAllInDoc(String orgID);
+
+	/**
+	 * 
+	 * @param orgID
+	 * @param orderID
+	 * @return
+	 */
+	public RepoPosition getPosition(String orgID, String orderID);
+
+	/**
 	 * 保存仓库信息
 	 */
 	public void recordRepo();
-	
+
 	/**
 	 * 记录“仓库调整”到日志，并保存仓库信息
 	 */

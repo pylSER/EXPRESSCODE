@@ -39,8 +39,9 @@ public class AdminChangeUI extends JDialog {
 		abs = new Admin();
 		vo = abs.getUser(id);
 		tmodel = tablemodel;
-		Font font = new Font("楷体", Font.PLAIN, 18);
-		Font f = new Font("仿宋", Font.PLAIN, 16);
+		Font font = new Font("幼圆", Font.PLAIN, 20);
+		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
+		Font buttonf = new Font("隶书", Font.PLAIN, 18);
 
 		JListener lis = new JListener();
 
@@ -64,7 +65,15 @@ public class AdminChangeUI extends JDialog {
 //		String[] pos = { "快递员", "管理员", "总经理", "普通财务人员", "最高权限财务人员",
 //		"中转中心仓库管理人员", "中转中心业务员", "营业厅业务员" };
     	posit = vo.getPosition();
+    	System.out.println("vo.getPosition()："+vo.getPosition());
+    	System.out.println("posit:"+posit);
+    	
+    	
     	position = new UserInfoVO().transposition(posit);
+    	
+    	System.out.println("查询时："+position);
+    	
+    	
 //    	if(posit.equals(UserRole.Admin))
 //    		position = "管理员";
 //    	else if(posit.equals(UserRole.BusinessSale))
@@ -83,7 +92,7 @@ public class AdminChangeUI extends JDialog {
 //    		position = "中转中心业务员";
     	
 		positiontf = new JTextField(position);
-		positiontf.setBounds(70, 45, 120, 30);
+		positiontf.setBounds(70, 45, 180, 30);
 		positiontf.setFont(f);
 		positiontf.setEditable(false);
 		this.add(positiontf);
@@ -111,20 +120,20 @@ public class AdminChangeUI extends JDialog {
 		this.add(keytf);
 
 		ok = new JButton("修改");
-		ok.setBounds(10, 170,70, 30);
-		ok.setFont(font);
+		ok.setBounds(10, 170,80, 30);
+		ok.setFont(buttonf);
 		ok.addMouseListener(lis);
 		this.add(ok);
 		
 		detele = new JButton("删除");
-		detele.setBounds(100, 170,70, 30);
-		detele.setFont(font);
+		detele.setBounds(100, 170,80, 30);
+		detele.setFont(buttonf);
 		detele.addMouseListener(lis);
 		this.add(detele);
 
 		exit = new JButton("取消");
-		exit.setBounds(190, 170, 70, 30);
-		exit.setFont(font);
+		exit.setBounds(190, 170, 80, 30);
+		exit.setFont(buttonf);
 		exit.addMouseListener(lis);
 		this.add(exit);
 		

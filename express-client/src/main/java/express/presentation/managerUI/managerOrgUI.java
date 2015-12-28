@@ -48,8 +48,9 @@ public class managerOrgUI extends JPanel {
 
 		int leftside1 = 170;
 		int leftside2 = 270;
-		Font font = new Font("楷体", Font.PLAIN, 18);
-		Font f = new Font("仿宋", Font.PLAIN, 16);
+		Font font = new Font("幼圆", Font.PLAIN, 20);
+		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
+		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
 		Listener listener = new Listener();
 		omg = new OrgForManager();
 
@@ -80,6 +81,8 @@ public class managerOrgUI extends JPanel {
 		table = new JTable(tableModel);
 		table.setRowHeight(40);
 		table.setFont(f);
+		table.getTableHeader().setFont(font);
+		table.getTableHeader().setReorderingAllowed(false);
 		table.addMouseListener(listener);
 		table.setBounds(50, 60, 750, 600);
 
@@ -94,20 +97,20 @@ public class managerOrgUI extends JPanel {
 
 		detele = new JButton("删除");
 		detele.setBounds(50, 10, 100, 40);
-		detele.setFont(font);
+		detele.setFont(buttonfont);
 		detele.addMouseListener(listener);
 		this.add(detele);
 
 		add = new JButton("添加");
 		add.setBounds(190, 10, 100, 40);
 		add.addMouseListener(listener);
-		add.setFont(font);
+		add.setFont(buttonfont);
 		this.add(add);
 
 		change = new JButton("查找");
 		change.setBounds(320, 10, 100, 40);
 		change.addMouseListener(listener);
-		change.setFont(font);
+		change.setFont(buttonfont);
 		this.add(change);
 
 		JLabel idl = new JLabel("机构代号");

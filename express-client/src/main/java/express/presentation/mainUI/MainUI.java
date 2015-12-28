@@ -125,8 +125,8 @@ public class MainUI implements MainUIService {
 		return true;
 	};
 
-	public boolean jumpToFinanceMenuUI(String id) {
-		FinanceMenuUI fianacemenu = new FinanceMenuUI(this, id);
+	public boolean jumpToFinanceMenuUI(String id, boolean high) {
+		FinanceMenuUI fianacemenu = new FinanceMenuUI(this, id, high);
 		pane.add("fianacemenu", fianacemenu);
 		card.show(pane, "fianacemenu");
 		return true;
@@ -156,8 +156,7 @@ public class MainUI implements MainUIService {
 	}
 
 	public boolean jumpToFinanceManageBankAccountUI() {
-		FinanceManageBankAccountUI financeManageBankAccount = new FinanceManageBankAccountUI(
-				this);
+		FinanceManageBankAccountUI financeManageBankAccount = new FinanceManageBankAccountUI();
 		pane1.add("financeManageBankAccount", financeManageBankAccount);
 		card1.show(pane1, "financeManageBankAccount");
 
@@ -165,7 +164,7 @@ public class MainUI implements MainUIService {
 	}
 
 	public boolean jumpToFinancePaymentUI() {
-		FinancePaymentUI financepayment = new FinancePaymentUI(this);
+		FinancePaymentUI financepayment = new FinancePaymentUI();
 		pane1.add("financepayment", financepayment);
 		card1.show(pane1, "financepayment");
 		return true;
@@ -264,7 +263,7 @@ public class MainUI implements MainUIService {
 	}
 
 	public boolean jumpToviewUI() {
-		ViewUI viewPanel = new ViewUI();
+		ViewUI viewPanel = new ViewUI(this);
 		pane1.add("viewPanel", viewPanel);
 		card1.show(pane1, "viewPanel");
 		return true;
@@ -384,14 +383,14 @@ public class MainUI implements MainUIService {
 	}
 
 	public boolean jumpToViewProfitUI() {
-		ViewProfitUI viewProfitPanel = new ViewProfitUI(this);
+		ViewProfitUI viewProfitPanel = new ViewProfitUI();
 		pane1.add("viewProfitPanel", viewProfitPanel);
 		card1.show(pane1, "viewProfitPanel");
 		return true;
 	}
 
 	public boolean jumpToViewOperateUI() {
-		ViewOperateUI viewOperatePanel = new ViewOperateUI(this);
+		ViewOperateUI viewOperatePanel = new ViewOperateUI();
 		pane1.add("viewOperatePanel", viewOperatePanel);
 		card1.show(pane1, "viewOperatePanel");
 		return true;
@@ -401,7 +400,7 @@ public class MainUI implements MainUIService {
 	public boolean jumpTomanagerSalaryUI() {
 		// TODO Auto-generated method stub
 		managerSalaryUI managersalary = new managerSalaryUI();
-		pane1.add("managersalary", managersalary );
+		pane1.add("managersalary", managersalary);
 		card1.show(pane1, "managersalary");
 		return true;
 	}

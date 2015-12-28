@@ -12,12 +12,8 @@ public class OrderController implements DeliverCreateOrderBLService{
 	CheckOrder checker=new CheckOrder();
 	public String addOrder(OrderVO vo){
 		
-		if(checker.isOrderIDAvailable(vo.getOrderID())){
 			return order.addOrder(vo);
-		}
-		else {
-			return "wrong ID";
-		}
+	
 	}
 	
 	

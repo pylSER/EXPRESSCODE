@@ -51,8 +51,9 @@ public class transSaleArrivalDocUI extends JPanel {
 
 		int base = 80;
 
-		Font font = new Font("楷体", Font.PLAIN, 18);
-		Font f = new Font("仿宋", Font.PLAIN, 16);
+		Font font = new Font("幼圆", Font.PLAIN, 20);
+		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
+		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
 		Foclistener foclis = new Foclistener();
 
 		setLayout(null);
@@ -187,11 +188,13 @@ public class transSaleArrivalDocUI extends JPanel {
 
 		button_confirm = new JButton("确定");
 		button_confirm.setBounds(210, 520, 110, 40);
+		button_confirm.setFont(buttonfont);
 		button_confirm.addMouseListener(listener);
 		this.add(button_confirm);
 
 		button_cancel = new JButton("取消");
 		button_cancel.setBounds(400, 520, 110, 40);
+		button_cancel.setFont(buttonfont);
 		button_cancel.addMouseListener(listener);
 		this.add(button_cancel);
 

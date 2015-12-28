@@ -33,7 +33,7 @@ public interface MainUIService {
 	
 	public boolean jumpToStatisticDataUI (String s,int index,String date);
 	
-	public boolean jumpToFinanceMenuUI (String id);
+	public boolean jumpToFinanceMenuUI (String id, boolean high);
 	
 	public boolean jumpToFinanceCreateProfitUI ();
 	

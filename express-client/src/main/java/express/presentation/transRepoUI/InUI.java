@@ -3,6 +3,8 @@ package express.presentation.transRepoUI;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.SimpleDateFormat;
@@ -39,6 +41,7 @@ public class InUI extends JPanel {
 	// private String number, date, arrival, district, row, shelf, position;
 	private DateChooser datechooser;
 	private JComboBox<String> combobox, areaBox, rowBox;
+	private String orgID = IDKeeper.getOrgID();
 
 	public InUI(MainUIService main) {
 
@@ -95,10 +98,11 @@ public class InUI extends JPanel {
 		// textArea4.setWrapStyleWord(true);
 		this.add(areaBox);
 
+		Item i = new Item();
+		areaBox.addItemListener(i);
+
 		AdjustRepoBLService adjust = new RepoController();
-		// TODO Auto-generated method stub
-		// adjust.getRow(IDKeeper.getOrgID(), Area.AIR);
-		String[] rowList = adjust.getRow("0250", Area.AIR);
+		String[] rowList = adjust.getRow(orgID, Area.AIR);
 		rowBox = new JComboBox<String>(rowList);
 		rowBox.setBounds(300, 390, textlength, textwidth);
 		rowBox.setFont(f);
@@ -194,6 +198,10 @@ public class InUI extends JPanel {
 		button_exit.setFont(f1);
 		button_exit.setBackground(Color.WHITE);
 		this.add(button_exit);
+
+		// areaBox.addMouseListener(listener);
+		textArea6.addMouseListener(listener);
+		textArea7.addMouseListener(listener);
 	}
 
 	private boolean checkFilled() {
@@ -228,14 +236,24 @@ public class InUI extends JPanel {
 		CheckOrder check = new CheckOrder();
 		String id = textArea1.getText();
 		boolean correct = check.isOrderIDAvailable(id);
+		boolean repeat = true;
 		if (!correct) {
 			textArea1.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
 
 			JOptionPane.showConfirmDialog(null, "订单号输入错误，应该是10位数字", null,
 					JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
 					null);
+		} else {
+			AdjustRepoBLService adjust = new RepoController();
+			repeat = adjust.checkIn(orgID, id);
+			
+			if(!repeat){
+				JOptionPane.showConfirmDialog(null, "该订单号已经入库", null,
+						JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
+						null);
+			}
 		}
-		return correct;
+		return correct && repeat;
 	}
 
 	private boolean checkDate() {
@@ -253,15 +271,8 @@ public class InUI extends JPanel {
 		}
 	}
 
-	private void addInDoc() {
-
-		String id = textArea1.getText();
-		String city = (String) combobox.getSelectedItem();
+	private Area getArea() {
 		String area = (String) areaBox.getSelectedItem();
-		String row = (String) rowBox.getSelectedItem();
-		String shelf = textArea6.getText();
-		String pos = textArea7.getText();
-		String date = datetf.getText();
 		Area a;
 		switch (area) {
 		case "航运区":
@@ -277,18 +288,33 @@ public class InUI extends JPanel {
 			a = Area.FLEXIBLE;
 			break;
 		}
+		return a;
+	}
+
+	private void addInDoc() {
+
+		String id = textArea1.getText();
+		String city = (String) combobox.getSelectedItem();
+		String area = (String) areaBox.getSelectedItem();
+		String row = (String) rowBox.getSelectedItem();
+		String shelf = textArea6.getText();
+		String pos = textArea7.getText();
+		String date = datetf.getText();
+		Area a = getArea();
+
 		row = row.substring(1, row.length() - 1);
 		int r = Integer.parseInt(row);
 		int s = Integer.parseInt(shelf);
 		int p = Integer.parseInt(pos);
 		RepoPosition position = new RepoPosition(id, a, r, s, p, true);
-		InDocVO vo = new InDocVO(id, date, city, position, IDKeeper.getOrgID());
+		InDocVO vo = new InDocVO(id, date, city, position, orgID);
 
 		AdjustRepoBLService adjust = new RepoController();
-		adjust.setRepoBlock(IDKeeper.getOrgID(), position);
+		adjust.setRepoBlock(orgID, position);
 
 		InDocblService inDoc = new InDoc();
 		boolean succ = inDoc.addInDoc(vo);
+		inDoc.endInDoc();
 		if (succ) {
 			JOptionPane.showConfirmDialog(null, "生 成 成 功！", null,
 					JOptionPane.DEFAULT_OPTION,
@@ -315,6 +341,12 @@ public class InUI extends JPanel {
 					if (checkOrderID()) {
 						if (checkDate()) {
 							addInDoc();
+							textArea1.setBorder(BorderFactory.createLineBorder(
+									Color.GRAY, 1));
+							textArea6.setBorder(BorderFactory.createLineBorder(
+									Color.GRAY, 1));
+							textArea7.setBorder(BorderFactory.createLineBorder(
+									Color.GRAY, 1));
 						}
 					}
 				}
@@ -332,22 +364,33 @@ public class InUI extends JPanel {
 						1));
 			} else if (e.getSource() == button_exit) {
 				m.jumpTotranscenterRepoMenuUI(IDKeeper.getID());
+			} else if (e.getSource() == textArea6 || e.getSource() == textArea7) {
+				String row = (String) rowBox.getSelectedItem();
+				row = row.substring(1, row.length() - 1);
+				if (row.charAt(0) >= '0' && row.charAt(0) <= '9') {
+					int r = Integer.parseInt(row);
+
+					ShowRepoUI show = new ShowRepoUI(orgID, getArea(), r,
+							textArea6, textArea7);
+					show.setVisible(true);
+				} else {
+					JOptionPane.showConfirmDialog(null, "库区没有空余资源", null,
+							JOptionPane.DEFAULT_OPTION,
+							JOptionPane.WARNING_MESSAGE, null);
+				}
 			}
 			repaint();
 		}
 
 		public void mouseEntered(MouseEvent arg0) {
-			// TODO Auto-generated method stub
 
 		}
 
 		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
 
 		}
 
 		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
 
 		}
 
@@ -357,28 +400,29 @@ public class InUI extends JPanel {
 
 	}
 
-	private class Action implements ActionListener {
+	private class Item implements ItemListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == areaBox) {
+		public void itemStateChanged(ItemEvent e) {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
 				String a = (String) areaBox.getSelectedItem();
 				AdjustRepoBLService adjust = new RepoController();
 				// TODO Auto-generated method stub
 				// adjust.getRow(IDKeeper.getOrgID(), Area.AIR);
 				String[] rowList;
 				if (a.equals("航运区")) {
-					rowList = adjust.getRow("0250", Area.AIR);
+					rowList = adjust.getRow(orgID, Area.AIR);
 				} else if (a.equals("铁运区")) {
-					rowList = adjust.getRow("0250", Area.TRAIN);
+					rowList = adjust.getRow(orgID, Area.TRAIN);
 				} else {
-					rowList = adjust.getRow("0250", Area.CAR);
+					rowList = adjust.getRow(orgID, Area.CAR);
 				}
 				rowBox.removeAllItems();
 				for (String s : rowList)
 					rowBox.addItem(s);
+				updateUI();
 			}
-			updateUI();
+
 		}
 
 	}

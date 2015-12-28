@@ -11,10 +11,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import express.businessLogic.userBL.User;
 import express.businesslogicService.signBLService.LogInBLService;
 import express.presentation.mainUI.MainUIService;
+import express.presentation.mainUI.MySideLabel;
 import express.vo.UserInfoSignVO;
 
 public class transSaleMenuUI extends JPanel {
@@ -26,16 +28,15 @@ public class transSaleMenuUI extends JPanel {
 	private JPanel transsalePanel;
 	// 组件：
 	private JLabel username, userid;
-	private JButton button_arrival = new JButton("生成到达单");
-	private JButton button_shipment = new JButton("生成装车单");
-	private JButton button_transfer = new JButton("生成中转单");
-	private JButton button_exit = new JButton("退出");
+	private MySideLabel button_arrival = new MySideLabel("生成到达单");
+	private MySideLabel button_shipment = new MySideLabel("生成装车单");
+	private MySideLabel button_transfer = new MySideLabel("生成中转单");
+	private MySideLabel button_exit = new MySideLabel("退出");
 
-	public transSaleMenuUI(MainUIService m,String id) {
+	public transSaleMenuUI(MainUIService m, String id) {
 
-		int base = 150;
+		int base = 220;
 		int width = 50;
-		Font font = new Font("隶书", Font.PLAIN, 20);
 
 		this.setLayout(null);
 		this.main = m;
@@ -51,36 +52,46 @@ public class transSaleMenuUI extends JPanel {
 
 		JListener listener = new JListener();
 		login = new User();
-		this.id = id;		
+		this.id = id;
 		UserInfoSignVO vo = login.getUserInfo(id);
 		String name = vo.getName();
-		
+
+		JLabel user = new JLabel();
+		ImageIcon userimage = new ImageIcon("picture/headpro.png");
+		user.setIcon(userimage);
+		user.setBounds(0, 10, 150, 80);
+		this.add(user);
+
 		username = new JLabel();
-		username.setBounds(50, 50, 70, 20);
+		username.setBounds(0, 100, 150, 20);
 		username.setText(name);
-		username.setForeground(Color.BLACK);
-		username.setFont(new Font("隶书",Font.PLAIN,18));
-		
+		username.setForeground(Color.WHITE);
+		username.setFont(new Font("苹方 中等", Font.PLAIN, 16));
+		username.setHorizontalAlignment(SwingConstants.CENTER);
+		this.add(username);
+
 		userid = new JLabel();
-		userid.setBounds(40, 75, 100, 20);
+		userid.setBounds(0, 120, 150, 20);
 		userid.setText(id);
-		userid.setForeground(Color.BLACK);
-		userid.setFont(new Font("隶书",Font.PLAIN,18));
+		userid.setForeground(Color.WHITE);
+		userid.setFont(new Font("苹方 中等", Font.PLAIN, 16));
+		userid.setHorizontalAlignment(SwingConstants.CENTER);
+		this.add(userid);
 
 		button_arrival.setBounds(0, base, 150, width);
-		button_arrival.setFont(font);
+
 		button_arrival.addMouseListener(listener);// 加监听
 
 		button_shipment.setBounds(0, base + width, 150, width);
-		button_shipment.setFont(font);
+
 		button_shipment.addMouseListener(listener);// 加监听
 
 		button_transfer.setBounds(0, base + 2 * width, 150, width);
-		button_transfer.setFont(font);
+
 		button_transfer.addMouseListener(listener);// 加监听
 
 		button_exit.setBounds(0, 600, 150, 50);
-		button_exit.setFont(font);
+
 		button_exit.addMouseListener(listener);
 
 		add(button_arrival);
@@ -96,17 +107,21 @@ public class transSaleMenuUI extends JPanel {
 	class JListener implements MouseListener {
 
 		public void mouseClicked(MouseEvent arg0) {
+			restoreAll();
 			if (arg0.getSource() == button_arrival) {
+				button_arrival.whenClickHappend();
 				main.jumpTotransSaleArrivalDocUI();
 				System.out.println("应该跳转到“到达单”界面的");
 
 			} else if (arg0.getSource() == button_shipment) {
+				button_shipment.whenClickHappend();
 				main.jumpTotransSaleShipmentDocUI();
 				System.out.println("应该跳转到“装车单”界面的");
 
 			}
 
 			else if (arg0.getSource() == button_transfer) {
+				button_transfer.whenClickHappend();
 				main.jumpTotransSaleTransterDocUI();
 				System.out.println("应该跳转到“中转单”界面的");
 
@@ -120,12 +135,39 @@ public class transSaleMenuUI extends JPanel {
 		}
 
 		public void mouseEntered(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+			if (arg0.getSource() == button_arrival) {
+				button_arrival.whenMouseOnIt();
+
+			} else if (arg0.getSource() == button_shipment) {
+				button_shipment.whenMouseOnIt();
+
+			}
+
+			else if (arg0.getSource() == button_transfer) {
+				button_transfer.whenMouseOnIt();
+
+			} else if (arg0.getSource() == button_exit) {
+				button_exit.whenMouseOnIt();
+			}
 
 		}
 
 		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+			if (arg0.getSource() == button_arrival) {
+				button_arrival.whenMouseleaveit();
+
+			} else if (arg0.getSource() == button_shipment) {
+				button_shipment.whenMouseleaveit();
+
+			}
+
+			else if (arg0.getSource() == button_transfer) {
+				button_transfer.whenMouseleaveit();
+
+			} else if (arg0.getSource() == button_exit) {
+				button_exit.whenMouseleaveit();
+
+			}
 
 		}
 
@@ -145,6 +187,13 @@ public class transSaleMenuUI extends JPanel {
 		ImageIcon background = new ImageIcon("picture/background.png");
 		g.drawImage(background.getImage(), 0, 0, this.getWidth(),
 				this.getHeight(), this);
+	}
+
+	public void restoreAll() {
+		button_arrival.restore();
+		button_shipment.restore();
+		button_transfer.restore();
+		button_exit.restore();
 	}
 
 }

@@ -56,9 +56,11 @@ public class deliverOrderUI extends JPanel {
 		this.setBounds(0, 0, 850, 700);
 		this.setBackground(Color.WHITE);
 
-		Font font = new Font("楷体", Font.PLAIN, 18);
-		Font font0 = new Font("楷体", Font.BOLD, 20);
-		Font f = new Font("仿宋", Font.PLAIN, 14);
+		Font font0 = new Font("幼圆", Font.BOLD, 20);
+		Font font = new Font("幼圆", Font.PLAIN, 20);
+		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
+		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
+		
 		int width = 100;
 		int height = 30;
 		int width2 = 120;
@@ -108,12 +110,12 @@ public class deliverOrderUI extends JPanel {
 		p[1].add(label_1);
 
 		JLabel label_2 = new JLabel("地址信息:");
-		label_2.setBounds(5, 5, 100, 30);
+		label_2.setBounds(5, 5, 150, 30);
 		label_2.setFont(font0);
 		p[2].add(label_2);
 
 		JLabel lblNewLabel_2 = new JLabel("托运货物信息：");
-		lblNewLabel_2.setBounds(5, 5, 160, 30);
+		lblNewLabel_2.setBounds(5, 5, 200, 30);
 		lblNewLabel_2.setFont(font0);
 		p[3].add(lblNewLabel_2);
 
@@ -191,7 +193,7 @@ public class deliverOrderUI extends JPanel {
 		border = tf[1].getBorder();
 		deliverytype = new JComboBox(type1);
 		deliverytype.setBounds(leftside1 + width, upside + 2 * 2 * height,
-				width, height);
+				width+20, height);
 		deliverytype.setFont(f);
 		p[3].add(deliverytype);
 
@@ -212,13 +214,13 @@ public class deliverOrderUI extends JPanel {
 
 		button_confirm = new JButton("确定");
 		button_confirm.setBounds(250, 650, 100, 30);
-		button_confirm.setFont(font);
+		button_confirm.setFont(buttonfont);
 		button_confirm.addMouseListener(lis);
 		this.add(button_confirm);
 
 		button_cancel = new JButton("取消");
 		button_cancel.setBounds(400, 650, 100, 30);
-		button_cancel.setFont(font);
+		button_cancel.setFont(buttonfont);
 		button_cancel.addMouseListener(lis);
 		this.add(button_cancel);
 	}
@@ -228,7 +230,7 @@ public class deliverOrderUI extends JPanel {
 		@Override
 		public void focusGained(FocusEvent e) {
 			// TODO Auto-generated method stub
-			for(int i = 0;i<19;i++){
+			for(int i = 0;i<16;i++){
 				if(e.getSource()==tf[i])
 					tf[i].setBorder(border);
 			}
@@ -253,7 +255,7 @@ public class deliverOrderUI extends JPanel {
 					tf[i].setBorder(border);
 				}
 			} else if (e.getSource() == button_confirm) {
-				for (int i = 0; i < 19; i++) {
+				for (int i = 0; i < 16; i++) {
 					if (tf[i].getText().isEmpty()) {
 						complete = false;
 						tf[i].setBorder(new LineBorder(Color.RED));
@@ -295,8 +297,8 @@ public class deliverOrderUI extends JPanel {
 					predictTime = dcob.getPredictArrivalTime(startCity, endCity).getTime();
 					vo.setFee(money);
 					vo.setPredictTime(predictTime);
-					tf[17].setText(predictTime);
-					tf[18].setText(money + "");
+					tf[18].setText(predictTime);
+					tf[17].setText(money + "");
 					
 					String result = dcob.addOrder(vo);
 					boolean success = true;

@@ -93,19 +93,12 @@ public class AdjustRepo {
 		}
 	}
 
-	public boolean adjustRepo(String orgID, RepoPositionVO oldPosition,
-			RepoPositionVO newPosition) {
-		RepoPosition oldP = new RepoPosition(oldPosition.getOrderID(),
-				oldPosition.getblock(), oldPosition.getrow(),
-				oldPosition.getshelf(), oldPosition.getposition(), true);
-
-		RepoPosition newP = new RepoPosition(newPosition.getOrderID(),
-				newPosition.getblock(), newPosition.getrow(),
-				newPosition.getshelf(), newPosition.getposition(), true);
+	public boolean adjustRepo(String orgID, RepoPosition oldPosition,
+			RepoPosition newPosition) {
 
 		try {
-			repo.deleteBlock(orgID, oldP);
-			return repo.addBlock(orgID, newP);
+			repo.deleteBlock(orgID, oldPosition);
+			return repo.addBlock(orgID, newPosition);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -200,4 +193,76 @@ public class AdjustRepo {
 		}
 	}
 
+	public boolean checkIn(String orgID, String orderID) {
+		try {
+			RepoInfoPO r = repo.getRepo(orgID);
+
+			if (r == null)
+				return true;
+			ArrayList<RepoPosition> list = r.getRepoPosition();
+
+			if (list == null)
+				return true;
+			else {
+				for (RepoPosition rp : list) {
+					if (rp.getOrderID().equals(orderID))
+						return false;
+				}
+			}
+			return true;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return true;
+		}
+	}
+
+	public String[] getAllInDoc(String orgID) {
+		String[] idList = new String[1];
+		idList[0] = "仓库没有快递入库";
+
+		RepoInfoPO r;
+
+		try {
+			r = repo.getRepo(orgID);
+			if (r == null)
+				return idList;
+
+			ArrayList<RepoPosition> list = r.getRepoPosition();
+
+			if (list != null && list.size() > 0) {
+				idList = new String[list.size()];
+				int index = 0;
+				for (RepoPosition rp : list) {
+					idList[index] = rp.getOrderID();
+					index++;
+				}
+			}
+			return idList;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return idList;
+		}
+	}
+	
+	public RepoPosition getPosition(String orgID, String orderID){
+		try {
+			RepoInfoPO r = repo.getRepo(orgID);
+			if(r == null)
+				return null;
+			ArrayList<RepoPosition> list = r.getRepoPosition();
+			if(list == null)
+				return null;
+			for(RepoPosition rp : list){
+				if(rp.getOrderID().equals(orderID))
+					return rp;
+			}
+			return null;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

@@ -77,8 +77,8 @@ public class RepoController implements AdjustRepoBLService,
 	}
 
 	@Override
-	public boolean adjustRepo(String orgID, RepoPositionVO oldPosition,
-			RepoPositionVO newPosition) {
+	public boolean adjustRepo(String orgID, RepoPosition oldPosition,
+			RepoPosition newPosition) {
 		return adjust.adjustRepo(orgID, oldPosition, newPosition);
 	}
 
@@ -191,6 +191,21 @@ public class RepoController implements AdjustRepoBLService,
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	@Override
+	public boolean checkIn(String orgID, String orderID) {
+		return adjust.checkIn(orgID, orderID);
+	}
+
+	@Override
+	public String[] getAllInDoc(String orgID) {
+		return adjust.getAllInDoc(orgID);
+	}
+
+	@Override
+	public RepoPosition getPosition(String orgID, String orderID) {
+		return adjust.getPosition(orgID, orderID);
 	}
 
 }

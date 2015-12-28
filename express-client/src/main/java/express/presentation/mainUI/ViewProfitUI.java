@@ -26,7 +26,6 @@ import express.vo.ProfitFormVO;
 
 public class ViewProfitUI extends JPanel {
 
-	private MainUIService m;
 	private JButton excel, exit, count;
 	private JTextField time, income, outcome, profit;
 	private JTable profittable;
@@ -35,9 +34,8 @@ public class ViewProfitUI extends JPanel {
 	private String[][] data = null;
 	private DefaultTableModel tableModel;
 
-	public ViewProfitUI(MainUIService main) {
+	public ViewProfitUI() {
 		setLayout(null);
-		m = main;
 		this.setBounds(0, 0, 850, 700);
 		this.setBackground(Color.WHITE);
 
@@ -80,7 +78,7 @@ public class ViewProfitUI extends JPanel {
 		this.add(scrollPane);
 
 		excel = new JButton("导出到Excel");
-		excel.setBounds(250, 590, 150, 40);
+		excel.setBounds(350, 590, 150, 40);
 		excel.setVisible(true);
 		excel.setBackground(Color.WHITE);
 		excel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
@@ -88,14 +86,14 @@ public class ViewProfitUI extends JPanel {
 		excel.addMouseListener(listen);
 		this.add(excel);
 
-		exit = new JButton("返回");
-		exit.setBounds(430, 590, 150, 40);
-		exit.setVisible(true);
-		exit.setBackground(Color.WHITE);
-		exit.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
-		exit.setFont(new Font("隶书", Font.PLAIN, 20));
-		exit.addMouseListener(listen);
-		this.add(exit);
+//		exit = new JButton("返回");
+//		exit.setBounds(430, 590, 150, 40);
+//		exit.setVisible(true);
+//		exit.setBackground(Color.WHITE);
+//		exit.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+//		exit.setFont(new Font("隶书", Font.PLAIN, 20));
+//		exit.addMouseListener(listen);
+//		this.add(exit);
 	}
 
 	private void getProfitForm() {
@@ -139,9 +137,7 @@ public class ViewProfitUI extends JPanel {
 
 		public void mouseClicked(MouseEvent e) {
 			// TODO Auto-generated method stub
-			if (e.getSource() == exit) {
-				m.jumpToFinanceMenuUI(IDKeeper.getID());
-			} else if (e.getSource() == excel) {
+			if (e.getSource() == excel) {
 				int row = profittable.getSelectedRow();
 				if (row < 0) {
 					JOptionPane.showConfirmDialog(null, "未 选 择 表 格！", null,

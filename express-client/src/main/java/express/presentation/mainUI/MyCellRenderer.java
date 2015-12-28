@@ -1,5 +1,6 @@
 package express.presentation.mainUI;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
@@ -75,15 +76,16 @@ public class MyCellRenderer extends DefaultTableCellRenderer {
 
 		String valueStr = (String) value;
 		JLabel label = new JLabel(valueStr);
+		label.setBackground(Color.WHITE);
 		label.setHorizontalAlignment(SwingConstants.CENTER); // 表头标签剧中
 		selectBox.setHorizontalAlignment(SwingConstants.CENTER);// 表头标签剧中
 		selectBox.setBorderPainted(true);
 
 		JComponent component = (column == 0) ? selectBox : label;
 		component.setForeground(tableHeader.getForeground());
-		component.setBackground(tableHeader.getBackground());
-		component.setFont(new Font("楷体", Font.PLAIN, 18));
-		component.setBorder(UIManager.getBorder("TableHeader.cellBorder"));
+//		component.setBackground(Color.WHITE);
+		component.setFont(new Font("幼圆", Font.PLAIN, 18));
+		component.setBorder(UIManager.getBorder("Table.cellBorder"));
 		return component;
 
 	}

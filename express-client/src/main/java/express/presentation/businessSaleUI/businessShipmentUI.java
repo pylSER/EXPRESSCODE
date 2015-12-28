@@ -53,10 +53,11 @@ public class businessShipmentUI extends JPanel {
 		int labelwidth = 30;
 
 		int leftside = 360;
-		int base = 140;
+		int base = 130;
 
-		Font font = new Font("楷体", Font.PLAIN, 18);
-		Font f = new Font("仿宋", Font.PLAIN, 16);
+		Font font = new Font("幼圆", Font.PLAIN, 20);
+		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
+		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
 		bssd = new ShipmentDocBusinessHall();
 		
 		setLayout(null);
@@ -187,7 +188,7 @@ public class businessShipmentUI extends JPanel {
 		this.add(label6);
 
 		JLabel label7 = new JLabel("本次装箱所有订单条形号码");
-		label7.setBounds(200 - 100, base + labelwidth * 12, labellength + 130,
+		label7.setBounds(200 - 120, base + labelwidth * 12, labellength + 150,
 				labelwidth);
 		label7.setFont(font);
 		this.add(label7);
@@ -199,13 +200,13 @@ public class businessShipmentUI extends JPanel {
 
 		button_confirm = new JButton("确定");
 		button_confirm.setBounds(280, 640, 100, 30);
-		button_confirm.setFont(font);
+		button_confirm.setFont(buttonfont);
 		button_confirm.addMouseListener(listener);
 		this.add(button_confirm);
 
 		button_cancel = new JButton("取消");
 		button_cancel.setBounds(480, 640, 100, 30);
-		button_cancel.setFont(font);
+		button_cancel.setFont(buttonfont);
 		button_cancel.addMouseListener(listener);
 		this.add(button_cancel);
 

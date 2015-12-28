@@ -11,6 +11,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
+import org.jvnet.substance.SubstanceLookAndFeel;
+import org.jvnet.substance.button.ClassicButtonShaper;
+import org.jvnet.substance.theme.SubstanceCremeTheme;
+import org.jvnet.substance.watermark.SubstanceBubblesWatermark;
+
 import express.businessLogic.infoManageBL.Admin;
 import express.businessLogic.infoManageBL.StaffForManager;
 import express.businesslogicService.adminBLService.AdminBLService;
@@ -47,8 +52,10 @@ public class SignInUI extends JFrame{
 			main.jumpToadminStartUI(id);
 		}else if(role.equals(UserRole.BusinessSale)){
 			main.jumpTobusinessMenuUI(id);
-		}else if(role.equals(UserRole.Financial)||role.equals(UserRole.Financial_highest)){
-			main.jumpToFinanceMenuUI(id);
+		}else if(role.equals(UserRole.Financial)){
+			main.jumpToFinanceMenuUI(id,false);
+		}else if(role.equals(UserRole.Financial_highest)){
+			main.jumpToFinanceMenuUI(id,true);
 		}else if(role.equals(UserRole.Manager)){
 			main.jumpTomanagerMenuUI(id);
 		}else if(role.equals(UserRole.TransCenterRepo)){
@@ -56,7 +63,7 @@ public class SignInUI extends JFrame{
 		}else if(role.equals(UserRole.TransCenterSale)){
 			main.jumpTotransSaleMenuUI(id);
 		}
-		
+
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setUndecorated(true);
 //		this.setLocation(screenSize.width/2-1200/2,screenSize.height/2-900/2);
