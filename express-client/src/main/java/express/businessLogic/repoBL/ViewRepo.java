@@ -56,7 +56,7 @@ public class ViewRepo {
 		try {
 			RepoInfoPO po = repo.getRepo(orgID);
 
-			if (po == null)
+			if (repo == null)
 				return null;
 			ArrayList<RepoPosition> positionList = po.getRepoPosition();
 

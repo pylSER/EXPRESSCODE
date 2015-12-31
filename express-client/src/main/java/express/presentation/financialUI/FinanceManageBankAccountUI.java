@@ -27,6 +27,7 @@ import express.vo.BankAccountVO;
 
 public class FinanceManageBankAccountUI extends JPanel {
 
+	private MainUIService m;
 	private JButton ok, cancel, find, exit;
 	private JTextField name, income, outcome, profit, search;
 	// private JButton[] buttonList;
@@ -35,9 +36,10 @@ public class FinanceManageBankAccountUI extends JPanel {
 	private String account, inmoney, outmoney;
 	private JPanel bankAccount;
 
-	public FinanceManageBankAccountUI() {
+	public FinanceManageBankAccountUI(MainUIService main) {
 
 		setLayout(null);
+		m = main;
 		this.setBounds(0, 0, 850, 700);
 		this.setBackground(Color.WHITE);
 
@@ -126,14 +128,14 @@ public class FinanceManageBankAccountUI extends JPanel {
 		cancel.addMouseListener(listen);
 		this.add(cancel);
 
-//		exit = new JButton("返回菜单");
-//		exit.setBounds(20, 600, 260, 40);
-//		exit.setVisible(true);
-//		exit.setBackground(Color.WHITE);
-//		exit.setBorder(BorderFactory.createLineBorder(Color.gray, 2));
-//		exit.setFont(new Font("隶书", Font.PLAIN, 18));
-//		exit.addMouseListener(listen);
-//		this.add(exit);
+		exit = new JButton("返回菜单");
+		exit.setBounds(20, 600, 260, 40);
+		exit.setVisible(true);
+		exit.setBackground(Color.WHITE);
+		exit.setBorder(BorderFactory.createLineBorder(Color.gray, 2));
+		exit.setFont(new Font("隶书", Font.PLAIN, 18));
+		exit.addMouseListener(listen);
+		this.add(exit);
 
 		search = new JTextField();
 		search.setBounds(350, 80, 350, 30);
@@ -157,7 +159,6 @@ public class FinanceManageBankAccountUI extends JPanel {
 		bankAccount.setLocation(350, 140);
 		bankAccount.setPreferredSize(new Dimension(435, 490));
 		//bankAccount.setBounds(350, 140, 435, 1000);
-		bankAccount.setOpaque(false);
 		bankAccount.setLayout(null);
 		JScrollPane scrollPane = new JScrollPane(bankAccount);
 		scrollPane.setFont(font);
@@ -165,9 +166,7 @@ public class FinanceManageBankAccountUI extends JPanel {
 		scrollPane.setBorder(BorderFactory.createMatteBorder(3, 0, 3, 0,
 				Color.gray));
 		scrollPane.setBounds(350, 140, 455, 500);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.getViewport().setOpaque(false);
-		scrollPane.setBackground(new Color(250, 235, 215));
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		this.add(scrollPane);
 	}
 
@@ -348,7 +347,9 @@ public class FinanceManageBankAccountUI extends JPanel {
 					income.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 					outcome.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 				}
-			} 
+			} else if (e.getSource() == exit) {
+				m.jumpToFinanceMenuUI(IDKeeper.getID());
+			}
 			repaint();
 		}
 

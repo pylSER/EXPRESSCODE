@@ -19,7 +19,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.SwingConstants;
 
 import express.businessLogic.userBL.User;
 import express.businesslogicService.signBLService.LogInBLService;
@@ -36,8 +35,8 @@ public class FinanceMenuUI extends JPanel {
 	// private JFrame frame;
 	private JPanel mainPanel, pane;
 	private JLabel username, userid;
-	// private JMenuBar viewstatisticbar, createstatisticbar;
-	// private JMenu viewstatisticm, createstatisticm;
+//	private JMenuBar viewstatisticbar, createstatisticbar;
+//	private JMenu viewstatisticm, createstatisticm;
 	private JMenuItem viewprofits, viewoperate, createprofits, createoperate;
 	private JPopupMenu viewstatisticpop, createstatisticpop;
 	private MySideLabel log;
@@ -47,19 +46,17 @@ public class FinanceMenuUI extends JPanel {
 
 	private boolean isclickedv = false;
 	private boolean isclickedc = false;
-	private boolean ishigh;
 
-	public FinanceMenuUI(MainUIService main, String id, boolean high) {
+	public FinanceMenuUI(MainUIService main,String id) {
 		setLayout(null);
 		this.m = main;
 		pane = this;
 		card = new CardLayout();
-		ishigh = high;
 
-		int base = 170;
+		int base = 150;
 		int width = 50;
 		int height = 150;
-		Font font = new Font("苹方 中等", Font.PLAIN, 17);
+		Font font = new Font("苹方", Font.PLAIN, 20);
 
 		mainPanel = new JPanel();
 		mainPanel.setLayout(card);
@@ -69,58 +66,53 @@ public class FinanceMenuUI extends JPanel {
 
 		m.setcard1(card);
 		m.setpane1(mainPanel);
-
+		
 		login = new User();
-		this.id = id;
+		this.id = id;		
 		UserInfoSignVO vo = login.getUserInfo(id);
 		String name = vo.getName();
-
-		JLabel user = new JLabel();
-		ImageIcon userimage = new ImageIcon("picture/headpro.png");
-		user.setIcon(userimage);
-		user.setBounds(0, 10, 150, 80);
-		this.add(user);
-
+		
 		username = new JLabel();
-		username.setBounds(0, 100, 150, 20);
+		username.setBounds(50, 50, 70, 20);
 		username.setText(name);
-		username.setForeground(Color.WHITE);
-		username.setFont(new Font("苹方 中等", Font.PLAIN, 16));
-		username.setHorizontalAlignment(SwingConstants.CENTER);
+		username.setForeground(Color.BLACK);
+		username.setFont(new Font("苹方",Font.PLAIN,18));
 		this.add(username);
-
+		
 		userid = new JLabel();
-		userid.setBounds(0, 120, 150, 20);
+		userid.setBounds(40, 75, 100, 20);
 		userid.setText(id);
-		userid.setForeground(Color.WHITE);
-		userid.setFont(new Font("苹方 中等", Font.PLAIN, 16));
-		userid.setHorizontalAlignment(SwingConstants.CENTER);
+		userid.setForeground(Color.BLACK);
+		userid.setFont(new Font("苹方",Font.PLAIN,18));
 		this.add(userid);
 
 		log = new MySideLabel("查询日志");
 		log.setBounds(0, base, height, width);
+		//log.setFont(font);
 		this.add(log);
 
 		initAccount = new MySideLabel("期初建账");
 		initAccount.setBounds(0, base + width, height, width);
+		//initAccount.setFont(font);
 		this.add(initAccount);
 
 		payment = new MySideLabel("生成付款单");
 		payment.setBounds(0, base + 2 * width, height, width);
+		//payment.setFont(font);
 		this.add(payment);
 
 		sumReceiveDoc = new MySideLabel("合计收款单");
 		sumReceiveDoc.setBounds(0, base + 3 * width, height, width);
 		this.add(sumReceiveDoc);
 
-		if (high) {
-			accountmanage = new MySideLabel("账户管理");
-			accountmanage.setBounds(0, base + 6 * width, height, width);
-			this.add(accountmanage);
-		}
+		accountmanage = new MySideLabel("账户管理");
+		accountmanage.setBounds(0, base + 4 * width, height, width);
+		
+		this.add(accountmanage);
 
 		viewstatistic = new MySideLabel("查看统计分析");
-		viewstatistic.setBounds(0, base + 4 * width, height, width);
+		viewstatistic.setBounds(0, base + 5 * width, height, width);
+		//viewstatistic.setFont(new Font("苹方", Font.PLAIN, 18));
 		this.add(viewstatistic);
 
 		// viewstatisticbar = new JMenuBar();
@@ -131,10 +123,8 @@ public class FinanceMenuUI extends JPanel {
 		viewstatisticpop.setFont(font);
 		viewprofits = new JMenuItem("查看成本收益表");
 		viewprofits.setFont(font);
-		viewprofits.setHorizontalAlignment(SwingConstants.CENTER);
 		viewoperate = new JMenuItem("查看经营状态表");
 		viewoperate.setFont(font);
-		viewoperate.setHorizontalAlignment(SwingConstants.CENTER);
 		viewstatisticpop.add(viewprofits);
 		viewstatisticpop.add(viewoperate);
 		// viewstatisticm.add(viewprofits);
@@ -143,7 +133,8 @@ public class FinanceMenuUI extends JPanel {
 		// this.add(viewstatisticbar);
 
 		createstatistic = new MySideLabel("生成统计分析");
-		createstatistic.setBounds(0, base + 5 * width, height, width);
+		createstatistic.setBounds(0, base + 6 * width, height, width);
+		
 		this.add(createstatistic);
 
 		// createstatisticbar = new JMenuBar();
@@ -154,10 +145,8 @@ public class FinanceMenuUI extends JPanel {
 		createstatisticpop.setFont(font);
 		createprofits = new JMenuItem("生成成本收益表");
 		createprofits.setFont(font);
-		createprofits.setHorizontalAlignment(SwingConstants.CENTER);
 		createoperate = new JMenuItem("生成经营状况表");
 		createoperate.setFont(font);
-		createoperate.setHorizontalAlignment(SwingConstants.CENTER);
 		createstatisticpop.add(createprofits);
 		createstatisticpop.add(createoperate);
 		// createstatisticm.add(createprofits);
@@ -167,6 +156,7 @@ public class FinanceMenuUI extends JPanel {
 
 		exit = new MySideLabel("退出");
 		exit.setBounds(0, 600, height, width);
+		//exit.setFont(font);
 		this.add(exit);
 
 		this.setBounds(0, 0, 1200, 900);
@@ -178,8 +168,7 @@ public class FinanceMenuUI extends JPanel {
 		sumReceiveDoc.addMouseListener(listener);
 		initAccount.addMouseListener(listener);
 		payment.addMouseListener(listener);
-		if (high)
-			accountmanage.addMouseListener(listener);
+		accountmanage.addMouseListener(listener);
 		// viewstatisticm.addMouseListener(listener);
 		// createstatisticm.addMouseListener(listener);
 		viewprofits.addActionListener(actlis);
@@ -192,13 +181,10 @@ public class FinanceMenuUI extends JPanel {
 	}
 
 	private class Listener implements MouseListener {
-
+		
 		public void mouseClicked(MouseEvent e) {
 			// TODO Auto-generated method stub
 			restoreAll();
-			isclickedv = false;
-			viewstatisticpop.setVisible(false);
-			createstatisticpop.setVisible(false);
 			if (e.getSource() == exit) {
 				login.SignOut(id);
 				m.jumpToLogInUI();
@@ -219,99 +205,96 @@ public class FinanceMenuUI extends JPanel {
 				payment.whenClickHappend();
 				m.jumpToFinancePaymentUI();
 
+			} else if (e.getSource() == accountmanage) {
+				accountmanage.whenClickHappend();
+				m.jumpToFinanceManageBankAccountUI();
+
 			} else if (e.getSource() == viewstatistic) {
+				viewstatistic.whenClickHappend();
 				if (!isclickedv) {
 					isclickedv = true;
-					viewstatisticpop.show(pane, 150, 370);
+					viewstatisticpop.show(pane, 150, 400);
 				} else {
 					isclickedv = false;
 					viewstatisticpop.setVisible(false);
 				}
-				
-			} else if (e.getSource() == createstatistic) {				
+			} else if (e.getSource() == createstatistic) {
+				createstatistic.whenClickHappend();
 				if (!isclickedc) {
 					isclickedc = true;
-					createstatisticpop.show(pane, 150, 420);
+					createstatisticpop.show(pane, 150, 450);
 				} else {
 					isclickedc = false;
 					createstatisticpop.setVisible(false);
-				}
-				
-			}
-			if (ishigh) {
-				if (e.getSource() == accountmanage) {
-
-					accountmanage.whenClickHappend();
-					m.jumpToFinanceManageBankAccountUI();
 				}
 			}
 			updateUI();
 		}
 
 		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
 			if (e.getSource() == exit) {
-
+				
 			} else if (e.getSource() == log) {
 				log.whenMouseOnIt();
+				
 
 			} else if (e.getSource() == sumReceiveDoc) {
 				sumReceiveDoc.whenMouseOnIt();
+				
 
 			} else if (e.getSource() == initAccount) {
 				initAccount.whenMouseOnIt();
+			
 
 			} else if (e.getSource() == payment) {
 				payment.whenMouseOnIt();
+			
+
+			} else if (e.getSource() == accountmanage) {
+				accountmanage.whenMouseOnIt();
+				
 
 			} else if (e.getSource() == viewstatistic) {
 				viewstatistic.whenMouseOnIt();
-				viewstatisticpop.show(pane, 150, 370);
-
+				
 			} else if (e.getSource() == createstatistic) {
 				createstatistic.whenMouseOnIt();
-				createstatisticpop.show(pane, 150, 420);
+				
+			}
 
-			}
-			if (ishigh) {
-				if (e.getSource() == accountmanage) {
-					accountmanage.whenMouseOnIt();
-				}
-			}
-			repaint();
 		}
 
 		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
 			if (e.getSource() == exit) {
-
+				
 			} else if (e.getSource() == log) {
 				log.whenMouseleaveit();
+				
 
 			} else if (e.getSource() == sumReceiveDoc) {
 				sumReceiveDoc.whenMouseleaveit();
+				
 
 			} else if (e.getSource() == initAccount) {
 				initAccount.whenMouseleaveit();
+			
 
 			} else if (e.getSource() == payment) {
 				payment.whenMouseleaveit();
+			
+
+			} else if (e.getSource() == accountmanage) {
+				accountmanage.whenMouseleaveit();
+				
 
 			} else if (e.getSource() == viewstatistic) {
 				viewstatistic.whenMouseleaveit();
-				// viewstatisticpop.setVisible(false);
-
+				
 			} else if (e.getSource() == createstatistic) {
 				createstatistic.whenMouseleaveit();
-				// createstatisticpop.setVisible(false);
+				
+			}
 
-			}
-			if (ishigh) {
-				if (e.getSource() == accountmanage) {
-					accountmanage.whenMouseleaveit();
-				}
-			}
-			repaint();
 		}
 
 		public void mousePressed(MouseEvent e) {
@@ -329,39 +312,18 @@ public class FinanceMenuUI extends JPanel {
 
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			restoreAll();
 			if (e.getSource().equals(createprofits)) {
-				createstatistic.whenClickHappend();
 				m.jumpToFinanceCreateProfitUI();
-
 			} else if (e.getSource().equals(createoperate)) {
-				createstatistic.whenClickHappend();
 				m.jumpToFinanceCreateOperateUI();
-
-			} else if (e.getSource().equals(viewprofits)) {
-				viewstatistic.whenClickHappend();
+			}else if (e.getSource().equals(viewprofits)) {
 				m.jumpToViewProfitUI();
-
-			} else if (e.getSource().equals(viewoperate)) {
-				viewstatistic.whenClickHappend();
+			}else if (e.getSource().equals(viewoperate)) {
 				m.jumpToViewOperateUI();
-
 			}
 			updateUI();
 		}
 
-	}
-
-	private void restoreAll() {
-		log.restore();
-		viewstatistic.restore();
-		createstatistic.restore();
-		sumReceiveDoc.restore();
-		initAccount.restore();
-		payment.restore();
-		if (ishigh)
-			accountmanage.restore();
-		exit.restore();
 	}
 
 	public void paintComponent(Graphics g) {
@@ -369,4 +331,16 @@ public class FinanceMenuUI extends JPanel {
 		g.drawImage(background.getImage(), 0, 0, this.getWidth(),
 				this.getHeight(), this);
 	}
+	
+	public void restoreAll(){
+		log.restore();
+		viewstatistic.restore();
+		createstatistic.restore();
+		sumReceiveDoc.restore();
+		initAccount.restore();
+		payment.restore();
+		accountmanage.restore();
+		exit.restore();
+	}
+	
 }

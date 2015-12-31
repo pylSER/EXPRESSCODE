@@ -3,9 +3,8 @@ package express.presentation.mainUI;
 import java.awt.Color;
 import java.awt.Font;
 
-import javax.swing.JButton;
+
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 
 
 public class MySideLabel extends JLabel{
@@ -35,16 +34,19 @@ public class MySideLabel extends JLabel{
 		this.setOpaque(true);
 		this.setSize(150,50);
 		this.setBackground(new Color(96, 161, 198));
-		Font font=new Font("苹方 中等", Font.PLAIN, 17);
+		Font font=new Font("苹方", Font.PLAIN, 15);
 		this.setForeground(Color.white);
 		this.setFont(font);
-		this.setText(contents);	
-		this.setHorizontalAlignment(SwingConstants.CENTER);
+		this.setText("   "+contents);	
 	}
 	
 	public void whenMouseleaveit(){
-		if(!isClicked)
+		if(isClicked){
+		}
+		else {
 			this.setBackground(new Color(96, 161, 198));
+			
+		}
 	}
 	
 	public void restore(){

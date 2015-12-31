@@ -44,9 +44,8 @@ public class managerMemberChangeUI extends JDialog {
 		tmodel = tablemodel;
 		int leftside1 = 10;
 		int leftside2 = 100;
-		Font font = new Font("幼圆", Font.PLAIN, 20);
-		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
-		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
+		Font font = new Font("楷体", Font.PLAIN, 18);
+		Font f = new Font("仿宋", Font.PLAIN, 16);
 
 		smb = new StaffForManager();
 		vo = smb.getUser(id);
@@ -148,19 +147,19 @@ public class managerMemberChangeUI extends JDialog {
 
 		ok = new JButton("修改");
 		ok.setBounds(30, 305, 70, 30);
-		ok.setFont(buttonfont);
+		ok.setFont(font);
 		ok.addMouseListener(lis);
 		this.add(ok);
 		
 		detele = new JButton("删除");
 		detele.setBounds(120, 305,70, 30);
-		detele.setFont(buttonfont);
+		detele.setFont(font);
 		detele.addMouseListener(lis);
 		this.add(detele);
 
 		exit = new JButton("取消");
 		exit.setBounds(210, 305, 70, 30);
-		exit.setFont(buttonfont);
+		exit.setFont(font);
 		exit.addMouseListener(lis);
 		this.add(exit);
 

@@ -11,7 +11,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 import express.businessLogic.userBL.User;
 import express.businesslogicService.signBLService.LogInBLService;
@@ -37,7 +36,7 @@ public class deliverMenuUI extends JPanel{
 		this.main=m;
 		card=new CardLayout();
 
-		int base = 250;
+		int base = 150;
 		int width = 50;		
 		Font font = new Font("隶书",Font.PLAIN,20);
 		
@@ -55,26 +54,18 @@ public class deliverMenuUI extends JPanel{
 		UserInfoSignVO vo = login.getUserInfo(id);
 		String name = vo.getName();
 		
-		JLabel user = new JLabel();
-		ImageIcon userimage = new ImageIcon("picture/headpro.png");
-		user.setIcon(userimage);
-		user.setBounds(0, 10, 150, 80);
-		this.add(user);
-		
 		username = new JLabel();
-		username.setBounds(0, 100, 150, 20);
+		username.setBounds(50, 50, 70, 20);
 		username.setText(name);
-		username.setForeground(Color.WHITE);
-		username.setFont(new Font("苹方 中等",Font.PLAIN,16));
-		username.setHorizontalAlignment(SwingConstants.CENTER);
+		username.setForeground(Color.BLACK);
+		username.setFont(new Font("隶书",Font.PLAIN,18));
 		this.add(username);
 		
 		userid = new JLabel();
-		userid.setBounds(0, 120, 150, 20);
+		userid.setBounds(40, 75, 100, 20);
 		userid.setText(id);
-		userid.setForeground(Color.WHITE);
-		userid.setFont(new Font("苹方 中等",Font.PLAIN,16));
-		userid.setHorizontalAlignment(SwingConstants.CENTER);
+		userid.setForeground(Color.BLACK);
+		userid.setFont(new Font("隶书",Font.PLAIN,18));
 		this.add(userid);
 		
 		JListener listener=new JListener();

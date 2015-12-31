@@ -51,9 +51,8 @@ public class businessReceiveUI extends JPanel {
 		int labelwidth = 40;
 		int base = 50;
 
-		Font font = new Font("幼圆", Font.PLAIN, 20);
-		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
-		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
+		Font font = new Font("楷体", Font.PLAIN, 18);
+		Font f = new Font("仿宋", Font.PLAIN, 16);
 
 		setLayout(null);
 		this.setBounds(0, 0, 850, 700);
@@ -142,12 +141,10 @@ public class businessReceiveUI extends JPanel {
 		button_confirm = new JButton("确定");
 		button_confirm.setBounds(250, 540, 100, 30);
 		button_confirm.addMouseListener(listener);
-		button_confirm.setFont(buttonfont);
 		this.add(button_confirm);
 
 		button_cancel = new JButton("取消");
 		button_cancel.setBounds(420, 540, 100, 30);
-		button_cancel.setFont(buttonfont);
 		button_cancel.addMouseListener(listener);
 		this.add(button_cancel);
 

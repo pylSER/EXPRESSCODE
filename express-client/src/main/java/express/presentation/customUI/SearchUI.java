@@ -30,7 +30,7 @@ public class SearchUI extends JPanel{
 		pane.setBackground(Color.WHITE);
 		searchframe.setSize(820, 550);
 		
-		final JPanel buttonPanel = new JPanel();  
+		final JPanel buttonPanel = new JPanel(); 
 		buttonPanel.setBackground(null);                      // 把背景设置为会  
 		buttonPanel.setOpaque(false); 
 		buttonPanel.setLayout(null);
@@ -50,7 +50,7 @@ public class SearchUI extends JPanel{
 		
 		searchframe.setLocationRelativeTo(null);
 		searchframe.setUndecorated(true);
-		searchframe.setVisible(true);
+		
 		
 		exitbutton.setSize(30,30);
 		exitbutton.setBorderPainted(false);
@@ -65,6 +65,8 @@ public class SearchUI extends JPanel{
 		pane.add(errortip);
 		
 		
+		
+		searchframe.setVisible(true);
 		exitbutton.addActionListener(new ActionListener() {
 			
 			@Override

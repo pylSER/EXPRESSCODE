@@ -43,9 +43,8 @@ public class deliverReceiveUI extends JPanel {
 		this.setBounds(0, 0, 850, 700);
 		this.setBackground(Color.WHITE);
 
-		Font font = new Font("幼圆", Font.PLAIN, 20);
-		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
-		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
+		Font font = new Font("楷体", Font.PLAIN, 18);
+		Font f = new Font("仿宋", Font.PLAIN, 16);
 		Foclistener foc = new Foclistener();
 
 		JLabel label1 = new JLabel("收件人姓名");
@@ -91,13 +90,13 @@ public class deliverReceiveUI extends JPanel {
 
 		button_return = new JButton("确认");
 		button_return.setBounds(220, 520, 100, 30);
-		button_return.setFont(buttonfont);
+		button_return.setFont(font);
 		button_return.addMouseListener(lis);
 		this.add(button_return);
 
 		button_cancel = new JButton("取消");
 		button_cancel.setBounds(400, 520, 100, 30);
-		button_cancel.setFont(buttonfont);
+		button_cancel.setFont(font);
 		button_cancel.addMouseListener(lis);
 		this.add(button_cancel);
 

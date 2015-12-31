@@ -43,11 +43,10 @@ public class managerSalaryUI extends JPanel {
 		setLayout(null);
 		this.setBounds(0, 0, 850, 700);
 		this.setBackground(Color.WHITE);
-;
-		Font font0 = new Font("楷体", Font.BOLD, 20);
-		Font font = new Font("幼圆", Font.PLAIN, 20);
-		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
-		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
+
+		Font font = new Font("楷体", Font.PLAIN, 18);
+		Font font0 = new Font("楷体", Font.BOLD, 19);
+		Font f = new Font("仿宋", Font.PLAIN, 16);
 		int width = 220;
 		int height = 30;
 
@@ -142,13 +141,13 @@ public class managerSalaryUI extends JPanel {
 		ok = new JButton("确认");
 		ok.setBounds(230, 620, 100, 30);
 		ok.addMouseListener(lis);
-		ok.setFont(buttonfont);
+		ok.setFont(font);
 		this.add(ok);
 
 		exit = new JButton("取消");
 		exit.setBounds(400, 620, 100, 30);
 		exit.addMouseListener(lis);
-		exit.setFont(buttonfont);
+		exit.setFont(font);
 		this.add(exit);
 	}
 

@@ -49,8 +49,8 @@ public class businessArrivalUI extends JPanel {
 		int labellength = 100;
 		int labelwidth = 30;
 
-		Font font = new Font("幼圆", Font.PLAIN, 20);
-		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
+		Font font = new Font("楷体", Font.PLAIN, 18);
+		Font f = new Font("仿宋", Font.PLAIN, 16);
 		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
 
 		setLayout(null);
@@ -155,13 +155,13 @@ public class businessArrivalUI extends JPanel {
 		tip2.setForeground(Color.RED);
 
 		button_confirm = new JButton("确定");
-		button_confirm.setBounds(200, 520, 100, 30);
+		button_confirm.setBounds(250, 520, 100, 30);
 		button_confirm.setFont(buttonfont);
 		button_confirm.addMouseListener(listener);
 		this.add(button_confirm);
 
 		button_cancel = new JButton("取消");
-		button_cancel.setBounds(350, 520, 100, 30);
+		button_cancel.setBounds(380, 520, 100, 30);
 		button_cancel.setFont(buttonfont);
 		button_cancel.addMouseListener(listener);
 		this.add(button_cancel);

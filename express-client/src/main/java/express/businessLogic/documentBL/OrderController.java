@@ -11,9 +11,9 @@ public class OrderController implements DeliverCreateOrderBLService{
 	Order order=new Order();
 	CheckOrder checker=new CheckOrder();
 	public String addOrder(OrderVO vo){
-		
-			return order.addOrder(vo);
 	
+			return order.addOrder(vo);
+
 	}
 	
 	

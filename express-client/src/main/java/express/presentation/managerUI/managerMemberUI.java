@@ -22,21 +22,27 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import org.apache.poi.ss.formula.ptg.Deleted3DPxg;
+
 import express.businessLogic.infoManageBL.StaffForManager;
 import express.businesslogicService.managerBLService.StaffManageBLService;
 import express.po.UserRole;
 import express.presentation.mainUI.MainUIService;
+import express.presentation.mainUI.MyOtherGreenLabel;
+import express.presentation.mainUI.MyOtherBlueLabel;
+import express.presentation.mainUI.MyOtherRedLabel;
 import express.presentation.mainUI.MyTableModel;
 import express.presentation.mainUI.TipBlock;
 import express.vo.UserInfoVO;
 
 public class managerMemberUI extends JPanel {
 
-	private JPanel tippane;
 	private JTable table;
 	private MyTableModel tableModel;
 	private TableColumnModel tcm;
-	private JButton detele, add, change;
+	private MyOtherRedLabel detele;
+	private MyOtherBlueLabel add;
+	private MyOtherGreenLabel change;
 	private JTextField idtf;
 	private JComboBox positioncb, gendercb, citycb;
 	private StaffManageBLService smb;
@@ -48,15 +54,14 @@ public class managerMemberUI extends JPanel {
 	private Object[][] data;
 	private String[] header = { "选择", "姓名", "性别", "工号", "职位", "所在单位", "联系方式",
 			"入职日期", "修改" };
-
+	private managerMemberUI curr=this;
 	public managerMemberUI() {
 		setLayout(null);
 		this.setBounds(0, 0, 850, 700);
 		this.setBackground(Color.WHITE);
 
-		Font font = new Font("幼圆", Font.PLAIN, 20);
-		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
-		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
+		Font font = new Font("苹方", Font.PLAIN, 18);
+		Font f = new Font("仿宋", Font.PLAIN, 16);
 		smb = new StaffForManager();
 		JListener listener = new JListener();
 
@@ -114,22 +119,22 @@ public class managerMemberUI extends JPanel {
 		scrollPane.setBounds(50, 60, 750, 600);
 		this.add(scrollPane);
 
-		detele = new JButton("删除");
+		detele = new MyOtherRedLabel("删除");
 		detele.setBounds(50, 10, 100, 40);
-		detele.setFont(buttonfont);
+		//detele.setFont(font);
 		detele.addMouseListener(listener);
 		this.add(detele);
 
-		add = new JButton("添加");
+		add = new MyOtherBlueLabel("添加");
 		add.setBounds(190, 10, 100, 40);
 		add.addMouseListener(listener);
-		add.setFont(buttonfont);
+		add.setFont(font);
 		this.add(add);
 
-		change = new JButton("查找");
+		change = new MyOtherGreenLabel("查找");
 		change.setBounds(320, 10, 100, 40);
 		change.addMouseListener(listener);
-		change.setFont(buttonfont);
+		change.setFont(font);
 		this.add(change);
 
 		JLabel idl = new JLabel("工号");
@@ -141,13 +146,6 @@ public class managerMemberUI extends JPanel {
 		idtf.setBounds(510, 10, 150, 40);
 		idtf.setFont(f);
 		this.add(idtf);
-		
-		tippane=new JPanel();
-		 tippane.setSize(850,40);
-		tippane.setLocation(0, 660);
-		tippane.setBackground(Color.white);
-		tippane.setLayout(null);
-		this.add(tippane);
 	}
 
 	private class JListener implements MouseListener {
@@ -156,6 +154,8 @@ public class managerMemberUI extends JPanel {
 			// TODO Auto-generated method stub
 			if (e.getSource() == detele) {
 				// m.jumpTomanagerMenuUI();
+				//new TipTest("添加成功",curr);
+				new TipBlock("添加成功", curr);
 				for (int i = tableModel.getRowCount() - 1; i >= 0; i--) {
 					if ((boolean) tableModel.getValueAt(i, 0)) {
 						smb.removeUser((String) tableModel.getValueAt(i, 3));
@@ -165,9 +165,6 @@ public class managerMemberUI extends JPanel {
 				smb.endManage();
 //				JOptionPane.showMessageDialog(null, "删除成功", "提示",
 //						JOptionPane.INFORMATION_MESSAGE);
-				TipBlock block=new TipBlock("删除成功");
-				tippane.add(block);
-				block.show();
 
 			} else if (e.getSource() == add) {
 
@@ -240,12 +237,27 @@ public class managerMemberUI extends JPanel {
 		}
 
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-
+			if(e.getSource() == detele){
+				detele.whenPressed();
+			}
+			else if (e.getSource()==change) {
+				change.whenPressed();
+			}
+			else if (e.getSource()==add) {
+				add.whenPressed();
+			}
 		}
 
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
+			if(e.getSource() == detele){
+				detele.setMyColor();
+			}
+			else if (e.getSource()==change) {
+				change.setMyColor();
+			}
+			else if (e.getSource()==add) {
+				add.setMyColor();
+			}
 
 		}
 	}

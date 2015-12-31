@@ -61,8 +61,8 @@ public class FinanceInitAccountUI extends JPanel {
 	private int labelheight = 30;
 	private int tablewidth = 720;
 	private int tableheight = 480;
-	private Font font = new Font("幼圆", Font.PLAIN, 20);
-	private Font f = new Font("方正隶变简体", Font.PLAIN, 18);
+	private Font font = new Font("楷体", Font.PLAIN, 18);
+	private Font f = new Font("仿宋", Font.PLAIN, 16);
 	private OrgInfoManageService orginfo;
 	private String changeunder = "<HTML><U>修改</U></HTML>";
 	private String confirmunder = "<HTML><U>确认</U></HTML>";
@@ -75,7 +75,6 @@ public class FinanceInitAccountUI extends JPanel {
 		setLayout(null);
 		this.setBounds(0, 0, 850, 700);
 		this.setBackground(Color.WHITE);
-		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
 
 		listener = new Listener();
 		foclis = new Foclistener();
@@ -110,17 +109,17 @@ public class FinanceInitAccountUI extends JPanel {
 
 		ok = new JButton("新建");
 		ok.setBounds(180, 640, 110, 30);
-		ok.setFont(buttonfont);
+		ok.setFont(font);
 		this.add(ok);
 
 		detele = new JButton("删除");
 		detele.setBounds(340, 640, 110, 30);
-		detele.setFont(buttonfont);
+		detele.setFont(font);
 		this.add(detele);
 
 		add = new JButton("添加");
 		add.setBounds(500, 640, 110, 30);
-		add.setFont(buttonfont);
+		add.setFont(font);
 		this.add(add);
 
 		ok.addMouseListener(listener);

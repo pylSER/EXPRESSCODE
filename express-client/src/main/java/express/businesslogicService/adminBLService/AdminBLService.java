@@ -15,8 +15,6 @@ public interface AdminBLService {
 	
 	public ArrayList<UserInfoVO> getUnregistered();
 	
-	public ArrayList<UserInfoAdminVO> getAllUser();
-	
 	public boolean changeUserPassword(String id,String password);
 	
 	public void endManage();

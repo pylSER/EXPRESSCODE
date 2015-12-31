@@ -43,9 +43,8 @@ public class managerOrgChangeUI extends JDialog {
 
 		int leftside1 = 10;
 		int leftside2 = 100;
-		Font font = new Font("幼圆", Font.PLAIN, 20);
-		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
-		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
+		Font font = new Font("楷体", Font.PLAIN, 18);
+		Font f = new Font("仿宋", Font.PLAIN, 16);
 		tmodel = tablemodel;
 		omg = new OrgForManager();
 		this.id = id;
@@ -118,19 +117,19 @@ public class managerOrgChangeUI extends JDialog {
 		ok = new JButton("确认");
 		ok.setBounds(30, 225, 70, 30);
 		ok.addMouseListener(lis);
-		ok.setFont(buttonfont);
+		ok.setFont(font);
 		this.add(ok);
 
 		detele = new JButton("删除");
 		detele.setBounds(115, 225,70, 30);
-		detele.setFont(buttonfont);
+		detele.setFont(font);
 		detele.addMouseListener(lis);
 		this.add(detele);
 		
 		exit = new JButton("取消");
 		exit.setBounds(200, 225, 70, 30);
 		exit.addMouseListener(lis);
-		exit.setFont(buttonfont);
+		exit.setFont(font);
 		this.add(exit);
 	}
 

@@ -35,6 +35,7 @@ import express.vo.ReceiveDocVO;
 
 public class ViewOperateUI extends JPanel {
 
+	private MainUIService m;
 	private JPanel[] panelList = null;
 	private JTabbedPane tabpane;
 	private String[][] docs = null;
@@ -55,8 +56,9 @@ public class ViewOperateUI extends JPanel {
 	private Font font = new Font("楷体", Font.PLAIN, 18);
 	private Font f = new Font("仿宋", Font.PLAIN, 16);
 
-	public ViewOperateUI() {
+	public ViewOperateUI(MainUIService main) {
 		setLayout(null);
+		m = main;
 		this.setBounds(0, 0, 850, 700);
 		this.setBackground(Color.WHITE);
 		Font font2 = new Font("楷体", Font.BOLD, 18);
@@ -76,7 +78,7 @@ public class ViewOperateUI extends JPanel {
 		Listener listen = new Listener();
 
 		excel = new JButton("导出到Excel");
-		excel.setBounds(350, 620, 150, 40);
+		excel.setBounds(250, 620, 150, 40);
 		excel.setVisible(true);
 		excel.setBackground(Color.WHITE);
 		excel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
@@ -84,14 +86,14 @@ public class ViewOperateUI extends JPanel {
 		excel.addMouseListener(listen);
 		this.add(excel);
 
-//		exit = new JButton("返回");
-//		exit.setBounds(430, 620, 150, 40);
-//		exit.setVisible(true);
-//		exit.setBackground(Color.WHITE);
-//		exit.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
-//		exit.setFont(new Font("隶书", Font.PLAIN, 20));
-//		exit.addMouseListener(listen);
-//		this.add(exit);
+		exit = new JButton("返回");
+		exit.setBounds(430, 620, 150, 40);
+		exit.setVisible(true);
+		exit.setBackground(Color.WHITE);
+		exit.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+		exit.setFont(new Font("隶书", Font.PLAIN, 20));
+		exit.addMouseListener(listen);
+		this.add(exit);
 
 	}
 
@@ -209,6 +211,8 @@ public class ViewOperateUI extends JPanel {
 				} else {
 					exportExcel(index);
 				}
+			} else if (e.getSource() == exit) {
+				m.jumpToFinanceMenuUI(IDKeeper.getID());
 			}
 			updateUI();
 		}

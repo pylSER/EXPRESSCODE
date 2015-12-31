@@ -2,7 +2,6 @@ package express.presentation.managerUI;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -75,17 +74,15 @@ public class managerExamDocUI extends JPanel {
 		this.setBackground(Color.WHITE);
 
 		panel = new JPanel();
-//		panel.setLayout(null);
-//		panel.setBounds(50, 60, 750, 600);
+		panel.setLayout(null);
+		panel.setBounds(50, 60, 750, 600);
 
 		JScrollPane scrollPane = new JScrollPane(panel);
 		scrollPane.setBounds(50, 60, 750, 600);
 		this.add(scrollPane);
 
-		Font font = new Font("幼圆", Font.PLAIN, 20);
-		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
-		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
-		
+		Font font = new Font("楷体", Font.PLAIN, 18);
+		Font f = new Font("仿宋", Font.PLAIN, 16);
 		Listener listener = new Listener();
 		examdoc = new ExamDocument();
 		table = new JTable[11];
@@ -240,15 +237,14 @@ public class managerExamDocUI extends JPanel {
 			table[i].addMouseListener(listener);
 			headerren[i] = new MyCellRenderer(table[i],tableModel[i]);
 			table[i].getTableHeader().setDefaultRenderer(headerren[i]);
-			table[i].getTableHeader().setFont(font);
 			sp[i] = new JScrollPane(table[i]);
-			sp[i].setPreferredSize(new Dimension(750,590));
+			sp[i].setBounds(0, 0, 750, 600);
 			panel.add(sp[i]);
 		}
-		panel.setPreferredSize(new Dimension(750,600*11));
+
 		exam = new JButton("审批");
 		exam.setBounds(340, 10, 100, 30);
-		exam.setFont(buttonfont);
+		exam.setFont(font);
 		exam.addMouseListener(listener);
 		this.add(exam);
 

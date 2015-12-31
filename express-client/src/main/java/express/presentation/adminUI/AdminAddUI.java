@@ -34,9 +34,8 @@ public class AdminAddUI extends JDialog {
 		this.setLocationRelativeTo(null);
 
 		tmodel = tablemodel;
-		Font font = new Font("幼圆", Font.PLAIN, 20);
-		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
-		Font buttonf = new Font("隶书", Font.PLAIN, 18);
+		Font font = new Font("楷体", Font.PLAIN, 18);
+		Font f = new Font("仿宋", Font.PLAIN, 16);
 
 		String[] pos = { "快递员", "管理员", "总经理", "普通财务人员", "最高权限财务人员",
 				"中转中心仓库管理人员", "中转中心业务员", "营业厅业务员" };
@@ -58,7 +57,7 @@ public class AdminAddUI extends JDialog {
 		this.add(positionl);
 
 		positioncb = new JComboBox(pos);
-		positioncb.setBounds(70, 45, 180, 30);
+		positioncb.setBounds(70, 45, 120, 30);
 		positioncb.setFont(f);
 		this.add(positioncb);
 
@@ -84,13 +83,13 @@ public class AdminAddUI extends JDialog {
 
 		ok = new JButton("确认");
 		ok.setBounds(30, 170, 100, 30);
-		ok.setFont(buttonf);
+		ok.setFont(font);
 		ok.addMouseListener(lis);
 		this.add(ok);
 
 		exit = new JButton("取消");
 		exit.setBounds(150, 170, 100, 30);
-		exit.setFont(buttonf);
+		exit.setFont(font);
 		exit.addMouseListener(lis);
 		this.add(exit);
 	}
@@ -107,9 +106,6 @@ public class AdminAddUI extends JDialog {
 				id = idtf.getText();
 				key = keytf.getText();
 				Object[] temp = { false, name, position, id, key };
-				
-				System.out.println("添加时："+position);
-				
 				values = temp;
 				
 				if (name.isEmpty() || id.isEmpty() || key.isEmpty()) {
@@ -117,12 +113,7 @@ public class AdminAddUI extends JDialog {
 							JOptionPane.ERROR_MESSAGE);
 				} else {	
 					
-					posit = UserRole.values()[positioncb.getSelectedIndex()+1];
-					
-					System.out.println("positioncb.getSelectedIndex()："+positioncb.getSelectedIndex());
-					
-					
-					
+					posit = UserRole.values()[positioncb.getSelectedIndex()];
 					UserInfoAdminVO vo = new UserInfoAdminVO(name, id, posit,
 							key);
 					AdminBLService abs = new Admin();

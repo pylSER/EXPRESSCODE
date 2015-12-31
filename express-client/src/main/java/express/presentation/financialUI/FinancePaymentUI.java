@@ -38,7 +38,8 @@ import express.vo.PaymentDocVO;
 
 public class FinancePaymentUI extends JPanel {
 
-	private JButton ok, exit, cancel;
+	private MainUIService m;
+	private JButton ok, exit, cancel, add;
 	private JTextField date, money, name;
 	private JComboBox<String> account, entry;
 	private JTextArea comment;
@@ -53,8 +54,9 @@ public class FinancePaymentUI extends JPanel {
 	// private String date, person, account, rentyear, trackingnum, wagemonth;
 	// private double money;
 
-	public FinancePaymentUI() {
+	public FinancePaymentUI(MainUIService main) {
 		setLayout(null);
+		m = main;
 		this.setBounds(0, 0, 850, 700);
 		this.setBackground(Color.WHITE);
 
@@ -216,23 +218,23 @@ public class FinancePaymentUI extends JPanel {
 		cancel.setFont(new Font("隶书", Font.PLAIN, 20));
 		this.add(cancel);
 
-//		exit = new JButton("返回菜单");
-//		exit.setBackground(Color.WHITE);
-//		// exit.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 0,
-//		// Color.GRAY));
-//		exit.setBounds(5, 650, 335, 35);
-//		exit.setFont(new Font("隶书", Font.PLAIN, 20));
-//		this.add(exit);
+		exit = new JButton("返回菜单");
+		exit.setBackground(Color.WHITE);
+		// exit.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 0,
+		// Color.GRAY));
+		exit.setBounds(5, 650, 335, 35);
+		exit.setFont(new Font("隶书", Font.PLAIN, 20));
+		this.add(exit);
 
 		// add.addMouseListener(listen);
 		ok.addMouseListener(listen);
 		cancel.addMouseListener(listen);
-//		exit.addMouseListener(listen);
+		exit.addMouseListener(listen);
 
 		String cd = time.substring(5, 7);
 		if (cd.charAt(0) == '0')
 			cd = cd.substring(1, 2);
-		JLabel title2 = new JLabel(cd + "月份应付款提示", JLabel.CENTER);
+		JLabel title2 = new JLabel(cd + "月份应付款记录", JLabel.CENTER);
 		title2.setFont(new Font("楷体", Font.PLAIN, 20));
 		title2.setBounds(390, 20, 410, 30);
 		title2.setBackground(Color.WHITE);
@@ -244,18 +246,15 @@ public class FinancePaymentUI extends JPanel {
 		tip.setLocation(390, 50);
 		tip.setPreferredSize(new Dimension(415, 630));
 		// bankAccount.setBounds(350, 140, 435, 1000);
-		tip.setOpaque(false);
 		tip.setLayout(null);
 		JScrollPane scrollPane = new JScrollPane(tip);
 		scrollPane.setFont(font);
 		scrollPane.setBackground(Color.white);
 		scrollPane.setBorder(BorderFactory.createMatteBorder(3, 0, 3, 0,
 				Color.gray));
-		scrollPane.getViewport().setOpaque(false);
-		scrollPane.setBackground(new Color(250, 235, 215));
 		scrollPane.setBounds(390, 50, 435, 635);
 		scrollPane
-				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		this.add(scrollPane);
 
 		init();
@@ -341,10 +340,8 @@ public class FinancePaymentUI extends JPanel {
 			for (int i = 0; i < list.size(); i++) {
 				PaymentDocVO vo = list.get(i);
 				PaymentItem payment = vo.getPaymentList();
-				JTextArea prompt = new JTextArea();
+				JLabel prompt = new JLabel();
 				prompt.setBounds(5, i * 90, 400, 90);
-				prompt.setEditable(false);
-				prompt.setOpaque(false);
 				String text = "付款日期：  " + payment.getDate() + "\n" + "付款金额：  "
 						+ payment.getSum() + "\n" + "条目：  "
 						+ payment.getEntry() + "\n" + "备注：  " + payment.getComment();
@@ -440,7 +437,9 @@ public class FinancePaymentUI extends JPanel {
 
 		public void mouseClicked(MouseEvent e) {
 			// TODO Auto-generated method stub
-		 if (e.getSource() == ok) {
+			if (e.getSource() == exit) {
+				m.jumpToFinanceMenuUI(IDKeeper.getID());
+			} else if (e.getSource() == ok) {
 				if (check()) {
 					if(correct()){
 						addPayment();

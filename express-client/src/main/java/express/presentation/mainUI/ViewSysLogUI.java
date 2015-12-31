@@ -30,8 +30,8 @@ public class ViewSysLogUI extends JPanel{
 		this.setBounds(0, 0, 850, 700);
 		this.setBackground(Color.WHITE);
 		
-		Font font = new Font("幼圆", Font.PLAIN, 20);
-		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
+		Font font = new Font("楷体",Font.PLAIN,20);
+		Font f = new Font("仿宋",Font.PLAIN,18);
 		
 		String[] tableheader = {"操作","时间"};
 		String[][] data = getoperationdata() ;
@@ -39,7 +39,7 @@ public class ViewSysLogUI extends JPanel{
 		
 		tableModel = new MyTableModel(data, tableheader, typeArray);
 		logtable = new JTable(tableModel);
-		logtable.setRowHeight(50);
+		logtable.setRowHeight(40);
 		logtable.setFont(f);
 		logtable.setBounds(100, 50, 650, 550);	
 		logtable.getTableHeader().setFont(font);
@@ -47,9 +47,9 @@ public class ViewSysLogUI extends JPanel{
 		
 		TableColumnModel columns = logtable.getColumnModel();
 		TableColumn column1 = columns.getColumn(0); 
-		column1.setPreferredWidth(220);
+		column1.setPreferredWidth(150);
 		TableColumn column2 = columns.getColumn(1); 
-		column2.setPreferredWidth(430);
+		column2.setPreferredWidth(500);
 //		logtable.setBorder(BorderFactory.createEtchedBorder());
 		
 		scrollPane = new JScrollPane(logtable); 

@@ -50,9 +50,8 @@ public class transSaleShipmentDocUI extends JPanel {
 		int labellength = 150;
 		int labelwidth = 30;
 
-		Font font = new Font("幼圆", Font.PLAIN, 20);
-		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
-		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
+		Font font = new Font("楷体", Font.PLAIN, 18);
+		Font f = new Font("仿宋", Font.PLAIN, 16);
 
 		setLayout(null);
 		this.setBounds(0, 0, 850, 700);
@@ -179,14 +178,14 @@ public class transSaleShipmentDocUI extends JPanel {
 
 		button_confirm = new JButton("确定");
 		button_confirm.setBounds(250, 605, 100, 30);
-		button_confirm.setFont(buttonfont);
+		button_confirm.setFont(font);
 		button_confirm.addMouseListener(listener);
 		this.add(button_confirm);
 
 		button_cancel = new JButton("取消");
 		button_cancel.setBounds(400, 605, 100, 30);
 		button_cancel.addMouseListener(listener);
-		button_cancel.setFont(buttonfont);
+		button_cancel.setFont(font);
 		this.add(button_cancel);
 	}
 
