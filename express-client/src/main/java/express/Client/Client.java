@@ -6,11 +6,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
-import org.jvnet.substance.SubstanceLookAndFeel;
-import org.jvnet.substance.button.ClassicButtonShaper;
-import org.jvnet.substance.theme.SubstanceCremeTheme;
-import org.jvnet.substance.theme.SubstanceTerracottaTheme;
-import org.jvnet.substance.watermark.SubstanceBubblesWatermark;
 
 import express.presentation.userUI.LoginUI;
 import express.rmi.RMIClient;
@@ -21,7 +16,7 @@ public class Client{
 	public static void main(String[] args){
 		
 		try {
-			javax.swing.UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");  
+			 
 //			UIManager.setLookAndFeel(new SubstanceLookAndFeel());
 ////			JFrame.setDefaultLookAndFeelDecorated(true);
 ////			JDialog.setDefaultLookAndFeelDecorated(true);

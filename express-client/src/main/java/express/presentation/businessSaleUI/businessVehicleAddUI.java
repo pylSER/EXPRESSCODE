@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
 
 import express.businessLogic.infoManageBL.Vehicle;
 import express.businesslogicService.businessSaleBLService.VehicleBusinessSaleblService;
-import express.data.vehicleAndDriverData.VehicleIO;
+
 import express.presentation.mainUI.MyOtherBlueLabel;
 import express.presentation.mainUI.MyOtherRedLabel;
 import express.vo.VehicleInfoVO;

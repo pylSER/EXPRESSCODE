@@ -11,11 +11,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-import org.jvnet.substance.SubstanceLookAndFeel;
-import org.jvnet.substance.button.ClassicButtonShaper;
-import org.jvnet.substance.theme.SubstanceCremeTheme;
-import org.jvnet.substance.watermark.SubstanceBubblesWatermark;
-
 import express.businessLogic.IDKeeper;
 import express.businessLogic.infoManageBL.Admin;
 import express.businessLogic.infoManageBL.StaffForManager;
