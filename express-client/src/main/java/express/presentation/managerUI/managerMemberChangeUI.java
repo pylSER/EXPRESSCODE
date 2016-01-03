@@ -10,6 +10,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
@@ -17,10 +18,17 @@ import express.businessLogic.infoManageBL.StaffForManager;
 import express.businesslogicService.managerBLService.StaffManageBLService;
 import express.po.UserRole;
 import express.presentation.mainUI.DateChooser;
+import express.presentation.mainUI.MyOtherBlueLabel;
+import express.presentation.mainUI.MyOtherGreenLabel;
+import express.presentation.mainUI.MyOtherRedLabel;
+import express.presentation.mainUI.TipBlock;
 import express.vo.UserInfoVO;
 
 public class managerMemberChangeUI extends JDialog {
 
+	
+	
+	private JPanel tippane;
 	private JTextField nametf, idtf, phonetf, datetf;
 	private JLabel tipphone;
 	private JComboBox gendercb, positioncb, citycb;
@@ -28,7 +36,9 @@ public class managerMemberChangeUI extends JDialog {
 	private UserRole posit;
 	private boolean sex;
 	private DateChooser datechooser;
-	private JButton ok, exit, detele;
+	private MyOtherBlueLabel ok;
+	private MyOtherGreenLabel exit;
+	private MyOtherRedLabel detele;
 	private DefaultTableModel tmodel;
 	private StaffManageBLService smb;
 	private UserInfoVO vo;
@@ -39,13 +49,16 @@ public class managerMemberChangeUI extends JDialog {
 		this.setLayout(null);
 		this.setSize(400, 400);
 		this.setLocationRelativeTo(null);
-
+		this.getContentPane().setBackground(Color.white);
+		
+		
 		this.id = id;
 		tmodel = tablemodel;
 		int leftside1 = 10;
 		int leftside2 = 100;
-		Font font = new Font("楷体", Font.PLAIN, 18);
-		Font f = new Font("仿宋", Font.PLAIN, 16);
+		Font font = new Font("幼圆", Font.PLAIN, 20);
+		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
+		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
 
 		smb = new StaffForManager();
 		vo = smb.getUser(id);
@@ -145,23 +158,30 @@ public class managerMemberChangeUI extends JDialog {
 		datechooser.setBounds(leftside2 + 110, 240, 40, 40);
 		this.add(datechooser);
 
-		ok = new JButton("修改");
+		ok = new MyOtherBlueLabel("修改");
 		ok.setBounds(30, 305, 70, 30);
-		ok.setFont(font);
 		ok.addMouseListener(lis);
 		this.add(ok);
 		
-		detele = new JButton("删除");
+		detele = new MyOtherRedLabel("删除");
 		detele.setBounds(120, 305,70, 30);
-		detele.setFont(font);
 		detele.addMouseListener(lis);
 		this.add(detele);
 
-		exit = new JButton("取消");
+		
+		exit = new MyOtherGreenLabel("取消");
 		exit.setBounds(210, 305, 70, 30);
-		exit.setFont(font);
 		exit.addMouseListener(lis);
 		this.add(exit);
+		
+		tippane=new JPanel();
+		 tippane.setSize(850,40);
+		tippane.setLocation(0, 660);
+		tippane.setBackground(Color.white);
+		tippane.setLayout(null);
+		this.add(tippane);
+		
+		
 
 	}
 
@@ -204,8 +224,11 @@ public class managerMemberChangeUI extends JDialog {
 						tmodel.setValueAt(city, i, 5);
 						tmodel.setValueAt(phone, i, 6);
 						tmodel.setValueAt(date, i, 7);
-						JOptionPane.showMessageDialog(null, "信息修改成功", "提示",
-								JOptionPane.INFORMATION_MESSAGE);
+						
+						TipBlock block=new TipBlock("修改成功");
+						tippane.add(block);
+						block.show();
+						block=null;
 						break;
 					}
 				}
@@ -216,8 +239,10 @@ public class managerMemberChangeUI extends JDialog {
 						tmodel.removeRow(i);
 						smb.removeUser(id);
 						smb.endManage();
-						JOptionPane.showMessageDialog(null, "删除成功", "提示",
-								JOptionPane.INFORMATION_MESSAGE);
+						TipBlock block=new TipBlock("删除成功");
+						tippane.add(block);
+						block.show();
+						block=null;
 						break;
 					}
 				}
@@ -239,13 +264,25 @@ public class managerMemberChangeUI extends JDialog {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
+			if(e.getSource()==ok){
+				ok.whenPressed();
+			}else if (e.getSource()==exit) {
+				exit.whenPressed();
+			}else if (e.getSource()==detele) {
+				detele.whenPressed();
+			}
 
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
+			if(e.getSource()==ok){
+				ok.setMyColor();
+			}else if (e.getSource()==exit) {
+				exit.setMyColor();
+			}else if (e.getSource()==detele) {
+				detele.setMyColor();
+			}
 
 		}
 

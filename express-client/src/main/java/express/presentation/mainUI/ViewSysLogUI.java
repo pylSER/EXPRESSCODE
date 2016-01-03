@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -25,13 +26,13 @@ public class ViewSysLogUI extends JPanel{
 	private MyTableModel tableModel;
     private JScrollPane scrollPane; 
 	
-	public ViewSysLogUI(){
+	public ViewSysLogUI(MainUIService main){
 		setLayout(null);
 		this.setBounds(0, 0, 850, 700);
 		this.setBackground(Color.WHITE);
 		
-		Font font = new Font("楷体",Font.PLAIN,20);
-		Font f = new Font("仿宋",Font.PLAIN,18);
+		Font font = new Font("幼圆", Font.PLAIN, 20);
+		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
 		
 		String[] tableheader = {"操作","时间"};
 		String[][] data = getoperationdata() ;
@@ -39,22 +40,31 @@ public class ViewSysLogUI extends JPanel{
 		
 		tableModel = new MyTableModel(data, tableheader, typeArray);
 		logtable = new JTable(tableModel);
-		logtable.setRowHeight(40);
+		logtable.setRowHeight(50);
 		logtable.setFont(f);
 		logtable.setBounds(100, 50, 650, 550);	
 		logtable.getTableHeader().setFont(font);
 		logtable.getTableHeader().setReorderingAllowed(false);
+		logtable.getTableHeader().setBorder(BorderFactory.createMatteBorder(1, 1, 2, 1, Color.LIGHT_GRAY));
+		logtable.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, Color.LIGHT_GRAY));
 		
 		TableColumnModel columns = logtable.getColumnModel();
 		TableColumn column1 = columns.getColumn(0); 
-		column1.setPreferredWidth(150);
+		column1.setPreferredWidth(220);
 		TableColumn column2 = columns.getColumn(1); 
-		column2.setPreferredWidth(500);
+		column2.setPreferredWidth(430);
 //		logtable.setBorder(BorderFactory.createEtchedBorder());
 		
 		scrollPane = new JScrollPane(logtable); 
 		scrollPane.setFont(font);
-		scrollPane.setBounds(100, 50, 650, 550);
+		scrollPane.setBounds(95, 50, 655, 550);
+		MyScrollPane render = new MyScrollPane();
+		scrollPane.getVerticalScrollBar().setUI(render);
+		scrollPane.setOpaque(false);
+		scrollPane.getViewport().setOpaque(false);
+		scrollPane.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 1, Color.LIGHT_GRAY));
+		render.setscrollbar();
+		updateUI();
 		this.add(scrollPane);
 		
 	}

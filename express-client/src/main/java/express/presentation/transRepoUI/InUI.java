@@ -3,6 +3,8 @@ package express.presentation.transRepoUI;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.SimpleDateFormat;
@@ -27,18 +29,29 @@ import express.po.Area;
 import express.po.RepoPosition;
 import express.presentation.mainUI.DateChooser;
 import express.presentation.mainUI.MainUIService;
+import express.presentation.mainUI.MyOtherBlueLabel;
+import express.presentation.mainUI.MyOtherGreenLabel;
+import express.presentation.mainUI.MyOtherOrangeLabel;
+import express.presentation.mainUI.TipBlock;
+import express.presentation.mainUI.TipBlockEmpty;
+import express.presentation.mainUI.TipBlockError;
 import express.vo.InDocVO;
 
 public class InUI extends JPanel {
 
 	// private JButton button_afterin;
 	// private JButton button_return;
-	private JButton button_confirm, button_cancel, button_exit;
+
+	private JPanel tippane;
+	private MyOtherBlueLabel button_confirm;
+	private MyOtherGreenLabel button_cancel;
+	private MyOtherOrangeLabel button_exit;
 	private MainUIService m;
 	private JTextField textArea1, textArea6, textArea7, datetf;
 	// private String number, date, arrival, district, row, shelf, position;
 	private DateChooser datechooser;
 	private JComboBox<String> combobox, areaBox, rowBox;
+	private String orgID = IDKeeper.getOrgID();
 
 	public InUI(MainUIService main) {
 
@@ -95,10 +108,11 @@ public class InUI extends JPanel {
 		// textArea4.setWrapStyleWord(true);
 		this.add(areaBox);
 
+		Item i = new Item();
+		areaBox.addItemListener(i);
+
 		AdjustRepoBLService adjust = new RepoController();
-		// TODO Auto-generated method stub
-		// adjust.getRow(IDKeeper.getOrgID(), Area.AIR);
-		String[] rowList = adjust.getRow("0250", Area.AIR);
+		String[] rowList = adjust.getRow(orgID, Area.AIR);
 		rowBox = new JComboBox<String>(rowList);
 		rowBox.setBounds(300, 390, textlength, textwidth);
 		rowBox.setFont(f);
@@ -174,26 +188,35 @@ public class InUI extends JPanel {
 
 		JListener listener = new JListener();
 
-		button_confirm = new JButton("确定");
+		button_confirm = new MyOtherBlueLabel("确定");
 		button_confirm.setBounds(200, 600, 130, 40);
 		button_confirm.addMouseListener(listener);
-		button_confirm.setFont(f1);
-		button_confirm.setBackground(Color.WHITE);
+
 		this.add(button_confirm);
 
-		button_cancel = new JButton("取消");
+		button_cancel = new MyOtherGreenLabel("取消");
 		button_cancel.setBounds(370, 600, 130, 40);
 		button_cancel.addMouseListener(listener);
-		button_cancel.setFont(f1);
-		button_cancel.setBackground(Color.WHITE);
+		
 		this.add(button_cancel);
 
-		button_exit = new JButton("返回菜单");
+		button_exit = new MyOtherOrangeLabel("返回菜单");
 		button_exit.setBounds(550, 600, 130, 40);
 		button_exit.addMouseListener(listener);
-		button_exit.setFont(f1);
-		button_exit.setBackground(Color.WHITE);
+
 		this.add(button_exit);
+
+		// areaBox.addMouseListener(listener);
+		textArea6.addMouseListener(listener);
+		textArea7.addMouseListener(listener);
+
+		tippane = new JPanel();
+		tippane.setSize(850, 40);
+		tippane.setLocation(0, 660);
+		tippane.setBackground(Color.white);
+		tippane.setLayout(null);
+		this.add(tippane);
+
 	}
 
 	private boolean checkFilled() {
@@ -217,9 +240,10 @@ public class InUI extends JPanel {
 			fill = false;
 		}
 		if (!fill) {
-			JOptionPane.showConfirmDialog(null, "您 还 有 信 息 未 填", null,
-					JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
-					null);
+			TipBlockEmpty block = new TipBlockEmpty("信息未填写完整");
+			tippane.add(block);
+			block.show();
+			block = null;
 		}
 		return fill;
 	}
@@ -228,14 +252,26 @@ public class InUI extends JPanel {
 		CheckOrder check = new CheckOrder();
 		String id = textArea1.getText();
 		boolean correct = check.isOrderIDAvailable(id);
+		boolean repeat = true;
 		if (!correct) {
 			textArea1.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
 
-			JOptionPane.showConfirmDialog(null, "订单号输入错误，应该是10位数字", null,
-					JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
-					null);
+			TipBlockError block = new TipBlockError("订单条形码号错误");
+			tippane.add(block);
+			block.show();
+			block = null;
+		} else {
+			AdjustRepoBLService adjust = new RepoController();
+			repeat = adjust.checkIn(orgID, id);
+
+			if (!repeat) {
+				TipBlockError block = new TipBlockError("该订单已入库");
+				tippane.add(block);
+				block.show();
+				block = null;
+			}
 		}
-		return correct;
+		return correct && repeat;
 	}
 
 	private boolean checkDate() {
@@ -246,22 +282,16 @@ public class InUI extends JPanel {
 		else {
 			datetf.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
 
-			JOptionPane.showConfirmDialog(null, "日期不能晚于今天", null,
-					JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
-					null);
+			TipBlockError block = new TipBlockError("日期不能晚于今天");
+			tippane.add(block);
+			block.show();
+			block = null;
 			return false;
 		}
 	}
 
-	private void addInDoc() {
-
-		String id = textArea1.getText();
-		String city = (String) combobox.getSelectedItem();
+	private Area getArea() {
 		String area = (String) areaBox.getSelectedItem();
-		String row = (String) rowBox.getSelectedItem();
-		String shelf = textArea6.getText();
-		String pos = textArea7.getText();
-		String date = datetf.getText();
 		Area a;
 		switch (area) {
 		case "航运区":
@@ -277,32 +307,61 @@ public class InUI extends JPanel {
 			a = Area.FLEXIBLE;
 			break;
 		}
+		return a;
+	}
+
+	private void addInDoc() {
+
+		String id = textArea1.getText();
+		String city = (String) combobox.getSelectedItem();
+		String area = (String) areaBox.getSelectedItem();
+		String row = (String) rowBox.getSelectedItem();
+		String shelf = textArea6.getText();
+		String pos = textArea7.getText();
+		String date = datetf.getText();
+		Area a = getArea();
+
 		row = row.substring(1, row.length() - 1);
 		int r = Integer.parseInt(row);
 		int s = Integer.parseInt(shelf);
 		int p = Integer.parseInt(pos);
 		RepoPosition position = new RepoPosition(id, a, r, s, p, true);
-		InDocVO vo = new InDocVO(id, date, city, position, IDKeeper.getOrgID());
+		InDocVO vo = new InDocVO(id, date, city, position, orgID);
 
 		AdjustRepoBLService adjust = new RepoController();
-		adjust.setRepoBlock(IDKeeper.getOrgID(), position);
 
-		InDocblService inDoc = new InDoc();
-		boolean succ = inDoc.addInDoc(vo);
-		if (succ) {
-			JOptionPane.showConfirmDialog(null, "生 成 成 功！", null,
-					JOptionPane.DEFAULT_OPTION,
-					JOptionPane.INFORMATION_MESSAGE, null);
-		} else {
-			JOptionPane.showConfirmDialog(null, "生 成 失 败！", null,
-					JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
-					null);
-		}
+		adjust.checkRepoBlockUsed(orgID, position);
 
-		if (adjust.alarm(IDKeeper.getOrgID(), position)) {
-			JOptionPane.showConfirmDialog(null, area + "库存已达到90%", null,
-					JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
-					null);
+		if (!adjust.checkRepoBlockUsed(orgID, position)) {
+			adjust.setRepoBlock(orgID, position);
+
+			InDocblService inDoc = new InDoc();
+			boolean succ = inDoc.addInDoc(vo);
+			inDoc.endInDoc();
+			if (succ) {
+				TipBlock block = new TipBlock("生成成功");
+				tippane.add(block);
+				block.show();
+				block = null;
+
+			} else {
+				TipBlockError block = new TipBlockError("生成失败");
+				tippane.add(block);
+				block.show();
+				block = null;
+			}
+
+			if (adjust.alarm(IDKeeper.getOrgID(), position)) {
+				TipBlockEmpty block = new TipBlockEmpty("库存已达到90%");
+				tippane.add(block);
+				block.show();
+				block = null;
+			}
+		}else{
+			TipBlockError block = new TipBlockError("库区位置正在使用");
+			tippane.add(block);
+			block.show();
+			block = null;
 		}
 	}
 
@@ -315,6 +374,12 @@ public class InUI extends JPanel {
 					if (checkOrderID()) {
 						if (checkDate()) {
 							addInDoc();
+							textArea1.setBorder(BorderFactory.createLineBorder(
+									Color.GRAY, 1));
+							textArea6.setBorder(BorderFactory.createLineBorder(
+									Color.GRAY, 1));
+							textArea7.setBorder(BorderFactory.createLineBorder(
+									Color.GRAY, 1));
 						}
 					}
 				}
@@ -332,53 +397,78 @@ public class InUI extends JPanel {
 						1));
 			} else if (e.getSource() == button_exit) {
 				m.jumpTotranscenterRepoMenuUI(IDKeeper.getID());
+			} else if (e.getSource() == textArea6 || e.getSource() == textArea7) {
+				String row = (String) rowBox.getSelectedItem();
+				row = row.substring(1, row.length() - 1);
+				if (row.charAt(0) >= '0' && row.charAt(0) <= '9') {
+					int r = Integer.parseInt(row);
+
+					ShowRepoUI show = new ShowRepoUI(orgID, getArea(), r,
+							textArea6, textArea7);
+					show.setVisible(true);
+				} else {
+					TipBlockError block = new TipBlockError("库存没有空余资源");
+					tippane.add(block);
+					block.show();
+					block = null;
+				}
 			}
 			repaint();
 		}
 
 		public void mouseEntered(MouseEvent arg0) {
-			// TODO Auto-generated method stub
 
 		}
 
 		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
 
 		}
 
 		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
+			if(arg0.getSource()==button_confirm){
+				button_confirm.whenPressed();
+			}else if (arg0.getSource()==button_cancel) {
+				button_cancel.whenPressed();
+			}else if (arg0.getSource()==button_exit) {
+				button_exit.whenPressed();
+			}
 		}
 
 		public void mouseReleased(MouseEvent arg0) {
-
+			if(arg0.getSource()==button_confirm){
+				button_confirm.setMyColor();
+			}else if (arg0.getSource()==button_cancel) {
+				button_cancel.setMyColor();
+			}else if (arg0.getSource()==button_exit) {
+				button_exit.setMyColor();
+			}
 		}
 
 	}
 
-	private class Action implements ActionListener {
+	private class Item implements ItemListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == areaBox) {
+		public void itemStateChanged(ItemEvent e) {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
 				String a = (String) areaBox.getSelectedItem();
 				AdjustRepoBLService adjust = new RepoController();
 				// TODO Auto-generated method stub
 				// adjust.getRow(IDKeeper.getOrgID(), Area.AIR);
 				String[] rowList;
 				if (a.equals("航运区")) {
-					rowList = adjust.getRow("0250", Area.AIR);
+					rowList = adjust.getRow(orgID, Area.AIR);
 				} else if (a.equals("铁运区")) {
-					rowList = adjust.getRow("0250", Area.TRAIN);
+					rowList = adjust.getRow(orgID, Area.TRAIN);
 				} else {
-					rowList = adjust.getRow("0250", Area.CAR);
+					rowList = adjust.getRow(orgID, Area.CAR);
 				}
 				rowBox.removeAllItems();
 				for (String s : rowList)
 					rowBox.addItem(s);
+				updateUI();
 			}
-			updateUI();
+
 		}
 
 	}

@@ -90,7 +90,7 @@ public class MainUI implements MainUIService {
 	}
 
 	public boolean jumpToViewSysLogUI() {
-		ViewSysLogUI viewsyslog = new ViewSysLogUI();
+		ViewSysLogUI viewsyslog = new ViewSysLogUI(this);
 		pane1.add("viewsyslog", viewsyslog);
 		card1.show(pane1, "viewsyslog");
 		return true;
@@ -125,8 +125,8 @@ public class MainUI implements MainUIService {
 		return true;
 	};
 
-	public boolean jumpToFinanceMenuUI(String id) {
-		FinanceMenuUI fianacemenu = new FinanceMenuUI(this, id);
+	public boolean jumpToFinanceMenuUI(String id, boolean high) {
+		FinanceMenuUI fianacemenu = new FinanceMenuUI(this, id, high);
 		pane.add("fianacemenu", fianacemenu);
 		card.show(pane, "fianacemenu");
 		return true;
@@ -149,15 +149,14 @@ public class MainUI implements MainUIService {
 	}
 
 	public boolean jumpToFinanceInitAccountUI() {
-		FinanceInitAccountUI financeinitaccount = new FinanceInitAccountUI();
+		FinanceInitAccountUI financeinitaccount = new FinanceInitAccountUI(this);
 		pane1.add("financeinitaccount", financeinitaccount);
 		card1.show(pane1, "financeinitaccount");
 		return true;
 	}
 
 	public boolean jumpToFinanceManageBankAccountUI() {
-		FinanceManageBankAccountUI financeManageBankAccount = new FinanceManageBankAccountUI(
-				this);
+		FinanceManageBankAccountUI financeManageBankAccount = new FinanceManageBankAccountUI(this);
 		pane1.add("financeManageBankAccount", financeManageBankAccount);
 		card1.show(pane1, "financeManageBankAccount");
 
@@ -264,7 +263,7 @@ public class MainUI implements MainUIService {
 	}
 
 	public boolean jumpToviewUI() {
-		ViewUI viewPanel = new ViewUI();
+		ViewUI viewPanel = new ViewUI(this);
 		pane1.add("viewPanel", viewPanel);
 		card1.show(pane1, "viewPanel");
 		return true;
@@ -401,7 +400,7 @@ public class MainUI implements MainUIService {
 	public boolean jumpTomanagerSalaryUI() {
 		// TODO Auto-generated method stub
 		managerSalaryUI managersalary = new managerSalaryUI();
-		pane1.add("managersalary", managersalary );
+		pane1.add("managersalary", managersalary);
 		card1.show(pane1, "managersalary");
 		return true;
 	}

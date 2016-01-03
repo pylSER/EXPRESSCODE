@@ -33,17 +33,26 @@ import express.businesslogicService.adminBLService.RemoveUserBLService;
 import express.businesslogicService.signBLService.LogInBLService;
 import express.po.UserRole;
 import express.presentation.mainUI.MainUIService;
+import express.presentation.mainUI.MyOtherBlueLabel;
+import express.presentation.mainUI.MyOtherGreenLabel;
+import express.presentation.mainUI.MyOtherRedLabel;
 import express.presentation.mainUI.MyTableModel;
+import express.presentation.mainUI.TipBlock;
+import express.presentation.mainUI.TipBlockError;
+import express.vo.UserInfoAdminVO;
 import express.vo.UserInfoSignVO;
 import express.vo.UserInfoVO;
 
 public class AdminStartUI extends JPanel {
 
+	private JPanel tippane;
 	private MainUIService main;
 	private LogInBLService login;
 	private JLabel username, userid, idl;
 	private JTextField idtf;
-	private JButton detele, add, search;
+	private MyOtherRedLabel detele;
+	private MyOtherBlueLabel add;
+	private MyOtherGreenLabel search;
 	private JLabel exit;
 	private JTable table;
 	private MyTableModel tmodel;
@@ -71,27 +80,47 @@ public class AdminStartUI extends JPanel {
 		this.setBackground(Color.WHITE);
 		this.setBounds(0, 0, 1000, 700);
 
-		Font font = new Font("楷体", Font.PLAIN, 18);
-		Font f = new Font("仿宋", Font.PLAIN, 16);
+		Font font = new Font("幼圆", Font.PLAIN, 20);
+		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
+		Font buttonf = new Font("隶书", Font.PLAIN, 18);
 
 		JListener listener = new JListener();
 		abs = new Admin();
 		login = new User();
 		this.userID = userID;
 
-		userarr = abs.getUnregistered();
-		if (userarr != null) {
-			data = new Object[userarr.size()][5];
-			for (int i = 0; i < userarr.size(); i++) {
-				UserInfoVO temp = userarr.get(i);
-				data[i][0] = false;
-				data[i][1] = temp.getName();
-				data[i][3] = temp.getID();
-				UserRole posit = temp.getPosition();
-				data[i][2] = transposition(posit);
-				data[i][4] = "";
-			}
+		//userarr = abs.getUnregistered();
+		
+//		if (userarr != null) {
+//			data = new Object[userarr.size()][5];
+//			for (int i = 0; i < userarr.size(); i++) {
+//				UserInfoVO temp = userarr.get(i);
+//				data[i][0] = false;
+//				data[i][1] = temp.getName();
+//				data[i][3] = temp.getID();
+//				UserRole posit = temp.getPosition();
+//				data[i][2] = transposition(posit);
+//				data[i][4] = "";
+//			}
+//		}
+		
+		ArrayList<UserInfoAdminVO> list2 = abs.getAllUser();
+		if (list2 != null) {
+		data = new Object[list2.size()][5];
+		for (int i = 0; i < list2.size(); i++) {
+			UserInfoAdminVO temp = list2.get(i);
+			data[i][0] = false;
+			data[i][1] = temp.getName();
+			data[i][3] = temp.getID();
+			UserRole posit = temp.getPosition();
+			data[i][2] = transposition(posit);
+			data[i][4] = "";
 		}
+	}
+		System.out.println("list2："+list2.size());
+    	
+		
+		
 
 		UserInfoSignVO vo = login.getUserInfo(userID);
 		String name = vo.getName();
@@ -134,22 +163,19 @@ public class AdminStartUI extends JPanel {
 		scrollPane.setBounds(50, 60, 900, 600);
 		this.add(scrollPane);
 
-		detele = new JButton("删除");
+		detele = new MyOtherRedLabel("删除");
 		detele.setBounds(280, 10, 100, 40);
-		detele.setFont(font);
 		detele.addMouseListener(listener);
 		this.add(detele);
 
-		add = new JButton("添加");
+		add = new MyOtherBlueLabel("添加");
 		add.setBounds(410, 10, 100, 40);
 		add.addMouseListener(listener);
-		add.setFont(font);
 		this.add(add);
 
-		search = new JButton("查找");
+		search = new MyOtherGreenLabel("查找");
 		search.setBounds(770, 10, 100, 40);
 		search.addMouseListener(listener);
-		search.setFont(font);
 		this.add(search);
 
 		idl = new JLabel("工号");
@@ -161,6 +187,17 @@ public class AdminStartUI extends JPanel {
 		idtf.setBounds(600, 10, 150, 40);
 		idtf.setFont(f);
 		this.add(idtf);
+		
+		tippane=new JPanel();
+		 tippane.setSize(1000,40);
+		tippane.setLocation(75, 660);
+		tippane.setBackground(Color.white);
+		tippane.setLayout(null);
+		this.add(tippane);
+		
+		
+		
+		
 	}
 	
 	private String transposition(UserRole posit){
@@ -202,8 +239,10 @@ public class AdminStartUI extends JPanel {
 						tmodel.removeRow(i);
 					}
 				}
-				JOptionPane.showMessageDialog(null, "删除成功", "提示",
-						JOptionPane.INFORMATION_MESSAGE);
+				TipBlock block=new TipBlock("删除成功");
+				tippane.add(block);
+				block.show();
+				block=null;
 
 			} else if (e.getSource() == add) {
 
@@ -217,8 +256,12 @@ public class AdminStartUI extends JPanel {
 					AdminChangeUI acui = new AdminChangeUI(tmodel, id);
 					acui.setVisible(true);
 				} else {
-					JOptionPane.showMessageDialog(null, "工号不存在", "提示",
-							JOptionPane.ERROR_MESSAGE);
+					TipBlockError block=new TipBlockError("工号不存在");
+					
+					tippane.add(block);
+					
+					block.show();
+					block=null;
 				}
 			}
 			updateUI();
@@ -242,6 +285,12 @@ public class AdminStartUI extends JPanel {
 			// TODO Auto-generated method stub
 			if (e.getSource() == exit) {
 				exit.setForeground(Color.RED);
+			}else if (e.getSource()==add) {
+				add.whenPressed();
+			}else if (e.getSource()==search) {
+				search.whenPressed();
+			}else if (e.getSource()==detele) {
+				detele.whenPressed();
 			}
 		}
 
@@ -249,6 +298,12 @@ public class AdminStartUI extends JPanel {
 			// TODO Auto-generated method stub
 			if (e.getSource() == exit) {
 				exit.setForeground(Color.BLUE);
+			}else if (e.getSource()==add) {
+				add.setMyColor();
+			}else if (e.getSource()==search) {
+				search.setMyColor();
+			}else if (e.getSource()==detele) {
+				detele.setMyColor();
 			}
 		}
 

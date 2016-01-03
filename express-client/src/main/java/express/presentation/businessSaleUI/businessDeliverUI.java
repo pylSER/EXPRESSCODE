@@ -20,16 +20,22 @@ import javax.swing.border.LineBorder;
 import express.businessLogic.documentBL.DeliverDoc;
 import express.businesslogicService.businessSaleBLService.BusinessSaleDeliverDocumentblService;
 import express.presentation.mainUI.DateChooser;
+import express.presentation.mainUI.MyOtherBlueLabel;
+import express.presentation.mainUI.MyOtherRedLabel;
+import express.presentation.mainUI.TipBlock;
+import express.presentation.mainUI.TipBlockEmpty;
+import express.presentation.mainUI.TipBlockError;
 import express.vo.DeliverDocVO;
 
 public class businessDeliverUI extends JPanel {
+	private JPanel tippane;
 	private JTextField textArea1;
 	private JTextField textArea2;
 	private JTextField textArea3;
 	private JLabel tip1;
 	private DateChooser datechooser;
-	private JButton button_confirm;
-	private JButton button_cancel;
+	private MyOtherBlueLabel button_confirm;
+	private MyOtherRedLabel button_cancel;
 	private String arriveDate, orderID, deliverManID;
 	private DeliverDocVO vo;
 	private Border border;
@@ -41,8 +47,8 @@ public class businessDeliverUI extends JPanel {
 
 		int labellength = 100;
 		int labelwidth = 30;
-		Font font = new Font("楷体", Font.PLAIN, 18);
-		Font f = new Font("仿宋", Font.PLAIN, 16);
+		Font font = new Font("幼圆", Font.PLAIN, 20);
+		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
 		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
 
 		setLayout(null);
@@ -96,18 +102,24 @@ public class businessDeliverUI extends JPanel {
 		label3.setFont(font);
 		this.add(label3);
 
-		button_confirm = new JButton("确定");
-		button_confirm.setBounds(230, 490, 120, 30);
-		button_confirm.setFont(buttonfont);
+		button_confirm = new MyOtherBlueLabel("确定");
+		button_confirm.setBounds(200, 490, 120, 30);
 		button_confirm.addMouseListener(listener);
 		this.add(button_confirm);
 
-		button_cancel = new JButton("取消");
-		button_cancel.setBounds(400, 490, 120, 30);
-		button_cancel.setFont(buttonfont);
+		button_cancel = new MyOtherRedLabel("取消");
+		button_cancel.setBounds(360, 490, 120, 30);
 		button_cancel.addMouseListener(listener);
 		this.add(button_cancel);
 
+
+		tippane=new JPanel();
+		 tippane.setSize(850,40);
+		tippane.setLocation(0, 660);
+		tippane.setBackground(Color.white);
+		tippane.setLayout(null);
+		this.add(tippane);
+		
 		this.addMouseListener(listener);
 	}
 
@@ -147,7 +159,7 @@ public class businessDeliverUI extends JPanel {
 			} else if (e.getSource() == button_confirm) {
 				
 				arriveDate = textArea1.getText();
-				deliverManID = textArea1.getText();
+				deliverManID = textArea2.getText();
 				orderID = textArea3.getText();
 				
 				if(deliverManID.isEmpty()){
@@ -161,22 +173,30 @@ public class businessDeliverUI extends JPanel {
 				}
 				
 				if (!complete) {
-					JOptionPane.showMessageDialog(null, "信息未填写完整", "提示",
-							JOptionPane.ERROR_MESSAGE);
+					TipBlockEmpty block=new TipBlockEmpty("信息未填写完整");
+					tippane.add(block);
+					block.show();
+					block=null;
 				} else {
 					vo = new DeliverDocVO(arriveDate, orderID, deliverManID);
 					BusinessSaleDeliverDocumentblService bsd = new DeliverDoc();
 					
 					if(!bsd.isOrderIDavailable(orderID)){
-						JOptionPane.showMessageDialog(null, "订单号错误", "错误",
-								JOptionPane.ERROR_MESSAGE);
+						TipBlockError block=new TipBlockError("订单条形码号错误");
+						tippane.add(block);
+						block.show();
+						block=null;
 					}else{
 						if (!bsd.addDeliverDoc(vo)) {
-							JOptionPane.showMessageDialog(null, "派件单生成失败", "错误",
-									JOptionPane.ERROR_MESSAGE);
+							TipBlockError block=new TipBlockError("派件单生成失败");
+							tippane.add(block);
+							block.show();
+							block=null;
 						} else {
-							JOptionPane.showMessageDialog(null, "生成派件单成功", "提示",
-									JOptionPane.INFORMATION_MESSAGE);
+							TipBlock block=new TipBlock("生成派件单成功");
+							tippane.add(block);
+							block.show();
+							block=null;
 							bsd.endDeliverDoc();
 						}
 					}
@@ -197,12 +217,21 @@ public class businessDeliverUI extends JPanel {
 		}
 
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
+			if (e.getSource() == button_cancel) {
+				button_cancel.whenPressed();
+			} else if (e.getSource() == button_confirm) {
+				button_confirm.whenPressed();
+			}	
 
 		}
 
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
+			if (e.getSource() == button_cancel) {
+				button_cancel.setMyColor();
+			} else if (e.getSource() == button_confirm) {
+				button_cancel.setMyColor();
+			}	
+
 
 		}
 

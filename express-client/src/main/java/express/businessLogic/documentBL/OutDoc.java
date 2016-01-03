@@ -73,6 +73,7 @@ public class OutDoc implements OutDocblService {
 		OutDocPO po = new OutDocPO(vo.getOrderID(), vo.getdate(),
 				vo.getarrival(), vo.gettransKind(), vo.gettransNumber(),
 				vo.getOrgID());
+		po.setState(true);
 		try {
 			rmiObj.changeOutDoc(po);
 			return true;

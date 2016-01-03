@@ -28,7 +28,7 @@ import express.vo.ShipmentDocBusinessHallVO;
 import express.vo.ShipmentDocTransCenterVO;
 import express.vo.TransferDocVO;
 
-public class ExamDocument	implements ExamDocumentBLService {
+public class ExamDocument implements ExamDocumentBLService {
 
 	@Override
 	public ArrayList<OrderVO> getUEOrderlist() {
@@ -101,12 +101,6 @@ public class ExamDocument	implements ExamDocumentBLService {
 
 	}
 
-	
-	
-	
-	
-	
-	
 	@Override
 	public boolean changeOrder(OrderVO vo) {
 		Order order=new Order();
@@ -171,7 +165,7 @@ public class ExamDocument	implements ExamDocumentBLService {
 	@Override
 	public boolean changePaymentDoc(PaymentDocVO vo) {  //
 		PaymentDoc paymentDoc=new PaymentDoc();
-		return paymentDoc.changePaymentDoc(vo, vo.getPaymentID());	
+		return paymentDoc.changePaymentDoc(vo, vo.getPaymentID());
 	}
 
 	@Override

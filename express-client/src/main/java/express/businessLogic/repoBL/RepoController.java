@@ -61,13 +61,17 @@ public class RepoController implements AdjustRepoBLService,
 	public boolean setRepoBlock(String orgID, RepoPosition position) {
 		return adjust.setRepoBlock(orgID, position);
 	}
+	
+	public boolean freeRepoBlock(String orgID, RepoPosition position){
+		return adjust.freeRepoBlock(orgID, position);
+	}
 
 	public void endRepoManage() {
 		adjust.endRepoManage();
 	}
 
 	@Override
-	public boolean checkRepoBlockUsed(String orgID, RepoPositionVO position) {
+	public boolean checkRepoBlockUsed(String orgID, RepoPosition position) {
 		return adjust.checkRepoBlockUsed(orgID, position);
 	}
 
@@ -77,14 +81,19 @@ public class RepoController implements AdjustRepoBLService,
 	}
 
 	@Override
-	public boolean adjustRepo(String orgID, RepoPositionVO oldPosition,
-			RepoPositionVO newPosition) {
+	public boolean adjustRepo(String orgID, RepoPosition oldPosition,
+			RepoPosition newPosition) {
 		return adjust.adjustRepo(orgID, oldPosition, newPosition);
 	}
 
 	@Override
 	public String[] getRow(String orgID, Area area) {
 		return adjust.getRow(orgID, area);
+	}
+	
+	@Override
+	public String[] getAllRow(String orgID, Area area){
+		return adjust.getAllRow(orgID, area);
 	}
 
 	@Override
@@ -191,6 +200,21 @@ public class RepoController implements AdjustRepoBLService,
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	@Override
+	public boolean checkIn(String orgID, String orderID) {
+		return adjust.checkIn(orgID, orderID);
+	}
+
+	@Override
+	public String[] getAllInDoc(String orgID) {
+		return adjust.getAllInDoc(orgID);
+	}
+
+	@Override
+	public RepoPosition getPosition(String orgID, String orderID) {
+		return adjust.getPosition(orgID, orderID);
 	}
 
 }

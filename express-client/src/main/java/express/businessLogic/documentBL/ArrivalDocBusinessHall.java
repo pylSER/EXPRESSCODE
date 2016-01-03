@@ -43,6 +43,11 @@ public class ArrivalDocBusinessHall implements BusinessSaleArrivalDocumentblServ
 			if(null==oct.getOrder(vo.getOrderID())){
 				return false;
 			}
+			
+			if(null!=rmiObj.getArrivalDoc(vo.getOrderID())){
+				System.out.print("IDIDI"+vo.getOrderID());
+				return false;
+			}
 
 			rmiObj.createArrivalDoc(po);
 			String orderId=vo.getOrderID();
@@ -57,6 +62,7 @@ public class ArrivalDocBusinessHall implements BusinessSaleArrivalDocumentblServ
 			int year=c.get(Calendar.YEAR);
 			int month=-c.get(Calendar.MONTH)-1;
 			int day=-c.get(Calendar.DATE);
+
 			String date="";
 			date+=year;
 			date+=month;
@@ -177,6 +183,7 @@ public class ArrivalDocBusinessHall implements BusinessSaleArrivalDocumentblServ
 	public boolean changeBusinessHallArrivalDoc(ArrivalDocBusinessHallVO vo){
 		ArrivalDocBusinessHallPO po=new ArrivalDocBusinessHallPO(vo.getArriveTime(), vo.getTransferDocID(), vo.getDeparture(),
 				vo.getArrivalStatus(), vo.getOrderID());
+		po.setState(true);
 		try{
 			rmiObj.changeBusinessHallArrivalDoc(po);
 			return true;

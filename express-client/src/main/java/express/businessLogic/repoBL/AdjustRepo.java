@@ -19,7 +19,7 @@ public class AdjustRepo {
 		repo = RMIClient.getRepoInfoObject();
 	}
 
-	public boolean checkRepoBlockUsed(String orgID, RepoPositionVO position) {
+	public boolean checkRepoBlockUsed(String orgID, RepoPosition position) {
 
 		try {
 			RepoInfoPO r = repo.getRepo(orgID);
@@ -30,12 +30,11 @@ public class AdjustRepo {
 			if (list.size() == 0)
 				return false;
 
-			RepoPosition rp = new RepoPosition(position.getOrderID(),
-					position.getblock(), position.getrow(),
-					position.getshelf(), position.getposition(), true);
-
 			for (RepoPosition p : list) {
-				if (rp.equals(p)) {
+				if (p.getblock().equals(position.getblock())&&
+						p.getrow() == position.getrow()&&
+						p.getshelf() == position.getshelf()&&
+						p.getposition() == position.getposition()) {
 					return true;
 				}
 			}
@@ -51,6 +50,17 @@ public class AdjustRepo {
 		try {
 			position.setIsUsed(true);
 			return repo.addBlock(orgID, position);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean freeRepoBlock(String orgID, RepoPosition position) {
+		try {
+			position.setIsUsed(true);
+			return repo.deleteBlock(orgID, position);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -93,19 +103,14 @@ public class AdjustRepo {
 		}
 	}
 
-	public boolean adjustRepo(String orgID, RepoPositionVO oldPosition,
-			RepoPositionVO newPosition) {
-		RepoPosition oldP = new RepoPosition(oldPosition.getOrderID(),
-				oldPosition.getblock(), oldPosition.getrow(),
-				oldPosition.getshelf(), oldPosition.getposition(), true);
-
-		RepoPosition newP = new RepoPosition(newPosition.getOrderID(),
-				newPosition.getblock(), newPosition.getrow(),
-				newPosition.getshelf(), newPosition.getposition(), true);
+	public boolean adjustRepo(String orgID, RepoPosition oldPosition,
+			RepoPosition newPosition) {
 
 		try {
-			repo.deleteBlock(orgID, oldP);
-			return repo.addBlock(orgID, newP);
+			oldPosition.setIsUsed(true);
+			newPosition.setIsUsed(true);
+			repo.deleteBlock(orgID, oldPosition);
+			return repo.addBlock(orgID, newPosition);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -117,26 +122,67 @@ public class AdjustRepo {
 	public String[] getRow(String orgID, Area area) {
 		String[] row = new String[1];
 		row[0] = "没有空排";
+		int num = 0;
 
 		try {
 			RepoInfoPO po = repo.getRepo(orgID);
 			if (po != null) {
 				switch (area) {
 				case AIR:
-					row = new String[po.getAirShelfSize()];
+					num = po.getAirShelfSize();
 					break;
 				case TRAIN:
-					row = new String[po.getTrainShelfSize()];
+					num = po.getTrainShelfSize();
 					break;
 				case CAR:
-					row = new String[po.getTruckShelfSize()];
+					num = po.getTruckShelfSize();
 					break;
 				default:
 					break;
 				}
-				for (int i = 0; i < row.length; i++) {
-					int r = i + 1;
-					row[i] = "第" + r + "排";
+				if (num > 0) {
+					row = new String[num];
+					for (int i = 0; i < num; i++) {
+						int r = i + 1;
+						row[i] = "第" + r + "排";
+					}
+				}
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return row;
+	}
+
+	public String[] getAllRow(String orgID, Area area) {
+		String[] row = new String[1];
+		row[0] = "没有空排";
+		int num = 0;
+
+		try {
+			RepoInfoPO po = repo.getRepo(orgID);
+			if (po != null) {
+				switch (area) {
+				case AIR:
+					num = po.getAirShelfSize();
+					break;
+				case TRAIN:
+					num = po.getTrainShelfSize();
+					break;
+				case CAR:
+					num = po.getTruckShelfSize();
+					break;
+				default:
+					num = po.getFlexibleShelfSize();
+					break;
+				}
+				if (num > 0) {
+					row = new String[num];
+					for (int i = 0; i < num; i++) {
+						int r = i + 1;
+						row[i] = "第" + r + "排";
+					}
 				}
 			}
 
@@ -200,4 +246,76 @@ public class AdjustRepo {
 		}
 	}
 
+	public boolean checkIn(String orgID, String orderID) {
+		try {
+			RepoInfoPO r = repo.getRepo(orgID);
+
+			if (r == null)
+				return true;
+			ArrayList<RepoPosition> list = r.getRepoPosition();
+
+			if (list == null)
+				return true;
+			else {
+				for (RepoPosition rp : list) {
+					if (rp.getOrderID().equals(orderID))
+						return false;
+				}
+			}
+			return true;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return true;
+		}
+	}
+
+	public String[] getAllInDoc(String orgID) {
+		String[] idList = new String[1];
+		idList[0] = "仓库没有快递入库";
+
+		RepoInfoPO r;
+
+		try {
+			r = repo.getRepo(orgID);
+			if (r == null)
+				return idList;
+
+			ArrayList<RepoPosition> list = r.getRepoPosition();
+
+			if (list != null && list.size() > 0) {
+				idList = new String[list.size()];
+				int index = 0;
+				for (RepoPosition rp : list) {
+					idList[index] = rp.getOrderID();
+					index++;
+				}
+			}
+			return idList;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return idList;
+		}
+	}
+
+	public RepoPosition getPosition(String orgID, String orderID) {
+		try {
+			RepoInfoPO r = repo.getRepo(orgID);
+			if (r == null)
+				return null;
+			ArrayList<RepoPosition> list = r.getRepoPosition();
+			if (list == null)
+				return null;
+			for (RepoPosition rp : list) {
+				if (rp.getOrderID().equals(orderID))
+					return rp;
+			}
+			return null;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

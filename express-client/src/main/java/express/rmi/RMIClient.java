@@ -3,7 +3,9 @@ package express.rmi;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.UnknownHostException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -25,6 +27,7 @@ import express.dataService.documentDataService.TransCenterArrivalDocumentDataSer
 import express.dataService.documentDataService.TransCenterShipmentDocDataService;
 import express.dataService.documentDataService.TransCenterTransferDocDataService;
 import express.dataService.innerAccountDataService.InnerAccountDataService;
+import express.dataService.ipandname.IPDataService;
 import express.dataService.logDataService.LogDataService;
 import express.dataService.organizationDataService.OrganizationDataService;
 import express.dataService.repoDataService.RepoDataService;
@@ -38,6 +41,7 @@ import express.dataService.userDataService.SignUserDataService;
 import express.dataService.userDataService.UserDataService;
 import express.dataService.vehicleAndDriverDataService.DriverDataService;
 import express.dataService.vehicleAndDriverDataService.VehicleDataService;
+import express.po.IPPO;
 
 public class RMIClient {
 
@@ -75,7 +79,11 @@ public class RMIClient {
 	private static BusinessSaleArrivalDocumentDataService businessArrivalDoc;
 	private static OutDocDataService outDoc;
 	private static InDocDataService inDoc;
+	private static IPDataService ipdata;
+	
 	public synchronized static void init() throws ClientException {
+		
+		
 		if (inited) {
 			return;
 		}
@@ -87,8 +95,15 @@ public class RMIClient {
 			IP = br.readLine();
 			br.close();
 			initObjects();
+			
+			
+			IPPO ip=new IPPO(AboutSystem.getMyIp(),AboutSystem.getMyName());
+			System.out.println(AboutSystem.getMyIp());
+			ipdata.addIP(ip);
+			
 			inited = true;
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ClientException(e);
 		}
 	}
@@ -151,7 +166,7 @@ public class RMIClient {
 		
 		shipmentdoc=(TransCenterShipmentDocDataService)Naming.lookup(urlPrefix+"TransCenterShipment-data");
 		
-		
+		ipdata=(IPDataService)Naming.lookup(urlPrefix+"IP-data");
 	}
 	
 
@@ -278,5 +293,10 @@ public class RMIClient {
 	public static InDocDataService getInDocObject(){
 		return inDoc;
 	}
+	
+	public static IPDataService getIPObject() {
+		return ipdata;
+	}
+	
 	
 }

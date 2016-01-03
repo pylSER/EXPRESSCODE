@@ -33,8 +33,8 @@ public class FinanceInitAccountPreUI extends JDialog {
 	private MyTableModel[] tableModel;
 	private InnerAccountBLService iab;
 	private InnerAccountVO accvo;
-	private Font font = new Font("楷体", Font.PLAIN, 18);
-	private Font f = new Font("仿宋", Font.PLAIN, 16);
+	private Font font = new Font("幼圆", Font.PLAIN, 20);
+	private Font f = new Font("方正隶变简体", Font.PLAIN, 18);
 	private int tablewidth = 500;
 	private int tableheight = 380;
 
@@ -43,6 +43,7 @@ public class FinanceInitAccountPreUI extends JDialog {
 		this.setLayout(null);
 		this.setSize(500, 500);
 		this.setLocationRelativeTo(null);
+		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
 
 		JListener lis = new JListener();
 		pane = new JPanel();
@@ -79,7 +80,7 @@ public class FinanceInitAccountPreUI extends JDialog {
 		ok = new JButton("确认");
 		ok.setBounds(230, 420, 100, 30);
 		ok.addMouseListener(lis);
-		ok.setFont(new Font("隶书", Font.PLAIN, 18));
+		ok.setFont(buttonfont);
 		this.add(ok);
 	}
 

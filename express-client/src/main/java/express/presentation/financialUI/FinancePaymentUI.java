@@ -9,43 +9,50 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;import org.omg.PortableServer.IdAssignmentPolicy;
 
 import express.businessLogic.IDKeeper;
 import express.businessLogic.documentBL.PaymentDoc;
 import express.businessLogic.infoManageBL.BankAccount;
+import express.businessLogic.userBL.User;
 import express.businesslogicService.financialBLService.BankAccountBLService;
 import express.businesslogicService.financialBLService.PaymentBLService;
-import express.po.PaymentDocPO;
+import express.businesslogicService.signBLService.LogInBLService;
 import express.po.PaymentItem;
 import express.presentation.mainUI.DateChooser;
 import express.presentation.mainUI.MainUIService;
+import express.presentation.mainUI.MyOtherBlueLabel;
+import express.presentation.mainUI.MyOtherOrangeLabel;
+import express.presentation.mainUI.MyOtherRedLabel;
+import express.presentation.mainUI.MyScrollPane;
+import express.presentation.mainUI.TipBlock;
+import express.presentation.mainUI.TipBlockEmpty;
+import express.presentation.mainUI.TipBlockError;
 import express.vo.PaymentDocVO;
+import express.vo.UserInfoSignVO;
 
 public class FinancePaymentUI extends JPanel {
 
 	private MainUIService m;
-	private JButton ok, exit, cancel, add;
+	private JPanel tippane;
+	private MyOtherBlueLabel ok;
+	private MyOtherOrangeLabel exit;
+	private MyOtherRedLabel cancel;
 	private JTextField date, money, name;
 	private JComboBox<String> account, entry;
 	private JTextArea comment;
 	// private LinkedList<JButton> delete;
 	private JPanel tip;
 	private String time = "";
+	private String n;
 
 	// private JRadioButton rent, freight, wage, award;
 	// private ButtonGroup entry;
@@ -55,8 +62,8 @@ public class FinancePaymentUI extends JPanel {
 	// private double money;
 
 	public FinancePaymentUI(MainUIService main) {
-		setLayout(null);
 		m = main;
+		setLayout(null);
 		this.setBounds(0, 0, 850, 700);
 		this.setBackground(Color.WHITE);
 
@@ -83,7 +90,7 @@ public class FinancePaymentUI extends JPanel {
 		this.add(title);
 
 		JLabel line = new JLabel();
-		line.setBounds(365, 20, 2, 615);
+		line.setBounds(365, 70, 2, 520);
 		line.setBackground(Color.WHITE);
 		line.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 		this.add(line);
@@ -156,8 +163,12 @@ public class FinancePaymentUI extends JPanel {
 		money.setBounds(100, 150, 240, 30);
 		this.add(money);
 
+		String id = IDKeeper.getID();
+		LogInBLService login = new User();
+		UserInfoSignVO vo = login.getUserInfo(id);
+		n = vo.getName();
 		name = new JTextField();
-		name.setText("");
+		name.setText(n);
 		name.setFont(f);
 		name.setBounds(100, 230, 240, 30);
 		this.add(name);
@@ -190,7 +201,7 @@ public class FinancePaymentUI extends JPanel {
 		comment.setFont(f);
 		comment.setVisible(true);
 		comment.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-		comment.setBounds(100, 470, 240, 110);
+		comment.setBounds(100, 470, 240, 70);
 		this.add(comment);
 
 		Listener listen = new Listener();
@@ -202,28 +213,29 @@ public class FinancePaymentUI extends JPanel {
 		 * Font("隶书", Font.PLAIN, 20)); this.add(add);
 		 */
 
-		ok = new JButton("生成单据");
-		ok.setBackground(Color.WHITE);
+		ok = new MyOtherBlueLabel("生成单据");
 		// ok.setBorder(BorderFactory.createMatteBorder(2, 0, 2, 0,
 		// Color.GRAY));
-		ok.setBounds(5, 600, 150, 35);
-		ok.setFont(new Font("隶书", Font.PLAIN, 20));
+		ok.setBounds(30, 560, 125, 40);
 		this.add(ok);
 
-		cancel = new JButton("取消");
-		cancel.setBackground(Color.WHITE);
+		cancel = new MyOtherRedLabel("取消");
 		// cancel.setBorder(BorderFactory
 		// .createMatteBorder(2, 2, 2, 0, Color.GRAY));
-		cancel.setBounds(190, 600, 150, 35);
-		cancel.setFont(new Font("隶书", Font.PLAIN, 20));
+		cancel.setBounds(210, 560, 130, 40);
 		this.add(cancel);
+		
+		tippane = new JPanel();
+		tippane.setSize(850, 40);
+		tippane.setLocation(0, 660);
+		tippane.setBackground(Color.white);
+		tippane.setLayout(null);
+		this.add(tippane);
 
-		exit = new JButton("返回菜单");
-		exit.setBackground(Color.WHITE);
+		exit = new MyOtherOrangeLabel("返回菜单");
 		// exit.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 0,
 		// Color.GRAY));
-		exit.setBounds(5, 650, 335, 35);
-		exit.setFont(new Font("隶书", Font.PLAIN, 20));
+		exit.setBounds(30, 620, 310, 40);
 		this.add(exit);
 
 		// add.addMouseListener(listen);
@@ -234,27 +246,33 @@ public class FinancePaymentUI extends JPanel {
 		String cd = time.substring(5, 7);
 		if (cd.charAt(0) == '0')
 			cd = cd.substring(1, 2);
-		JLabel title2 = new JLabel(cd + "月份应付款记录", JLabel.CENTER);
+		JLabel title2 = new JLabel(cd + "月份应付款提示", JLabel.CENTER);
 		title2.setFont(new Font("楷体", Font.PLAIN, 20));
-		title2.setBounds(390, 20, 410, 30);
-		title2.setBackground(Color.WHITE);
-		// title.setBorder(BorderFactory.createMatteBorder(2, 2, 0, 2,
-		// Color.GRAY));
+		title2.setBounds(500, 20, 200, 30);
+		title2.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0,
+		Color.LIGHT_GRAY));
 		this.add(title2);
 
 		tip = new JPanel();
-		tip.setLocation(390, 50);
-		tip.setPreferredSize(new Dimension(415, 630));
+		tip.setLocation(390, 60);
+		tip.setPreferredSize(new Dimension(405, 600));
 		// bankAccount.setBounds(350, 140, 435, 1000);
+		tip.setOpaque(false);
 		tip.setLayout(null);
 		JScrollPane scrollPane = new JScrollPane(tip);
 		scrollPane.setFont(font);
 		scrollPane.setBackground(Color.white);
-		scrollPane.setBorder(BorderFactory.createMatteBorder(3, 0, 3, 0,
-				Color.gray));
-		scrollPane.setBounds(390, 50, 435, 635);
+		scrollPane.setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1,
+				Color.LIGHT_GRAY));
+		MyScrollPane render = new MyScrollPane();
+		scrollPane.getVerticalScrollBar().setUI(render);
+		render.setscrollbar();
+		updateUI();
+		scrollPane.setOpaque(false);
+		scrollPane.getViewport().setOpaque(false);
+		scrollPane.setBounds(390, 60, 420, 600);
 		scrollPane
-				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		this.add(scrollPane);
 
 		init();
@@ -334,20 +352,22 @@ public class FinancePaymentUI extends JPanel {
 		PaymentBLService pay = new PaymentDoc();
 
 		ArrayList<PaymentDocVO> list = pay.createPaymentDoc();
-		Font f = new Font("仿宋", Font.PLAIN, 18);
+		Font f = new Font("楷体", Font.PLAIN, 20);
 
 		if (list != null) {
 			for (int i = 0; i < list.size(); i++) {
 				PaymentDocVO vo = list.get(i);
 				PaymentItem payment = vo.getPaymentList();
-				JLabel prompt = new JLabel();
-				prompt.setBounds(5, i * 90, 400, 90);
+				JTextArea prompt = new JTextArea();
+				prompt.setBounds(5, i * 105, 400, 100);
+				prompt.setEditable(false);
+				prompt.setOpaque(false);
 				String text = "付款日期：  " + payment.getDate() + "\n" + "付款金额：  "
-						+ payment.getSum() + "\n" + "条目：  "
-						+ payment.getEntry() + "\n" + "备注：  " + payment.getComment();
+						+ payment.getSum() + "\n" + "条目：      "
+						+ payment.getEntry() + "\n" + "备注：      " + payment.getComment();
 				prompt.setText(text);
 				prompt.setFont(f);
-				prompt.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.GRAY));
+				prompt.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.LIGHT_GRAY));
 				tip.add(prompt);
 			}
 			tip.setPreferredSize(new Dimension(415,list.size() * 90));
@@ -417,13 +437,15 @@ public class FinancePaymentUI extends JPanel {
 		
 		boolean succ = pay.addPaymentDoc(vo);
 		if (succ) {
-			JOptionPane.showConfirmDialog(null, "添 加 成 功！", null,
-					JOptionPane.DEFAULT_OPTION,
-					JOptionPane.INFORMATION_MESSAGE, null);
+			TipBlock block = new TipBlock("添加成功");
+			tippane.add(block);
+			block.show();
+			block = null;
 		} else {
-			JOptionPane.showConfirmDialog(null, "添 加 失 败！", null,
-					JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
-					null);
+			TipBlockError block = new TipBlockError("添加失败");
+			tippane.add(block);
+			block.show();
+			block = null;
 		}
 		
 		pay.endPaymentDoc();
@@ -437,19 +459,21 @@ public class FinancePaymentUI extends JPanel {
 
 		public void mouseClicked(MouseEvent e) {
 			// TODO Auto-generated method stub
-			if (e.getSource() == exit) {
-				m.jumpToFinanceMenuUI(IDKeeper.getID());
-			} else if (e.getSource() == ok) {
+		 if (e.getSource() == ok) {
 				if (check()) {
 					if(correct()){
 						addPayment();
 					} else {
-						JOptionPane.showConfirmDialog(null, "信 息 错 误！", null,
-								JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null);
+						TipBlockError block = new TipBlockError("信息错误");
+						tippane.add(block);
+						block.show();
+						block = null;
 					}
 				} else {
-					JOptionPane.showConfirmDialog(null, "信 息 未 填！", null,
-							JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null);
+					TipBlockEmpty block = new TipBlockEmpty("您还有信息未填");
+					tippane.add(block);
+					block.show();
+					block = null;
 				}
 			} else if (e.getSource() == cancel) {
 				Date d = new Date();
@@ -457,12 +481,14 @@ public class FinancePaymentUI extends JPanel {
 				time = format.format(d);
 				date.setText(time);
 				money.setText("");
-				name.setText("");
+				name.setText(n);
 				comment.setText("");
 				date.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 				name.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 				money.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 				comment.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+			}else if(e.getSource() == exit){
+				m.jumpToFinanceMenuUI(IDKeeper.getID(), IDKeeper.getHigh());
 			}
 			repaint();
 		}
@@ -478,13 +504,23 @@ public class FinancePaymentUI extends JPanel {
 		}
 
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-
+			if (e.getSource() == exit) {
+				exit.whenPressed();
+			} else if (e.getSource() == ok) {
+				ok.whenPressed();
+			} else if (e.getSource() == cancel) {
+				cancel.whenPressed();
+			}
 		}
 
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-
+			if (e.getSource() == exit) {
+				exit.setMyColor();
+			} else if (e.getSource() == ok) {
+				ok.setMyColor();
+			} else if (e.getSource() == cancel) {
+				cancel.setMyColor();
+			}
 		}
 	}
 }

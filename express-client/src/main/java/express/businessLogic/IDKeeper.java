@@ -5,6 +5,8 @@ public class IDKeeper {
 	private static String id;
 	private static String orgID;
 	private static String city;
+	private static boolean high;
+	private static boolean isManager = false;
 	
 	public IDKeeper(){
 		id=null;
@@ -33,5 +35,21 @@ public class IDKeeper {
 	
 	public static void setCity(String c){
 		city=c;
+	}
+	
+	public static boolean getHigh(){
+		return high;
+	}
+	
+	public static void setHigh(boolean h){
+		high = h;
+	}
+	
+	public static boolean getIsManager(){
+		return isManager;
+	}
+	
+	public static void setIsManager(boolean b){
+		isManager = b;
 	}
 }

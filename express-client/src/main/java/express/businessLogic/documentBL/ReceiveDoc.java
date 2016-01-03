@@ -118,6 +118,7 @@ public class ReceiveDoc implements BusinessSaleReceiveDocumentblService{
 	public boolean changeReceiveDoc(ReceiveDocVO vo){
 		ReceiveDocPO po=new ReceiveDocPO(vo.getReceiveDate(), vo.getReceivePrice(),
 				vo.getDeliverManID(), vo.getAllOrderIDs(),vo.getOrgID());
+		po.setState(true);
 		try{
 			rmiObj.changeReceiveDoc(po);
 			return true;

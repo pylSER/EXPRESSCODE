@@ -11,6 +11,8 @@ public interface OperateFormDataService extends Remote{
 	
 	public ArrayList<String> getOperateFormListTitle() throws RemoteException;
 	
+	public boolean removeOperateForm(int index) throws RemoteException;
+	
 	public OperateFormPO getOperateForm(int index) throws RemoteException;
 	
 	public boolean writeAllOperateForm() throws RemoteException;

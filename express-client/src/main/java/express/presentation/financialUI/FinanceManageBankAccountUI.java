@@ -23,12 +23,24 @@ import express.businessLogic.IDKeeper;
 import express.businessLogic.infoManageBL.BankAccount;
 import express.businesslogicService.financialBLService.BankAccountBLService;
 import express.presentation.mainUI.MainUIService;
+import express.presentation.mainUI.MyOtherBlueLabel;
+import express.presentation.mainUI.MyOtherGreenLabel;
+import express.presentation.mainUI.MyOtherOrangeLabel;
+import express.presentation.mainUI.MyOtherRedLabel;
+import express.presentation.mainUI.MyScrollPane;
+import express.presentation.mainUI.TipBlock;
+import express.presentation.mainUI.TipBlockEmpty;
+import express.presentation.mainUI.TipBlockError;
 import express.vo.BankAccountVO;
 
 public class FinanceManageBankAccountUI extends JPanel {
 
-	private MainUIService m;
-	private JButton ok, cancel, find, exit;
+	MainUIService m;
+	private JPanel tippane;
+	private MyOtherBlueLabel ok;
+	private MyOtherRedLabel cancel;
+	private MyOtherGreenLabel find;
+	private MyOtherOrangeLabel exit;
 	private JTextField name, income, outcome, profit, search;
 	// private JButton[] buttonList;
 	private JTextField[] textList;
@@ -37,9 +49,8 @@ public class FinanceManageBankAccountUI extends JPanel {
 	private JPanel bankAccount;
 
 	public FinanceManageBankAccountUI(MainUIService main) {
-
-		setLayout(null);
 		m = main;
+		setLayout(null);
 		this.setBounds(0, 0, 850, 700);
 		this.setBackground(Color.WHITE);
 
@@ -110,63 +121,62 @@ public class FinanceManageBankAccountUI extends JPanel {
 		this.add(line);
 
 		Listener listen = new Listener();
-		ok = new JButton("新建账户");
+		
+		ok = new MyOtherBlueLabel("新建账户");
 		ok.setBounds(20, 487, 110, 40);
-		ok.setVisible(true);
-		ok.setBackground(Color.WHITE);
-		ok.setBorder(BorderFactory.createLineBorder(Color.gray, 2));
-		ok.setFont(new Font("隶书", Font.PLAIN, 18));
 		ok.addMouseListener(listen);
 		this.add(ok);
 
-		cancel = new JButton("取消");
+		cancel = new MyOtherRedLabel("取消");
 		cancel.setBounds(170, 487, 110, 40);
-		cancel.setVisible(true);
-		cancel.setBackground(Color.WHITE);
-		cancel.setBorder(BorderFactory.createLineBorder(Color.gray, 2));
-		cancel.setFont(new Font("隶书", Font.PLAIN, 18));
 		cancel.addMouseListener(listen);
 		this.add(cancel);
 
-		exit = new JButton("返回菜单");
+		exit = new MyOtherOrangeLabel("返回菜单");
 		exit.setBounds(20, 600, 260, 40);
-		exit.setVisible(true);
-		exit.setBackground(Color.WHITE);
-		exit.setBorder(BorderFactory.createLineBorder(Color.gray, 2));
-		exit.setFont(new Font("隶书", Font.PLAIN, 18));
 		exit.addMouseListener(listen);
 		this.add(exit);
 
 		search = new JTextField();
-		search.setBounds(350, 80, 350, 30);
+		search.setBounds(350, 80, 350, 35);
 		search.setBackground(Color.WHITE);
 		search.setText("");
 		search.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
 		search.setFont(f);
 		this.add(search);
 
-		find = new JButton("查找");
-		find.setBounds(701, 80, 80, 29);
-		find.setVisible(true);
-		find.setBackground(Color.WHITE);
-		find.setBorder(BorderFactory.createLineBorder(Color.gray, 2));
-		find.setFont(new Font("楷体", Font.PLAIN, 18));
+		find = new MyOtherGreenLabel("查找");
+		find.setBounds(701, 80, 100, 35);
 		find.addMouseListener(listen);
 		this.add(find);
-		// find.addMouseListener(listen);
+		
+		tippane = new JPanel();
+		tippane.setSize(850, 40);
+		tippane.setLocation(0, 660);
+		tippane.setBackground(Color.white);
+		tippane.setLayout(null);
+		this.add(tippane);
 
 		bankAccount = new JPanel();
 		bankAccount.setLocation(350, 140);
-		bankAccount.setPreferredSize(new Dimension(435, 490));
+		bankAccount.setPreferredSize(new Dimension(440, 490));
 		//bankAccount.setBounds(350, 140, 435, 1000);
+		bankAccount.setOpaque(false);
 		bankAccount.setLayout(null);
 		JScrollPane scrollPane = new JScrollPane(bankAccount);
 		scrollPane.setFont(font);
 		scrollPane.setBackground(Color.white);
-		scrollPane.setBorder(BorderFactory.createMatteBorder(3, 0, 3, 0,
-				Color.gray));
-		scrollPane.setBounds(350, 140, 455, 500);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1,
+				Color.LIGHT_GRAY));
+		scrollPane.setBounds(350, 140, 450, 500);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		MyScrollPane render = new MyScrollPane();
+		scrollPane.getVerticalScrollBar().setUI(render);
+		render.setscrollbar();
+		updateUI();
+		scrollPane.setOpaque(false);
+		scrollPane.getViewport().setOpaque(false);
 		this.add(scrollPane);
 	}
 
@@ -185,32 +195,35 @@ public class FinanceManageBankAccountUI extends JPanel {
 				BankAccountVO vo = list.get(i);
 				addLine(vo, i);
 			}
-			bankAccount.setPreferredSize(new Dimension(435, len * 75));
+			bankAccount.setPreferredSize(new Dimension(430, len * 95));
 			this.updateUI();
 		}
 	}
 
 	private void addLine(BankAccountVO vo, int i) {
 
-		Font f = new Font("楷体", Font.PLAIN, 18);
-		int len = 75 * i;
+		Font f = new Font("楷体", Font.PLAIN, 20);
+		Font f1 = new Font("楷体", Font.PLAIN, 22);
+		int len = 95 * i;
+		
+		JLabel mLabel = new JLabel();
+		mLabel.setBounds(5, 45 + len, 425, 50);
+		String title = "余额 ：" + vo.getBalance();
+		mLabel.setText(title);
+		mLabel.setFont(f1);
+		mLabel.setBorder(BorderFactory
+				.createMatteBorder(0, 0, 2, 0, Color.lightGray));
+		bankAccount.add(mLabel);
 
 		JLabel nLabel = new JLabel("账户名");
-		nLabel.setBounds(5, 5 + len, 60, 30);
+		nLabel.setBounds(5, 5+len, 60, 40);
 		nLabel.setFont(f);
 		bankAccount.add(nLabel);
 
-		JLabel mLabel = new JLabel();
-		mLabel.setBounds(5, 35 + len, 425, 40);
-		String title = "余额 ：" + vo.getBalance();
-		mLabel.setText(title);
-		mLabel.setFont(f);
-		mLabel.setBorder(BorderFactory
-				.createMatteBorder(0, 0, 2, 0, Color.GRAY));
-		bankAccount.add(mLabel);
-
 		JTextField n = new JTextField();
-		n.setBounds(70, 5 + len, 280, 30);
+		//n.setForeground(Color.WHITE);
+		//n.setBackground(new Color(250, 235, 215));
+		n.setBounds(70, 7+len, 250, 35);
 		n.setFont(f);
 		n.setText(vo.getName());
 		n.setBackground(Color.WHITE);
@@ -221,10 +234,12 @@ public class FinanceManageBankAccountUI extends JPanel {
 		Action action = new Action();
 
 		JButton change = new JButton("修改");
-		change.setBounds(350, 5 + len, 80, 30);
+		change.setBounds(335, 7+len, 90, 35);
+		change.setOpaque(false);
+		change.setContentAreaFilled(false);
 		change.setBackground(Color.WHITE);
 		change.setActionCommand("#" + i);
-		change.setBorder(BorderFactory.createLineBorder(Color.gray, 2));
+		change.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY,1));
 		change.setFont(f);
 		change.addActionListener(action);
 		bankAccount.add(change);
@@ -232,10 +247,12 @@ public class FinanceManageBankAccountUI extends JPanel {
 		// buttonList[i] = change;
 
 		JButton delete = new JButton("删除");
-		delete.setBounds(345, 5, 80, 30);
+		delete.setBounds(330, 7, 90, 35);
+		delete.setOpaque(false);
+		delete.setContentAreaFilled(false);
 		delete.setBackground(Color.WHITE);
 		delete.setActionCommand(i+"");
-		delete.setBorder(BorderFactory.createLineBorder(Color.gray, 2));
+		delete.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY,1));
 		delete.setFont(f);
 		delete.addActionListener(action);
 		mLabel.add(delete);
@@ -256,23 +273,25 @@ public class FinanceManageBankAccountUI extends JPanel {
 		bank.endManage();
 
 		if (succ) {
-			JOptionPane.showConfirmDialog(null, "新 建 成 功！", null,
-					JOptionPane.DEFAULT_OPTION,
-					JOptionPane.INFORMATION_MESSAGE, null);
+			TipBlock block = new TipBlock("新建成功");
+			tippane.add(block);
+			block.show();
+			block = null;
 		} else {
-			JOptionPane.showConfirmDialog(null, "新 建 失 败！", null,
-					JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
-					null);
+			TipBlockError block = new TipBlockError("新建失败");
+			tippane.add(block);
+			block.show();
+			block = null;
 		}
 	}
 
 	private boolean check() {
 
 		if (checkNotFill()) {
-
-			JOptionPane.showConfirmDialog(null, "您 还 有 信 息 未 填", null,
-					JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
-					null);
+			TipBlockEmpty block = new TipBlockEmpty("您还有信息未填");
+			tippane.add(block);
+			block.show();
+			block = null;
 
 			return false;
 		} else {
@@ -290,16 +309,18 @@ public class FinanceManageBankAccountUI extends JPanel {
 			}
 			if (bank.checkDuplication(account)) {
 				name.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
-
-				JOptionPane.showConfirmDialog(null, "账 户 重 名", null,
-						JOptionPane.DEFAULT_OPTION,
-						JOptionPane.WARNING_MESSAGE, null);
+				TipBlockError block = new TipBlockError("账户重名");
+				tippane.add(block);
+				block.show();
+				block = null;
 				isDup = true;
 			}
 			if (!isValid) {
-				JOptionPane.showConfirmDialog(null, "金 额 输 入 错 误", null,
-						JOptionPane.DEFAULT_OPTION,
-						JOptionPane.WARNING_MESSAGE, null);
+				TipBlockError block = new TipBlockError("金额输入错误");
+				tippane.add(block);
+				block.show();
+				block = null;
+				isDup = true;
 			}
 			return isValid && (!isDup);
 		}
@@ -327,8 +348,9 @@ public class FinanceManageBankAccountUI extends JPanel {
 	private class Listener implements MouseListener {
 
 		public void mouseClicked(MouseEvent e) {
-			
-			if (e.getSource() == cancel) {
+			if(e.getSource() == exit){
+				m.jumpToFinanceMenuUI(IDKeeper.getID(), true);
+			}else if (e.getSource() == cancel) {
 				name.setText("");
 				income.setText("");
 				outcome.setText("");
@@ -347,9 +369,7 @@ public class FinanceManageBankAccountUI extends JPanel {
 					income.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 					outcome.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 				}
-			} else if (e.getSource() == exit) {
-				m.jumpToFinanceMenuUI(IDKeeper.getID());
-			}
+			} 
 			repaint();
 		}
 
@@ -362,10 +382,27 @@ public class FinanceManageBankAccountUI extends JPanel {
 		}
 
 		public void mousePressed(MouseEvent e) {
+			if (e.getSource() == exit) {
+				exit.whenPressed();
+			} else if (e.getSource() == find) {
+				find.whenPressed();
+			} else if (e.getSource() == ok) {
+				ok.whenPressed();
+			}else if(e.getSource() == cancel){
+				cancel.whenPressed();
+			}
 		}
 
 		public void mouseReleased(MouseEvent e) {
-
+			if (e.getSource() == exit) {
+				exit.setMyColor();
+			} else if (e.getSource() == find) {
+				find.setMyColor();
+			} else if (e.getSource() == ok) {
+				ok.setMyColor();
+			}else if(e.getSource() == cancel){
+				cancel.setMyColor();
+			}
 		}
 	}
 
@@ -386,17 +423,21 @@ public class FinanceManageBankAccountUI extends JPanel {
 				n = text.getText();
 				if (n.equals("")) {
 					text.setBorder(BorderFactory.createLineBorder(new Color(255,215,0), 1));
-
-					JOptionPane.showConfirmDialog(null, "账 户 名 未 填！", null,
-							JOptionPane.DEFAULT_OPTION,
-							JOptionPane.WARNING_MESSAGE, null);
+					
+					TipBlockEmpty block = new TipBlockEmpty("账户名未填");
+					tippane.add(block);
+					block.show();
+					block = null;
+				
 				} else {
 					if (bank.checkDuplication(n)) {
 						text.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
 
-						JOptionPane.showConfirmDialog(null, "账 户 重 名！", null,
-								JOptionPane.DEFAULT_OPTION,
-								JOptionPane.WARNING_MESSAGE, null);
+						TipBlockError block = new TipBlockError("账户重名");
+						tippane.add(block);
+						block.show();
+						block = null;
+						
 					} else {
 
 						boolean succ = bank.changeBankAccount(nameList.get(i), n);
@@ -405,25 +446,39 @@ public class FinanceManageBankAccountUI extends JPanel {
 						text.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 
 						if (succ) {
-							JOptionPane.showConfirmDialog(null, "修 改 成 功！",
-									null, JOptionPane.DEFAULT_OPTION,
-									JOptionPane.INFORMATION_MESSAGE, null);
+							TipBlock block = new TipBlock("修改成功");
+							tippane.add(block);
+							block.show();
+							block = null;
 						} else {
-							JOptionPane.showConfirmDialog(null, "修 改 失 败！",
-									null, JOptionPane.DEFAULT_OPTION,
-									JOptionPane.WARNING_MESSAGE, null);
+							TipBlockError block = new TipBlockError("修改失败");
+							tippane.add(block);
+							block.show();
+							block = null;
 						}
 					}
 				}
 			} else {
 				int i = Integer.parseInt(s);
-				bank.removeBankAccount(nameList.get(i));
+				boolean succ = bank.removeBankAccount(nameList.get(i));
 				
 				bank.endManage();
 
 				String key = search.getText();
 				findBankAccount(key);
 				repaint();
+				
+				if (succ) {
+					TipBlock block = new TipBlock("删除成功");
+					tippane.add(block);
+					block.show();
+					block = null;
+				} else {
+					TipBlockError block = new TipBlockError("删除失败");
+					tippane.add(block);
+					block.show();
+					block = null;
+				}
 			}
 		}
 	}

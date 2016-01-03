@@ -86,6 +86,8 @@ public class RMIServer {
 		NAMING_MAP.put("TransArrivalDoc-data",ArrivalDocTransCenterIO.class);
 		NAMING_MAP.put("TransCenterShipment-data",ShipmentDocTransCenterIO.class);
 		
+		NAMING_MAP.put("IP-data",IPmanager.class);
+		
 		
 	}
 

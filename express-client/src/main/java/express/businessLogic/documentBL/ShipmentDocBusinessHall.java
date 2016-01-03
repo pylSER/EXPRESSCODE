@@ -1,9 +1,13 @@
 package express.businessLogic.documentBL;
 
 import java.rmi.RemoteException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
+import javax.swing.JInternalFrame;
 
 import express.businessLogic.IDKeeper;
 import express.businessLogic.infoManageBL.DistanceManager;
@@ -35,7 +39,7 @@ public class ShipmentDocBusinessHall implements BusinessSaleShipmentDocumentblSe
 				vo.getAllOrder(), vo.getMoney(), vo.getShipmentID(),vo.getStartPlace());
 
 		ShipmentDocCheck transidchecker = new ShipmentDocCheck();
-		if (!transidchecker.isTransIDavailable(vo.getTransId())) {
+		if (transidchecker.isTransIDavailable(vo.getTransId())) {
 			System.out.println("transID FAlse"+vo.getTransId());
 			return false;
 		}
@@ -155,7 +159,22 @@ public class ShipmentDocBusinessHall implements BusinessSaleShipmentDocumentblSe
 		int month=c.get(Calendar.MONTH)+1;
 		int day=c.get(Calendar.DATE);
 		
-		ID+=orgID+year+month+day;
+		
+		if(month<10&&day<10){
+			ID+=orgID+year+"0"+month+"0"+day;
+		}
+		if(month>=10&&day<10){
+			ID+=orgID+year+month+"0"+day;	
+		}
+		if(month<10&&day>=10){
+			ID+=orgID+year+"0"+month+day;
+		}
+		if(month>=10&&day>=10){
+			ID+=orgID+year+month+day;
+		}
+
+		//加判断       
+		
 		long a=System.currentTimeMillis();
 		String x="";
 		x+=a;
@@ -190,6 +209,7 @@ public class ShipmentDocBusinessHall implements BusinessSaleShipmentDocumentblSe
 		ShipmentDocBusinessHallPO po=new ShipmentDocBusinessHallPO(vo.getDate(), vo.getTransId(),
 				vo.getBusinessHallNum(), vo.getArrivalPlace(), vo.getVanID(), vo.getCheckMan(), vo.getTransMan(),
 				vo.getAllOrder(), vo.getMoney(), vo.getShipmentID(),vo.getStartPlace());
+		po.setState(true);
 		
 		try{
 			rmiObj.changeBusinessHallShipmentDoc(po);

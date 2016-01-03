@@ -21,6 +21,7 @@ public class MyTableModel extends DefaultTableModel {
 	// 使表格具有可编辑性
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		if(data!=null)
 		if (data.length > 0)
 			if (data[0][head.length - 1].equals(changeunder)
 					|| data[0][head.length - 1].equals(confirmunder)) {

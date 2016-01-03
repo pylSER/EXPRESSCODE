@@ -2,11 +2,13 @@ package express.presentation.managerUI;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -27,6 +29,8 @@ import express.businesslogicService.managerBLService.ExamDocumentBLService;
 import express.po.GoodsArrivalStatus;
 import express.presentation.mainUI.MainUIService;
 import express.presentation.mainUI.MyCellRenderer;
+import express.presentation.mainUI.MyOtherGreenLabel;
+import express.presentation.mainUI.MyScrollPane;
 import express.presentation.mainUI.MyTableModel;
 import express.vo.ArrivalDocBusinessHallVO;
 import express.vo.ArrivalDocTransCenterVO;
@@ -43,9 +47,13 @@ import express.vo.TransferDocVO;
 
 public class managerExamDocUI extends JPanel {
 
+	private JPanel tippane;
 	private JButton exam;
-	private JPanel panel;
-	private JTable[] table;
+	private JComboBox<String> typebox;
+	private MyOtherGreenLabel find;
+	private JPanel currPanel;
+	private JPanel title;
+	//
 	private MyTableModel[] tableModel;
 	private MyCellRenderer[] headerren;
 	private ExamDocumentBLService examdoc;
@@ -60,200 +68,122 @@ public class managerExamDocUI extends JPanel {
 	private ArrayList<DeliverDocVO> deliverdocarr;
 	private ArrayList<ReceiveDocVO> receivearr;
 	private ArrayList<PaymentDocVO> paymentarr;
-	private String changeunder = "<HTML><U>修改</U></HTML>";
-	// private String confirmunder = "<HTML><U>确认</U></HTML>";
-	// private String yesunder = "<HTML><U>已审批</U></HTML>";
-	// private String nounder = "<HTML><U>未审批</U></HTML>";
-	private Object[][] data1, data2, data3, data4, data5, data6, data7, data8,
-			data9, data10, data11;
-	private String[] header = { "选择", "单据类型", "单据名称", "修改" };
 
 	public managerExamDocUI() {
 		setLayout(null);
 		this.setBounds(0, 0, 850, 700);
 		this.setBackground(Color.WHITE);
 
-		panel = new JPanel();
-		panel.setLayout(null);
-		panel.setBounds(50, 60, 750, 600);
+		Font font = new Font("楷体", Font.PLAIN, 20);
+		Font f = new Font("仿宋", Font.PLAIN, 18);
 
-		JScrollPane scrollPane = new JScrollPane(panel);
-		scrollPane.setBounds(50, 60, 750, 600);
+		JLabel t = new JLabel("单据类型", JLabel.CENTER);
+		t.setFont(new Font("楷体", Font.PLAIN, 21));
+		t.setBounds(30, 50, 150, 30);
+		this.add(t);
+
+		String[] type = { "寄件单", "收款单", "营业厅到达单", "装车单", "派件单", "中转中心到达单",
+				"入库单", "中转单", "出库单", "付款单" };
+		typebox = new JComboBox<String>(type);
+		typebox.setBounds(200, 50, 420, 30);
+		typebox.setFont(font);
+		typebox.setMaximumRowCount(10);
+		typebox.setBackground(Color.WHITE);
+		this.add(typebox);
+
+		Listener listen = new Listener();
+
+		find = new MyOtherGreenLabel("查找");
+		find.setBounds(670, 50, 110, 30);
+		find.addMouseListener(listen);
+		this.add(find);
+
+		title = new JPanel();
+		title.setBounds(70, 115, 710, 35);
+		title.setLayout(null);
+		title.setOpaque(false);
+		title.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1,
+				Color.LIGHT_GRAY));
+		this.add(title);
+
+		currPanel = new JPanel();
+		currPanel.setLocation(70, 150);
+		currPanel.setPreferredSize(new Dimension(710, 500));
+		currPanel.setOpaque(false);
+		currPanel.setLayout(null);
+		JScrollPane scrollPane = new JScrollPane(currPanel);
+		scrollPane.setBounds(70, 150, 710, 500);
+		scrollPane.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1,
+				Color.LIGHT_GRAY));
+		MyScrollPane render = new MyScrollPane();
+		scrollPane.getVerticalScrollBar().setUI(render);
+		render.setscrollbar();
+		updateUI();
+		scrollPane.setOpaque(false);
+		scrollPane.getViewport().setOpaque(false);
+		scrollPane
+				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane
+				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		this.add(scrollPane);
 
-		Font font = new Font("楷体", Font.PLAIN, 18);
-		Font f = new Font("仿宋", Font.PLAIN, 16);
-		Listener listener = new Listener();
-		examdoc = new ExamDocument();
-		table = new JTable[11];
-		tableModel = new MyTableModel[11];
-		headerren = new MyCellRenderer[11];
-		JScrollPane[] sp = new JScrollPane[11];
+		tippane = new JPanel();
+		tippane.setSize(850, 40);
+		tippane.setLocation(0, 660);
+		tippane.setBackground(Color.white);
+		tippane.setLayout(null);
+		this.add(tippane);
+	}
 
-		Class[] typeArray = { Boolean.class, Object.class, Object.class,
-				Object.class, };
-		// table数据初始化
-		orderarr = examdoc.getUEOrderlist();
-		if (orderarr != null) {
-			data1 = new Object[orderarr.size()][4];
-			for (int i = 0; i < orderarr.size(); i++) {
-				data1[i][0] = false;
-				data1[i][1] = "订单";
-				data1[i][2] = orderarr.get(i).getOrderID();
-				data1[i][3] = changeunder;
-			}
-			tableModel[0] = new MyTableModel(data1, header, typeArray);
+	private void getList(int index) {
+		title.removeAll();
+		currPanel.removeAll();
+		repaint();
+
+		switch (index) {
+		case 0:
+			new ExamOrder(currPanel, title, tippane);
+			break;
+		case 1:
+			new ExamReceive(currPanel, title, tippane);
+			break;
+		case 2:
+			new ExamBusinessArrival(currPanel, title, tippane);
+			break;
+		case 3:
+			new ExamShipment(currPanel, title, tippane);
+			break;
+		case 4:
+			new ExamDeliver(currPanel, title, tippane);
+			break;
+		case 5:
+			new ExamTransArrival(currPanel, title, tippane);
+			break;
+		case 6:
+			new ExamIn(currPanel, title, tippane);
+			break;
+		case 7:
+			new ExamTransfer(currPanel, title, tippane);
+			break;
+		case 8:
+			new ExamOut(currPanel, title, tippane);
+			break;
+		case 9:
+			new ExamPayment(currPanel, title, tippane);
+			break;
 		}
-
-		arrivalbusarr = examdoc.getUEBusinessHallArrivalDoclist();
-		if (arrivalbusarr != null) {
-			data2 = new Object[arrivalbusarr.size()][4];
-			for (int i = 0; i < arrivalbusarr.size(); i++) {
-				data2[i][0] = false;
-				data2[i][1] = "营业厅到达单";
-				data2[i][2] = arrivalbusarr.get(i).getOrderID();
-				data2[i][3] = changeunder;
-			}
-			tableModel[1] = new MyTableModel(data2, header, typeArray);
-		}
-
-		arrivaltransarr = examdoc.getUETransCenterArrivalDoclist();
-		if (arrivaltransarr != null) {
-			data3 = new Object[arrivaltransarr.size()][4];
-			for (int i = 0; i < arrivaltransarr.size(); i++) {
-				data3[i][0] = false;
-				data3[i][1] = "中转中心到达单";
-				data3[i][2] = arrivaltransarr.get(i).getOrderID();
-				data3[i][3] = changeunder;
-			}
-			tableModel[2] = new MyTableModel(data3, header, typeArray);
-		}
-
-		deliverdocarr = examdoc.getUEDeliverDoclist();
-		if (deliverdocarr != null) {
-			data4 = new Object[deliverdocarr.size()][4];
-			for (int i = 0; i < deliverdocarr.size(); i++) {
-				data4[i][0] = false;
-				data4[i][1] = "派件单";
-				data4[i][2] = deliverdocarr.get(i).getOrderID();
-				data4[i][3] = changeunder;
-			}
-			tableModel[3] = new MyTableModel(data4, header, typeArray);
-		}
-
-		indocarr = examdoc.getUEInDoclist();
-		if (indocarr != null) {
-			data5 = new Object[indocarr.size()][4];
-			for (int i = 0; i < indocarr.size(); i++) {
-				data5[i][0] = false;
-				data5[i][1] = "入库单";
-				data5[i][2] = indocarr.get(i).getarrival() + "  "
-						+ indocarr.get(i).getdeliveryNumber();
-				data5[i][3] = changeunder;
-			}
-			tableModel[4] = new MyTableModel(data5, header, typeArray);
-		}
-
-		outdocarr = examdoc.getUEOutDoclist();
-		if (outdocarr != null) {
-			data6 = new Object[outdocarr.size()][4];
-			for (int i = 0; i < outdocarr.size(); i++) {
-				data6[i][0] = false;
-				data6[i][1] = "出库单";
-				data6[i][2] = outdocarr.get(i).getOrderID();
-				data6[i][3] = changeunder;
-			}
-			tableModel[5] = new MyTableModel(data6, header, typeArray);
-		}
-
-		paymentarr = examdoc.getUEPaymentDoclist();
-		if (paymentarr != null) {
-			data7 = new Object[paymentarr.size()][4];
-			for (int i = 0; i < paymentarr.size(); i++) {
-				data7[i][0] = false;
-				data7[i][1] = "付款单";
-				data7[i][2] = paymentarr.get(i).getPaymentID();
-				data7[i][3] = changeunder;
-			}
-			tableModel[6] = new MyTableModel(data7, header, typeArray);
-		}
-
-		receivearr = examdoc.getUEReceiveDoclist();
-		if (receivearr != null) {
-			data8 = new Object[receivearr.size()][4];
-			for (int i = 0; i < receivearr.size(); i++) {
-				data8[i][0] = false;
-				data8[i][1] = "收款单";
-				data8[i][2] = receivearr.get(i).getOrgID() + "  "
-						+ receivearr.get(i).getReceiveDate();
-				data8[i][3] = changeunder;
-			}
-			tableModel[7] = new MyTableModel(data8, header, typeArray);
-		}
-
-		shipbusarr = examdoc.getUEBusinessHallShipmentDoclist();
-		if (shipbusarr != null) {
-			data9 = new Object[shipbusarr.size()][4];
-			for (int i = 0; i < shipbusarr.size(); i++) {
-				data9[i][0] = false;
-				data9[i][1] = "营业厅装车单";
-				data9[i][2] = shipbusarr.get(i).getShipmentID();
-				data9[i][3] = changeunder;
-			}
-			tableModel[8] = new MyTableModel(data9, header, typeArray);
-		}
-
-		shiptransarr = examdoc.getUETransCenterShipmentDoclist();
-		if (shiptransarr != null) {
-			data10 = new Object[shiptransarr.size()][4];
-			for (int i = 0; i < shiptransarr.size(); i++) {
-				data10[i][0] = false;
-				data10[i][1] = "中转中心装车单";
-				data10[i][2] = shiptransarr.get(i).getShipmentID();
-				data10[i][3] = changeunder;
-			}
-			tableModel[9] = new MyTableModel(data10, header, typeArray);
-		}
-
-		transdocarr = examdoc.getUETransferDoclist();
-		if (transdocarr != null) {
-			data11 = new Object[transdocarr.size()][4];
-			for (int i = 0; i < transdocarr.size(); i++) {
-				data11[i][0] = false;
-				data11[i][1] = "中转单";
-				data11[i][2] = transdocarr.get(i).gettranscenterNumber() + "  "
-						+ transdocarr.get(i).getdate();
-				data11[i][3] = changeunder;
-			}
-			tableModel[10] = new MyTableModel(data11, header, typeArray);
-		}
-
-		for (int i = 0; i < 11; i++) {
-			table[i] = new JTable(tableModel[i]);
-			table[i].setRowHeight(40);
-			table[i].getTableHeader().setReorderingAllowed(false);
-			table[i].setBounds(0, 0, 750, 600);
-			table[i].setFont(f);
-			table[i].addMouseListener(listener);
-			headerren[i] = new MyCellRenderer(table[i],tableModel[i]);
-			table[i].getTableHeader().setDefaultRenderer(headerren[i]);
-			sp[i] = new JScrollPane(table[i]);
-			sp[i].setBounds(0, 0, 750, 600);
-			panel.add(sp[i]);
-		}
-
-		exam = new JButton("审批");
-		exam.setBounds(340, 10, 100, 30);
-		exam.setFont(font);
-		exam.addMouseListener(listener);
-		this.add(exam);
-
 	}
 
 	private class Listener implements MouseListener {
 
 		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
+
+			if (e.getSource() == find) {
+				int index = typebox.getSelectedIndex();
+				getList(index);
+			}
+			repaint();
+
 			if (e.getSource() == exam) {
 				// 通过审批，设置单据审批状态
 				for (int i = 0; i < tableModel[0].getRowCount(); i++) {
@@ -265,7 +195,7 @@ public class managerExamDocUI extends JPanel {
 						tableModel[0].removeRow(i);
 					}
 				}
-				
+
 				for (int i = 0; i < tableModel[1].getRowCount(); i++) {
 					if ((boolean) tableModel[1].getValueAt(i, 0)) {
 						ArrivalDocBusinessHallVO vo = arrivalbusarr.get(i);
@@ -275,7 +205,7 @@ public class managerExamDocUI extends JPanel {
 						tableModel[1].removeRow(i);
 					}
 				}
-				
+
 				for (int i = 0; i < tableModel[2].getRowCount(); i++) {
 					if ((boolean) tableModel[2].getValueAt(i, 0)) {
 						ArrivalDocTransCenterVO vo = arrivaltransarr.get(i);
@@ -285,7 +215,7 @@ public class managerExamDocUI extends JPanel {
 						tableModel[2].removeRow(i);
 					}
 				}
-				
+
 				for (int i = 0; i < tableModel[3].getRowCount(); i++) {
 					if ((boolean) tableModel[3].getValueAt(i, 0)) {
 						DeliverDocVO vo = deliverdocarr.get(i);
@@ -295,7 +225,7 @@ public class managerExamDocUI extends JPanel {
 						tableModel[3].removeRow(i);
 					}
 				}
-				
+
 				for (int i = 0; i < tableModel[4].getRowCount(); i++) {
 					if ((boolean) tableModel[4].getValueAt(i, 0)) {
 						InDocVO vo = indocarr.get(i);
@@ -305,7 +235,7 @@ public class managerExamDocUI extends JPanel {
 						tableModel[4].removeRow(i);
 					}
 				}
-				
+
 				for (int i = 0; i < tableModel[5].getRowCount(); i++) {
 					if ((boolean) tableModel[5].getValueAt(i, 0)) {
 						OutDocVO vo = outdocarr.get(i);
@@ -315,7 +245,7 @@ public class managerExamDocUI extends JPanel {
 						tableModel[5].removeRow(i);
 					}
 				}
-				
+
 				for (int i = 0; i < tableModel[6].getRowCount(); i++) {
 					if ((boolean) tableModel[6].getValueAt(i, 0)) {
 						PaymentDocVO vo = paymentarr.get(i);
@@ -325,7 +255,7 @@ public class managerExamDocUI extends JPanel {
 						tableModel[6].removeRow(i);
 					}
 				}
-				
+
 				for (int i = 0; i < tableModel[7].getRowCount(); i++) {
 					if ((boolean) tableModel[7].getValueAt(i, 0)) {
 						ReceiveDocVO vo = receivearr.get(i);
@@ -335,7 +265,7 @@ public class managerExamDocUI extends JPanel {
 						tableModel[7].removeRow(i);
 					}
 				}
-				
+
 				for (int i = 0; i < tableModel[8].getRowCount(); i++) {
 					if ((boolean) tableModel[8].getValueAt(i, 0)) {
 						ShipmentDocBusinessHallVO vo = shipbusarr.get(i);
@@ -345,7 +275,7 @@ public class managerExamDocUI extends JPanel {
 						tableModel[8].removeRow(i);
 					}
 				}
-				
+
 				for (int i = 0; i < tableModel[9].getRowCount(); i++) {
 					if ((boolean) tableModel[9].getValueAt(i, 0)) {
 						ShipmentDocTransCenterVO vo = shiptransarr.get(i);
@@ -355,7 +285,7 @@ public class managerExamDocUI extends JPanel {
 						tableModel[9].removeRow(i);
 					}
 				}
-				
+
 				for (int i = 0; i < tableModel[10].getRowCount(); i++) {
 					if ((boolean) tableModel[10].getValueAt(i, 0)) {
 						TransferDocVO vo = transdocarr.get(i);
@@ -366,22 +296,26 @@ public class managerExamDocUI extends JPanel {
 					}
 				}
 			}
-			
-			for (int i = 0; i < 11; i++) {
-				if (e.getSource() == table[i]) {
-					int row = table[i].getSelectedRow();
-					int col = table[i].getSelectedColumn();
 
-					if (col == 5) {
-						if (tableModel[i].getValueAt(row, col).equals(
-								changeunder)) {
-							if(i==1){
-								OrderChangeUI orui = new OrderChangeUI(tableModel[i],orderarr.get(row));
-								orui.setVisible(true);
-							}
-						}
-					}
-				}
+			for (int i = 0; i < 11; i++) {
+				// if (e.getSource() == table[i]) {
+				// int row = table[i].getSelectedRow();
+				// int col = table[i].getSelectedColumn();
+				//
+				// if (tableModel[i].getValueAt(row, col).equals(changeunder)) {
+				// if (i == 0) {
+				// OrderViewUI orui = new OrderViewUI(tableModel[i],
+				// orderarr.get(row));
+				// orui.setVisible(true);
+				// } else if (i == 1) {
+				// BusinessHallArrivalViewUI baui = new
+				// BusinessHallArrivalViewUI(
+				// tableModel[i], arrivalbusarr.get(row));
+				// baui.setVisible(true);
+				// }
+				//
+				// }
+				// }
 
 			}
 			updateUI();
@@ -398,13 +332,11 @@ public class managerExamDocUI extends JPanel {
 		}
 
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-
+			find.whenPressed();
 		}
 
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-
+			find.setMyColor();
 		}
 	}
 }

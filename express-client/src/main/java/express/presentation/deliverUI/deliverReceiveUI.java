@@ -21,10 +21,17 @@ import express.businessLogic.receiveInfoBL.ReceiveInfo;
 import express.businesslogicService.delivermanBLService.ReceiveInfoBLService;
 import express.presentation.mainUI.DateChooser;
 import express.presentation.mainUI.MainUIService;
+import express.presentation.mainUI.MyOtherBlueLabel;
+import express.presentation.mainUI.MyOtherGreenLabel;
+import express.presentation.mainUI.TipBlock;
+import express.presentation.mainUI.TipBlockError;
 import express.vo.ReceiveInfoVO;
 
 public class deliverReceiveUI extends JPanel {
-	private JButton button_return, button_cancel;
+	
+	private JPanel tippane;
+	private MyOtherBlueLabel button_return;
+	private MyOtherGreenLabel button_cancel;
 	private JTextField textArea1, textArea2, textArea3;
 	private DateChooser datechooser;
 	private String receiverName, receiveTime, OrderID;
@@ -43,8 +50,9 @@ public class deliverReceiveUI extends JPanel {
 		this.setBounds(0, 0, 850, 700);
 		this.setBackground(Color.WHITE);
 
-		Font font = new Font("楷体", Font.PLAIN, 18);
-		Font f = new Font("仿宋", Font.PLAIN, 16);
+		Font font = new Font("幼圆", Font.PLAIN, 20);
+		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
+		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
 		Foclistener foc = new Foclistener();
 
 		JLabel label1 = new JLabel("收件人姓名");
@@ -88,17 +96,25 @@ public class deliverReceiveUI extends JPanel {
 
 		Listener lis = new Listener();
 
-		button_return = new JButton("确认");
+		button_return = new MyOtherBlueLabel("确认");
 		button_return.setBounds(220, 520, 100, 30);
-		button_return.setFont(font);
+	
 		button_return.addMouseListener(lis);
 		this.add(button_return);
 
-		button_cancel = new JButton("取消");
+		button_cancel = new MyOtherGreenLabel("取消");
 		button_cancel.setBounds(400, 520, 100, 30);
-		button_cancel.setFont(font);
+	
 		button_cancel.addMouseListener(lis);
 		this.add(button_cancel);
+		
+		
+		tippane=new JPanel();
+		 tippane.setSize(850,40);
+		tippane.setLocation(0, 660);
+		tippane.setBackground(Color.white);
+		tippane.setLayout(null);
+		this.add(tippane);
 
 	}
 
@@ -156,12 +172,16 @@ public class deliverReceiveUI extends JPanel {
 							receiveTime, OrderID);
 					ReceiveInfoBLService rbs = new ReceiveInfo();
 					if (rbs.addReceiveInfo(vo)) {
-						JOptionPane.showMessageDialog(null, "生成收件信息成功", "提示",
-								JOptionPane.INFORMATION_MESSAGE);
+						TipBlock block=new TipBlock("生成收件信息成功");
+						tippane.add(block);
+						block.show();
+						block=null;
 						rbs.endReceiveInfo();
 					} else {
-						JOptionPane.showMessageDialog(null, "订单号错误", "提示",
-								JOptionPane.ERROR_MESSAGE);
+						TipBlockError block=new TipBlockError("订单条形码号错误");
+						tippane.add(block);
+						block.show();
+						block=null;
 					}
 				}
 			}
@@ -179,12 +199,20 @@ public class deliverReceiveUI extends JPanel {
 		}
 
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
+			if(e.getSource()==button_return){
+				button_return.whenPressed();
+			}else if (e.getSource()==button_cancel) {
+				button_cancel.whenPressed();
+			}
 
 		}
 
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
+			if(e.getSource()==button_return){
+				button_return.setMyColor();
+			}else if (e.getSource()==button_cancel) {
+				button_cancel.setMyColor();
+			}
 
 		}
 	}

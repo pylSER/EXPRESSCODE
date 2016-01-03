@@ -26,15 +26,24 @@ import express.businessLogic.infoManageBL.SalaryManager;
 import express.businesslogicService.managerBLService.SalaryManagerBLService;
 import express.po.Strategy;
 import express.po.UserRole;
+import express.presentation.mainUI.MyOtherBlueLabel;
+import express.presentation.mainUI.MyOtherGreenLabel;
+import express.presentation.mainUI.TipBlock;
+import express.presentation.mainUI.TipBlockEmpty;
 import express.vo.SalaryStrategyVO;
 
 public class managerSalaryUI extends JPanel {
 
+	
+	
+	
+	private JPanel tippane;
 	private JComboBox positioncb;
 	private JPanel panel;
 	private JPanel[] p;
 	private JTextField[] tf;
-	private JButton ok, exit;
+	private MyOtherBlueLabel ok;
+	private MyOtherGreenLabel exit;
 	private Border border;
 	private boolean complete = true;
 	private SalaryManagerBLService smb;
@@ -43,10 +52,11 @@ public class managerSalaryUI extends JPanel {
 		setLayout(null);
 		this.setBounds(0, 0, 850, 700);
 		this.setBackground(Color.WHITE);
-
-		Font font = new Font("楷体", Font.PLAIN, 18);
-		Font font0 = new Font("楷体", Font.BOLD, 19);
-		Font f = new Font("仿宋", Font.PLAIN, 16);
+;
+		Font font0 = new Font("楷体", Font.BOLD, 20);
+		Font font = new Font("幼圆", Font.PLAIN, 20);
+		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
+		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
 		int width = 220;
 		int height = 30;
 
@@ -138,17 +148,27 @@ public class managerSalaryUI extends JPanel {
 
 		}
 
-		ok = new JButton("确认");
+		ok = new MyOtherBlueLabel("确认");
 		ok.setBounds(230, 620, 100, 30);
 		ok.addMouseListener(lis);
-		ok.setFont(font);
+		
 		this.add(ok);
 
-		exit = new JButton("取消");
+		exit = new MyOtherGreenLabel("取消");
 		exit.setBounds(400, 620, 100, 30);
 		exit.addMouseListener(lis);
-		exit.setFont(font);
+		
 		this.add(exit);
+	
+		tippane=new JPanel();
+		 tippane.setSize(850,40);
+		tippane.setLocation(0, 660);
+		tippane.setBackground(Color.white);
+		tippane.setLayout(null);
+		this.add(tippane);
+	
+	
+	
 	}
 
 	private class Foclistener implements FocusListener {
@@ -209,11 +229,15 @@ public class managerSalaryUI extends JPanel {
 											.getText()));
 						smb.changeSalaryStrategy(vo[i]);
 					}
-					JOptionPane.showMessageDialog(null, "生成成功", "提示",
-							JOptionPane.INFORMATION_MESSAGE);
+					TipBlock block=new TipBlock("生成成功");
+					tippane.add(block);
+					block.show();
+					block=null;
 				} else {
-					JOptionPane.showMessageDialog(null, "信息未填写完整", "提示",
-							JOptionPane.ERROR_MESSAGE);
+					TipBlockEmpty block=new TipBlockEmpty("信息未填写完整");
+					tippane.add(block);
+					block.show();
+					block=null;
 				}
 			}
 			complete = true;
@@ -234,13 +258,21 @@ public class managerSalaryUI extends JPanel {
 
 		@Override
 		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+			if(arg0.getSource()==ok){
+				ok.whenPressed();
+			}else if (arg0.getSource()==exit) {
+				exit.whenPressed();
+			}
 
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+			if(arg0.getSource()==ok){
+				ok.setMyColor();
+			}else if (arg0.getSource()==exit) {
+				exit.setMyColor();
+			}
 
 		}
 

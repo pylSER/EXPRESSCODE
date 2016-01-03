@@ -73,6 +73,18 @@ public class ProfitStatistic implements ProfitFinanceBLService {
 		}
 		return null;
 	}
+	
+	public boolean removeProfitForm(int index){
+		try {
+			boolean succ = profit.removeProfitForm(index);
+			profit.writeAllProfitForm();
+			return succ;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 	public ProfitFormVO createProfitForm() {
 		BankAccountBLService bank = new BankAccount();

@@ -154,6 +154,7 @@ public class ArrivalDocTransCenter implements TransCenterArrivalDocblService{
 	public boolean changeTransCenterArrivalDoc(ArrivalDocTransCenterVO vo){
 		ArrivalDocTransCenterPO po=new ArrivalDocTransCenterPO(vo.getOrderID(),vo.getArriveDate(),vo.getTransCenterID(),vo.getTransferDocID()
 				,vo.getDeparture(),vo.getArrivalStatus());
+		po.setState(true);
 			try{
 				rmiobj.changeArrialDoc(po);
 				return true;

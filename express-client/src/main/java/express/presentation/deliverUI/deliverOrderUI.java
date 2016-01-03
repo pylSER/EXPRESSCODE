@@ -30,14 +30,20 @@ import express.businesslogicService.delivermanBLService.DeliverCreateOrderBLServ
 import express.po.DeliveryType;
 import express.po.PackageType;
 import express.presentation.mainUI.MainUIService;
+import express.presentation.mainUI.MyOtherBlueLabel;
+import express.presentation.mainUI.MyOtherGreenLabel;
+import express.presentation.mainUI.MyOtherRedLabel;
+import express.presentation.mainUI.TipBlock;
+import express.presentation.mainUI.TipBlockError;
 import express.vo.OrderVO;
 
 public class deliverOrderUI extends JPanel {
-
+	private JPanel tippane;
 	private JTextField[] tf;
 	private JPanel[] p;
 	private JComboBox deliverytype, packtype;
-	private JButton button_cancel, button_confirm;
+	private MyOtherGreenLabel button_cancel;
+	private MyOtherBlueLabel button_confirm;
 	private String sendername, senderaddress, senderworkplace, sendertelpnum,
 			sendermobilepnm;
 	private String recipientname, recipientaddress, recipientworkplace,
@@ -56,9 +62,11 @@ public class deliverOrderUI extends JPanel {
 		this.setBounds(0, 0, 850, 700);
 		this.setBackground(Color.WHITE);
 
-		Font font = new Font("楷体", Font.PLAIN, 18);
-		Font font0 = new Font("楷体", Font.BOLD, 20);
-		Font f = new Font("仿宋", Font.PLAIN, 14);
+		Font font0 = new Font("幼圆", Font.BOLD, 20);
+		Font font = new Font("幼圆", Font.PLAIN, 20);
+		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
+		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
+		
 		int width = 100;
 		int height = 30;
 		int width2 = 120;
@@ -83,6 +91,7 @@ public class deliverOrderUI extends JPanel {
 
 		for (int i = 0; i < 5; i++) {
 			p[i] = new JPanel();
+			p[i].setBackground(Color.white);
 			p[i].setBorder(BorderFactory.createMatteBorder(0, 0, 4, 0,
 					Color.GRAY));
 			p[i].setLayout(null);
@@ -108,12 +117,12 @@ public class deliverOrderUI extends JPanel {
 		p[1].add(label_1);
 
 		JLabel label_2 = new JLabel("地址信息:");
-		label_2.setBounds(5, 5, 100, 30);
+		label_2.setBounds(5, 5, 150, 30);
 		label_2.setFont(font0);
 		p[2].add(label_2);
 
 		JLabel lblNewLabel_2 = new JLabel("托运货物信息：");
-		lblNewLabel_2.setBounds(5, 5, 160, 30);
+		lblNewLabel_2.setBounds(5, 5, 200, 30);
 		lblNewLabel_2.setFont(font0);
 		p[3].add(lblNewLabel_2);
 
@@ -191,7 +200,7 @@ public class deliverOrderUI extends JPanel {
 		border = tf[1].getBorder();
 		deliverytype = new JComboBox(type1);
 		deliverytype.setBounds(leftside1 + width, upside + 2 * 2 * height,
-				width, height);
+				width+20, height);
 		deliverytype.setFont(f);
 		p[3].add(deliverytype);
 
@@ -210,17 +219,26 @@ public class deliverOrderUI extends JPanel {
 
 		Listener lis = new Listener();
 
-		button_confirm = new JButton("确定");
-		button_confirm.setBounds(250, 650, 100, 30);
-		button_confirm.setFont(font);
+		button_confirm = new MyOtherBlueLabel("确定");
+		button_confirm.setBounds(250, 630, 100, 30);
+
 		button_confirm.addMouseListener(lis);
 		this.add(button_confirm);
 
-		button_cancel = new JButton("取消");
-		button_cancel.setBounds(400, 650, 100, 30);
-		button_cancel.setFont(font);
+		button_cancel = new MyOtherGreenLabel("取消");
+		button_cancel.setBounds(400, 630, 100, 30);
+	
 		button_cancel.addMouseListener(lis);
 		this.add(button_cancel);
+		tippane=new JPanel();
+		 tippane.setSize(850,40);
+		tippane.setLocation(0, 660);
+		tippane.setBackground(Color.white);
+		tippane.setLayout(null);
+		this.add(tippane);
+		
+		
+		
 	}
 	
 	private class Foclistener implements FocusListener {
@@ -228,7 +246,7 @@ public class deliverOrderUI extends JPanel {
 		@Override
 		public void focusGained(FocusEvent e) {
 			// TODO Auto-generated method stub
-			for(int i = 0;i<19;i++){
+			for(int i = 0;i<16;i++){
 				if(e.getSource()==tf[i])
 					tf[i].setBorder(border);
 			}
@@ -310,12 +328,16 @@ public class deliverOrderUI extends JPanel {
 					if (success) {
 						orderID = result;
 						tf[16].setText(orderID);
-						JOptionPane.showMessageDialog(null, "生成订单成功", "提示",
-								JOptionPane.INFORMATION_MESSAGE);
+						TipBlock block=new TipBlock("生成订单成功");
+						tippane.add(block);
+						block.show();
+						block=null;
 						dcob.endOrder();
 					} else {
-						JOptionPane.showMessageDialog(null, result, "提示",
-								JOptionPane.ERROR_MESSAGE);
+						TipBlockError block=new TipBlockError(result);
+						tippane.add(block);
+						block.show();
+						block=null;
 					}
 				}
 			}
@@ -334,13 +356,20 @@ public class deliverOrderUI extends JPanel {
 		}
 
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
+			if(e.getSource()==button_confirm){
+				button_confirm.whenPressed();
+			}else if (e.getSource()==button_cancel) {
+				button_cancel.whenPressed();
+			}
 
 		}
 
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-
+			if(e.getSource()==button_confirm){
+				button_confirm.setMyColor();
+			}else if (e.getSource()==button_cancel) {
+				button_cancel.setMyColor();
+			}
 		}
 	}
 

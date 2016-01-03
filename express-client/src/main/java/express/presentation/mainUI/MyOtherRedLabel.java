@@ -11,12 +11,12 @@ public class MyOtherRedLabel extends MyOtherBlueLabel{
 	
 	public void setMyColor(){
 		//red
-		this.setBackground(new Color(193,39,34));
+		this.setBackground(new Color(206,53,44));
 	}
 	
 	
 	public void whenPressed(){
-		this.setBackground(new Color(136,27,22));
+		this.setBackground(new Color(154,22,22));
 	}
 	
 }

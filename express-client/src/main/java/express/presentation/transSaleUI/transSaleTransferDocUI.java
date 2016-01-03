@@ -28,10 +28,18 @@ import express.businessLogic.documentBL.TransferDoc;
 import express.po.TransWay;
 import express.presentation.mainUI.DateChooser;
 import express.presentation.mainUI.MainUIService;
+import express.presentation.mainUI.MyOtherBlueLabel;
+import express.presentation.mainUI.MyOtherGreenLabel;
+import express.presentation.mainUI.TipBlock;
+import express.presentation.mainUI.TipBlockEmpty;
+import express.presentation.mainUI.TipBlockError;
 import express.vo.TransferDocVO;
 
 public class transSaleTransferDocUI extends JPanel {
-	private JButton button_confirm, button_cancel;
+	
+	private JPanel tippane;
+	private MyOtherBlueLabel button_confirm;
+	private MyOtherGreenLabel button_cancel;
 	private JTextArea textArea7;
 	private JTextField[] tf;
 	private JLabel label2;
@@ -54,8 +62,9 @@ public class transSaleTransferDocUI extends JPanel {
 		int labellength = 100;
 		int labelwidth = 30;
 
-		Font font = new Font("楷体", Font.PLAIN, 18);
-		Font f = new Font("仿宋", Font.PLAIN, 16);
+		Font font = new Font("幼圆", Font.PLAIN, 20);
+		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
+		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
 
 		setLayout(null);
 		this.setBounds(0, 0, 850, 700);
@@ -182,14 +191,30 @@ public class transSaleTransferDocUI extends JPanel {
 		label8.setFont(font);
 		this.add(label8);
 
-		button_confirm = new JButton("确定");
+		button_confirm = new MyOtherBlueLabel("确定");
 		button_confirm.setBounds(230, 610, 80, 30);
+		
 		button_confirm.addMouseListener(listener);
 		this.add(button_confirm);
 
-		button_cancel = new JButton("取消");
+		button_cancel = new MyOtherGreenLabel("取消");
 		button_cancel.setBounds(400, 610, 80, 30);
+	
 		button_cancel.addMouseListener(listener);
+		
+		
+		
+		
+		tippane=new JPanel();
+		 tippane.setSize(850,40);
+		tippane.setLocation(0, 660);
+		tippane.setBackground(Color.white);
+		tippane.setLayout(null);
+		this.add(tippane);
+		
+		
+		
+		
 		this.add(button_cancel);
 
 		this.addMouseListener(listener);
@@ -237,16 +262,22 @@ public class transSaleTransferDocUI extends JPanel {
 					tf[7].setText(money + "");
 
 					if (ttd.addTransferDoc(vo)) {
-						JOptionPane.showMessageDialog(null, "生成中转单成功", "提示",
-								JOptionPane.INFORMATION_MESSAGE);
+						TipBlock block=new TipBlock("生成中转单成功");
+						tippane.add(block);
+						block.show();
+						block=null;
 						ttd.endTransferDoc();
 					} else {
-						JOptionPane.showMessageDialog(null, "订单条形码号输入错误", "提示",
-								JOptionPane.ERROR_MESSAGE);
+						TipBlockError block=new TipBlockError("订单条形码号错误");
+						tippane.add(block);
+						block.show();
+						block=null;
 					}
 				} else {
-					JOptionPane.showMessageDialog(null, "信息未填写完整", "提示",
-							JOptionPane.ERROR_MESSAGE);
+					TipBlockEmpty block=new TipBlockEmpty("信息未填写完整");
+					tippane.add(block);
+					block.show();
+					block=null;
 				}
 			} else if (e.getSource() == button_cancel) {
 				tf[1].setText(new SimpleDateFormat("yyyy-MM-dd")
@@ -275,12 +306,21 @@ public class transSaleTransferDocUI extends JPanel {
 		}
 
 		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+			if(arg0.getSource()==button_confirm){
+				button_confirm.whenPressed();
+			}else if (arg0.getSource()==button_cancel) {
+				button_cancel.whenPressed();
+			}
+
 
 		}
 
 		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+			if(arg0.getSource()==button_confirm){
+				button_confirm.setMyColor();
+			}else if (arg0.getSource()==button_cancel) {
+				button_cancel.setMyColor();
+			}
 
 		}
 

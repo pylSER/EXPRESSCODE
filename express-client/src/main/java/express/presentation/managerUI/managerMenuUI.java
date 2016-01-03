@@ -2,6 +2,7 @@ package express.presentation.managerUI;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -9,12 +10,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingConstants;
 
 import express.businessLogic.userBL.User;
 import express.businesslogicService.signBLService.LogInBLService;
@@ -49,10 +52,10 @@ public class managerMenuUI extends JPanel{
 		pane = this;
 		card = new CardLayout();	
 		
-		int base = 150;
+		int base = 170;
 		int width = 50;
 		int height = 150;
-		Font font = new Font("隶书",Font.PLAIN,20);
+		Font font = new Font("苹方 中等",Font.PLAIN,17);
 		
 		mainPanel = new JPanel();
 		mainPanel.setLayout(card);
@@ -68,18 +71,26 @@ public class managerMenuUI extends JPanel{
 		UserInfoSignVO vo = login.getUserInfo(id);
 		String name = vo.getName();
 		
+		JLabel user = new JLabel();
+		ImageIcon userimage = new ImageIcon("picture/headpro.png");
+		user.setIcon(userimage);
+		user.setBounds(0, 10, 150, 80);
+		this.add(user);
+		
 		username = new JLabel();
-		username.setBounds(50, 50, 70, 20);
+		username.setBounds(0, 100, 150, 20);
 		username.setText(name);
-		username.setForeground(Color.BLACK);
-		username.setFont(new Font("隶书",Font.PLAIN,18));
+		username.setForeground(Color.WHITE);
+		username.setFont(new Font("苹方 中等",Font.PLAIN,16));
+		username.setHorizontalAlignment(SwingConstants.CENTER);
 		this.add(username);
 		
 		userid = new JLabel();
-		userid.setBounds(40, 75, 100, 20);
+		userid.setBounds(0, 120, 150, 20);
 		userid.setText(id);
-		userid.setForeground(Color.BLACK);
-		userid.setFont(new Font("隶书",Font.PLAIN,18));
+		userid.setForeground(Color.WHITE);
+		userid.setFont(new Font("苹方 中等",Font.PLAIN,16));
+		userid.setHorizontalAlignment(SwingConstants.CENTER);
 		this.add(userid);
 		
 		log = new MySideLabel("查询日志");
@@ -118,8 +129,20 @@ public class managerMenuUI extends JPanel{
 		viewstatisticpop.setFont(font);
 		viewprofits = new JMenuItem("查看成本收益表");
 		viewprofits.setFont(font);
+		viewprofits.setPreferredSize(new Dimension(170,50));
+		viewprofits.setOpaque(true);
+		viewprofits.setBackground(Color.WHITE);
+		
 		viewoperate = new JMenuItem("查看经营状况表");
 		viewoperate.setFont(font);
+		viewoperate.setPreferredSize(new Dimension(170,50));
+		viewoperate.setOpaque(true);
+		viewoperate.setBackground(Color.WHITE);
+		
+		viewstatisticpop.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 1, new Color(135,206,250)));
+		//viewstatisticpop.setSize(150,100);
+		viewstatisticpop.setOpaque(true);
+		viewstatisticpop.setBackground(Color.WHITE);
 		viewstatisticpop.add(viewprofits);
 		viewstatisticpop.add(viewoperate);
 		
@@ -148,36 +171,43 @@ public class managerMenuUI extends JPanel{
 	private class Listener implements MouseListener{
 
 		public void mouseClicked(MouseEvent e) {
-			restoreAll();
+			
 			if(e.getSource()==exit){
+				
 				exit.whenClickHappend();
 				login.SignOut(id);
 				m.jumpToLogInUI();		
 			}else if(e.getSource()==log){
+				restoreAll();
 				log.whenClickHappend();
 				m.jumpToViewSysLogUI();	
 			}else if(e.getSource()==staff){
+				restoreAll();
 				staff.whenClickHappend();
 				m.jumpTomanagerMemberUI();
 			}else if(e.getSource()==org){
+				restoreAll();
 				org.whenClickHappend();
 				m.jumpTomanagerOrgUI();
 			}else if(e.getSource()==examdoc){
+				restoreAll();
 				examdoc.whenClickHappend();
 				m.jumpTomanagerExamDocUI();
 			}else if (e.getSource() == statistic) {
-				statistic.whenClickHappend();
+				//statistic.whenClickHappend();
 				if (!isclicked) {
 					isclicked = true;
-					viewstatisticpop.show(pane, 150, 350);
+					viewstatisticpop.show(pane, 150, 370);
 				} else {
 					isclicked = false;
 					viewstatisticpop.setVisible(false);
 				}
 			}else if(e.getSource()==salary){
+				restoreAll();
 				salary.whenClickHappend();
 				m.jumpTomanagerSalaryUI();
 			}else if(e.getSource()==cityprice){
+				restoreAll();
 				cityprice.whenClickHappend();
 				m.jumpTomanagerCityPriceUI();
 			}
@@ -256,10 +286,13 @@ public class managerMenuUI extends JPanel{
 
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
+			restoreAll();
 			if (e.getSource().equals(viewprofits)) {
+				statistic.whenClickHappend();
 				m.jumpToViewProfitUI();
 			 //   m.jumpToViewStatisticUI("成本收益表");
 			} else if (e.getSource().equals(viewoperate)) {
+				statistic.whenClickHappend();
 				m.jumpToViewOperateUI();
 			//	m.jumpToViewStatisticUI("经营状况表");
 			}

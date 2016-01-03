@@ -72,6 +72,7 @@ public class InDoc implements InDocblService {
 	public boolean changeInDoc(InDocVO vo) {
 		InDocPO po = new InDocPO(vo.getdeliveryNumber(), vo.getdate(),
 				vo.getarrival(), vo.getRepoPosition(), vo.getOrgID());
+		po.setState(true);
 		try {
 			rmiObj.changeInDoc(po);
 			return true;

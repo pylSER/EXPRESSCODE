@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -27,15 +28,24 @@ import express.businesslogicService.businessSaleBLService.BusinessSaleShipmentDo
 import express.businessLogic.documentBL.ShipmentDocBusinessHall;
 import express.presentation.mainUI.DateChooser;
 import express.presentation.mainUI.MainUIService;
+import express.presentation.mainUI.MyOtherBlueLabel;
+import express.presentation.mainUI.MyOtherRedLabel;
+import express.presentation.mainUI.TipBlock;
+import express.presentation.mainUI.TipBlockEmpty;
+import express.presentation.mainUI.TipBlockError;
 import express.vo.ShipmentDocBusinessHallVO;
 
 public class businessShipmentUI extends JPanel {
 
+	
+	private JPanel tippane;
 	private JTextField textArea1, textArea2, textArea8;
 	private JTextField[] tf;
 	private JTextArea textArea7;
-	private JButton button_confirm;
-	private JButton button_cancel;
+	
+	private MyOtherBlueLabel button_confirm;
+	private MyOtherRedLabel button_cancel;
+	
 	private DateChooser datechooser;
 	private String date, businessHallNumber, transID, arrivalplace, vanID,
 			checkMan, transMan, shipmentID, startPlace;
@@ -53,10 +63,11 @@ public class businessShipmentUI extends JPanel {
 		int labelwidth = 30;
 
 		int leftside = 360;
-		int base = 140;
+		int base = 130;
 
-		Font font = new Font("楷体", Font.PLAIN, 18);
-		Font f = new Font("仿宋", Font.PLAIN, 16);
+		Font font = new Font("楷体", Font.PLAIN, 20);
+		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
+		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
 		bssd = new ShipmentDocBusinessHall();
 		
 		setLayout(null);
@@ -122,7 +133,7 @@ public class businessShipmentUI extends JPanel {
 		textArea7.setBounds(leftside, base + labelwidth * 12, textlength,
 				textwidth * 2);
 		textArea7.setFont(f);
-		textArea7.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
+		textArea7.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		textArea7.setLineWrap(true);
 		textArea7.setWrapStyleWord(true);
 		textArea7.addFocusListener(foclis);
@@ -132,6 +143,7 @@ public class businessShipmentUI extends JPanel {
 		scrollPane.setFont(font);
 		scrollPane.setBounds(leftside, base + labelwidth * 12, textlength,
 				textwidth * 2);
+		scrollPane.setBorder(null);
 		this.add(scrollPane);
 
 		textArea8 = new JTextField();
@@ -187,7 +199,7 @@ public class businessShipmentUI extends JPanel {
 		this.add(label6);
 
 		JLabel label7 = new JLabel("本次装箱所有订单条形号码");
-		label7.setBounds(200 - 100, base + labelwidth * 12, labellength + 130,
+		label7.setBounds(200 - 120, base + labelwidth * 12, labellength + 150,
 				labelwidth);
 		label7.setFont(font);
 		this.add(label7);
@@ -197,17 +209,24 @@ public class businessShipmentUI extends JPanel {
 		label8.setFont(font);
 		this.add(label8);
 
-		button_confirm = new JButton("确定");
-		button_confirm.setBounds(280, 640, 100, 30);
-		button_confirm.setFont(font);
+		button_confirm = new MyOtherBlueLabel("确定");
+		button_confirm.setBounds(280, 630, 100, 30);
+		
 		button_confirm.addMouseListener(listener);
 		this.add(button_confirm);
 
-		button_cancel = new JButton("取消");
-		button_cancel.setBounds(480, 640, 100, 30);
-		button_cancel.setFont(font);
+		button_cancel = new MyOtherRedLabel("取消");
+		button_cancel.setBounds(480, 630, 100, 30);
+	
 		button_cancel.addMouseListener(listener);
 		this.add(button_cancel);
+		
+		tippane = new JPanel();
+		tippane.setSize(850, 40);
+		tippane.setLocation(0, 660);
+		tippane.setBackground(Color.white);
+		tippane.setLayout(null);
+		this.add(tippane);
 
 	}
 
@@ -249,15 +268,15 @@ public class businessShipmentUI extends JPanel {
 				transMan = tf[6].getText();
 
 				for (int i = 0; i < 7; i++) {
-					if (tf[i].getText().isEmpty()) {
-						tf[i].setBorder(new LineBorder(Color.RED));
+					if (tf[i].getText().equals("")) {
+						tf[i].setBorder(new LineBorder(new Color(255,215,0),2));
 						complete = false;
 					}
 				}
 
 				String[] temp = textArea7.getText().split("\n");
 				if (textArea7.getText().isEmpty()) {
-					textArea7.setBorder(new LineBorder(Color.RED));
+					textArea7.setBorder(new LineBorder(new Color(255,215,0),2));
 					complete = false;
 				}
 				
@@ -267,8 +286,10 @@ public class businessShipmentUI extends JPanel {
 				}
 
 				if (!complete) {
-					JOptionPane.showMessageDialog(null, "信息未填写完整", "提示",
-							JOptionPane.ERROR_MESSAGE);
+					TipBlockEmpty block=new TipBlockEmpty("信息未填写完整");
+					tippane.add(block);
+					block.show();
+					block=null;
 				} else {
 					ShipmentDocBusinessHallVO sdb = new ShipmentDocBusinessHallVO(
 							date, businessHallNumber, transID, arrivalplace,
@@ -278,17 +299,24 @@ public class businessShipmentUI extends JPanel {
 					money = bssd.getShipmentfee(sdb);
 					boolean b = (money>0);
 					if(!b){
-						JOptionPane.showMessageDialog(null, "有订单未生成或订单号填写错误", "提示",
-								JOptionPane.ERROR_MESSAGE);
+						textArea7.setBorder(new LineBorder(Color.RED,2));
+						TipBlockError block=new TipBlockError("有订单未生成或订单号填写错误");
+						tippane.add(block);
+						block.show();
+						block=null;
 					}else{
 					textArea8.setText(money + "");
 					sdb.setMoney(money);
 					if (!bssd.addShipmentDoc(sdb)) {
-						JOptionPane.showMessageDialog(null, "生成装车单失败", "提示",
-								JOptionPane.ERROR_MESSAGE);
+						TipBlockError block=new TipBlockError("生成装车单失败");
+						tippane.add(block);
+						block.show();
+						block=null;
 					} else {
-						JOptionPane.showMessageDialog(null, "生成装车单成功", "提示",
-								JOptionPane.INFORMATION_MESSAGE);
+						TipBlock block=new TipBlock("生成装车单成功");
+						tippane.add(block);
+						block.show();
+						block=null;
 						bssd.endShipmentDoc();
 					}
 					}
@@ -318,13 +346,21 @@ public class businessShipmentUI extends JPanel {
 
 		}
 
-		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+		public void mousePressed(MouseEvent e) {
+			if(e.getSource()==button_confirm){
+				button_confirm.whenPressed();
+			}else if(e.getSource()==button_cancel){
+				button_cancel.whenPressed();
+			}
 
 		}
 
-		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+		public void mouseReleased(MouseEvent e) {
+			if(e.getSource()==button_confirm){
+				button_confirm.setMyColor();
+			}else if(e.getSource()==button_cancel){
+				button_cancel.setMyColor();
+			}
 
 		}
 

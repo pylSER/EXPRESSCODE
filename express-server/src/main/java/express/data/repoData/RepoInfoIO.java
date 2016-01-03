@@ -70,7 +70,7 @@ public class RepoInfoIO extends UnicastRemoteObject implements RepoDataService {
 					} else if (position.getblock().equals(Area.TRAIN)) {
 						repo.changeTrainSum(-1);
 						repo.changeRepoSum(-1);
-					} else if (position.getblock().equals(Area.TRAIN)) {
+					} else if (position.getblock().equals(Area.CAR)) {
 						repo.changeTruckSum(-1);
 						repo.changeRepoSum(-1);
 					} else {
@@ -107,7 +107,7 @@ public class RepoInfoIO extends UnicastRemoteObject implements RepoDataService {
 					} else if (position.getblock().equals(Area.TRAIN)) {
 						repo.changeTrainSum(1);
 						repo.changeRepoSum(1);
-					} else if (position.getblock().equals(Area.TRAIN)) {
+					} else if (position.getblock().equals(Area.CAR)) {
 						repo.changeTruckSum(1);
 						repo.changeRepoSum(1);
 					} else {

@@ -31,6 +31,16 @@ public class ProfitFormIO extends UnicastRemoteObject implements ProfitFormDataS
 		profitFormList.add(profitForm);
 		return true;
 	}
+	
+
+	@Override
+	public boolean removeProfitForm(int index) throws RemoteException {
+		if(profitFormList.size()>0){
+			profitFormList.remove(index);
+			return true;
+		}else
+			return false;
+	}
 
 	@Override
 	public ArrayList<ProfitFormPO> getProfitFormList() throws RemoteException {
@@ -60,5 +70,4 @@ public class ProfitFormIO extends UnicastRemoteObject implements ProfitFormDataS
 			return false;
 		}
 	}
-
 }

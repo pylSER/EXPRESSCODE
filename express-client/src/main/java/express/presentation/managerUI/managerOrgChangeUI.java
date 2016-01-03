@@ -20,11 +20,17 @@ import javax.swing.table.DefaultTableModel;
 import express.businessLogic.infoManageBL.OrgForManager;
 import express.businesslogicService.managerBLService.OrgManageBLService;
 import express.po.OrgProperty;
+import express.presentation.mainUI.MyOtherBlueLabel;
+import express.presentation.mainUI.MyOtherGreenLabel;
+import express.presentation.mainUI.MyOtherRedLabel;
 import express.vo.OrganizationVO;
 
 public class managerOrgChangeUI extends JDialog {
 
-	private JButton ok, exit,detele;
+	private MyOtherBlueLabel ok;
+	private MyOtherGreenLabel exit;
+	private MyOtherRedLabel detele;
+	
 	private JTextField orgnametf, orgidtf, citytf, orgaddtf;
 	private JComboBox orgtypecb;
 	private DefaultTableModel tmodel;
@@ -40,11 +46,13 @@ public class managerOrgChangeUI extends JDialog {
 		this.setLayout(null);
 		this.setSize(300, 300);
 		this.setLocationRelativeTo(null);
-
+		this.getContentPane().setBackground(Color.white);
+		
 		int leftside1 = 10;
 		int leftside2 = 100;
-		Font font = new Font("楷体", Font.PLAIN, 18);
-		Font f = new Font("仿宋", Font.PLAIN, 16);
+		Font font = new Font("幼圆", Font.PLAIN, 20);
+		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
+		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
 		tmodel = tablemodel;
 		omg = new OrgForManager();
 		this.id = id;
@@ -114,22 +122,22 @@ public class managerOrgChangeUI extends JDialog {
 		orgidtf.setEditable(false);
 		this.add(orgidtf);
 
-		ok = new JButton("确认");
+		ok = new MyOtherBlueLabel("确认");
 		ok.setBounds(30, 225, 70, 30);
 		ok.addMouseListener(lis);
-		ok.setFont(font);
+		
 		this.add(ok);
 
-		detele = new JButton("删除");
+		detele = new MyOtherRedLabel("删除");
 		detele.setBounds(115, 225,70, 30);
-		detele.setFont(font);
+		
 		detele.addMouseListener(lis);
 		this.add(detele);
 		
-		exit = new JButton("取消");
+		exit = new MyOtherGreenLabel("取消");
 		exit.setBounds(200, 225, 70, 30);
 		exit.addMouseListener(lis);
-		exit.setFont(font);
+		
 		this.add(exit);
 	}
 
@@ -261,13 +269,25 @@ public class managerOrgChangeUI extends JDialog {
 
 		@Override
 		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+			if(arg0.getSource()==ok){
+				ok.whenPressed();
+			}else if (arg0.getSource()==exit) {
+				exit.whenPressed();
+			}else if (arg0.getSource()==detele) {
+				detele.whenPressed();
+			}
 
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+			if(arg0.getSource()==ok){
+				ok.setMyColor();
+			}else if (arg0.getSource()==exit) {
+				exit.setMyColor();
+			}else if (arg0.getSource()==detele) {
+				detele.setMyColor();
+			}
 
 		}
 

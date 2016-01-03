@@ -172,13 +172,13 @@ public class DistanceManager {
 		}
 		
 		
-//		System.out.println(dm.getTwoCityDistance("上海", "广州"));
-//		
-//		CityDistanceVO vo=new CityDistanceVO("上海", "广州", 8989);
-//		
-//		
-//		dm.setTwoCityDistance(vo);
-//		System.out.println(dm.getTwoCityDistance("广州", "上海"));
+		System.out.println(dm.getTwoCityDistance("上海", "广州"));
+		
+		CityDistanceVO vo=new CityDistanceVO("上海", "广州", 8989);
+		
+		
+		dm.setTwoCityDistance(vo);
+		System.out.println(dm.getTwoCityDistance("广州", "上海"));
 		
 		
 		

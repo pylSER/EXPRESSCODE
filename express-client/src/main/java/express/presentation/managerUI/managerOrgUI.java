@@ -25,15 +25,24 @@ import express.businessLogic.infoManageBL.OrgForManager;
 import express.businesslogicService.managerBLService.OrgManageBLService;
 import express.po.OrgProperty;
 import express.presentation.mainUI.MainUIService;
+import express.presentation.mainUI.MyOtherBlueLabel;
+import express.presentation.mainUI.MyOtherGreenLabel;
+import express.presentation.mainUI.MyOtherRedLabel;
 import express.presentation.mainUI.MyTableModel;
+import express.presentation.mainUI.TipBlockEmpty;
+import express.presentation.mainUI.TipBlockError;
 import express.vo.OrganizationVO;
 
 public class managerOrgUI extends JPanel {
 
+	
+	private JPanel tippane;
 	private JTable table;
 	private MyTableModel tableModel;
 	private TableColumnModel tcm;
-	private JButton detele, add, change;
+	private MyOtherRedLabel detele;
+	private MyOtherBlueLabel add;
+	private MyOtherGreenLabel change;
 	private JTextField idtf;
 	private JComboBox orgtypecb;
 	private String changeunder = "<HTML><U>修改</U></HTML>";
@@ -48,8 +57,9 @@ public class managerOrgUI extends JPanel {
 
 		int leftside1 = 170;
 		int leftside2 = 270;
-		Font font = new Font("楷体", Font.PLAIN, 18);
-		Font f = new Font("仿宋", Font.PLAIN, 16);
+		Font font = new Font("幼圆", Font.PLAIN, 20);
+		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
+		Font buttonfont = new Font("隶书", Font.PLAIN, 18);
 		Listener listener = new Listener();
 		omg = new OrgForManager();
 
@@ -80,6 +90,8 @@ public class managerOrgUI extends JPanel {
 		table = new JTable(tableModel);
 		table.setRowHeight(40);
 		table.setFont(f);
+		table.getTableHeader().setFont(font);
+		table.getTableHeader().setReorderingAllowed(false);
 		table.addMouseListener(listener);
 		table.setBounds(50, 60, 750, 600);
 
@@ -92,22 +104,22 @@ public class managerOrgUI extends JPanel {
 		scrollPanes.setBounds(50, 60, 750, 600);
 		this.add(scrollPanes);
 
-		detele = new JButton("删除");
+		detele = new MyOtherRedLabel("删除");
 		detele.setBounds(50, 10, 100, 40);
-		detele.setFont(font);
+		
 		detele.addMouseListener(listener);
 		this.add(detele);
 
-		add = new JButton("添加");
+		add = new MyOtherBlueLabel("添加");
 		add.setBounds(190, 10, 100, 40);
 		add.addMouseListener(listener);
-		add.setFont(font);
+		
 		this.add(add);
 
-		change = new JButton("查找");
+		change = new MyOtherGreenLabel("查找");
 		change.setBounds(320, 10, 100, 40);
 		change.addMouseListener(listener);
-		change.setFont(font);
+		
 		this.add(change);
 
 		JLabel idl = new JLabel("机构代号");
@@ -120,6 +132,17 @@ public class managerOrgUI extends JPanel {
 		idtf.setFont(f);
 		this.add(idtf);
 
+		
+
+		tippane=new JPanel();
+		 tippane.setSize(850,40);
+		tippane.setLocation(0, 660);
+		tippane.setBackground(Color.white);
+		tippane.setLayout(null);
+		this.add(tippane);
+		
+		
+		
 	}
 
 	private class Listener implements MouseListener {
@@ -141,8 +164,10 @@ public class managerOrgUI extends JPanel {
 							tableModel, orgid);
 					orgchange.setVisible(true);
 				} else {
-					JOptionPane.showMessageDialog(null, "不存在该机构代号", "错误",
-							JOptionPane.ERROR_MESSAGE);
+					TipBlockError block=new TipBlockError("不存在该机构代号");
+					tippane.add(block);
+					block.show();
+					block=null;
 				}
 			} else if (e.getSource() == add) {
 				managerOrgAddUI orgadd = new managerOrgAddUI(tableModel);
@@ -196,12 +221,24 @@ public class managerOrgUI extends JPanel {
 		}
 
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
+			if(e.getSource()==change){
+				change.whenPressed();
+			}else if (e.getSource()==add) {
+				add.whenPressed();
+			}else if (e.getSource()==detele) {
+				detele.whenPressed();
+			}
 
 		}
 
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
+			if(e.getSource()==change){
+				change.setMyColor();
+			}else if (e.getSource()==add) {
+				add.setMyColor();
+			}else if (e.getSource()==detele) {
+				detele.setMyColor();
+			}
 
 		}
 	}

@@ -118,5 +118,23 @@ public class Admin implements AdminBLService,RemoveUserBLService{
 		}
 		return true;
 	}
+
+	@Override
+	public ArrayList<UserInfoAdminVO> getAllUser() {
+		try {
+			ArrayList<UserInfoAdminPO> list = admin.getAllUserAdmin();
+			ArrayList<UserInfoAdminVO> trans = new ArrayList<UserInfoAdminVO>();
+			
+			for(UserInfoAdminPO po : list){
+				UserInfoAdminVO vo = new UserInfoAdminVO(po.getName(),po.getID(),po.getPosition(),po.getPassword());
+				trans.add(vo);
+			}
+			return trans;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 }

@@ -10,5 +10,7 @@ public interface OperateManagerBLService {
 	
 	public OperateFormVO getOperateForm(int index);
 	
+	public boolean removeOperateForm(int index);
+	
 	public boolean exportExcel(OperateFormVO operateForm);
 }

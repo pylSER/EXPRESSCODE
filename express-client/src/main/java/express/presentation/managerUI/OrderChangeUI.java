@@ -14,6 +14,8 @@ import javax.swing.table.DefaultTableModel;
 
 import express.businessLogic.examDocumentBL.ExamDocument;
 import express.businesslogicService.managerBLService.ExamDocumentBLService;
+import express.presentation.mainUI.MyOtherBlueLabel;
+import express.presentation.mainUI.MyOtherGreenLabel;
 import express.vo.OrderVO;
 
 public class OrderChangeUI extends JDialog {
@@ -23,7 +25,8 @@ public class OrderChangeUI extends JDialog {
 	private JComboBox deliverytype, packtype;
 	private DefaultTableModel tmodel;
 	private ExamDocumentBLService examdoc;
-	private JButton ok, exit;
+	private MyOtherBlueLabel ok;
+	private MyOtherGreenLabel exit;
 
 	public OrderChangeUI(DefaultTableModel tablemodel, OrderVO vo) {
 		this.setTitle("修改用户信息");
@@ -108,15 +111,15 @@ public class OrderChangeUI extends JDialog {
 		packtype.setFont(f);
 		this.add(packtype);
 		
-		ok = new JButton("修改");
+		ok = new MyOtherBlueLabel("修改");
 		ok.setBounds(70, 280, 70, 30);
-		ok.setFont(font);
+
 		ok.addMouseListener(lis);
 		this.add(ok);
 
-		exit = new JButton("取消");
+		exit = new MyOtherGreenLabel("取消");
 		exit.setBounds(210, 280, 70, 30);
-		exit.setFont(font);
+
 		exit.addMouseListener(lis);
 		this.add(exit);
 	}
@@ -155,13 +158,21 @@ public class OrderChangeUI extends JDialog {
 
 		@Override
 		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+			if(arg0.getSource()==ok){
+				ok.whenPressed();
+			}else if (arg0.getSource()==exit) {
+				exit.whenPressed();
+			}
 			
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+			if(arg0.getSource()==ok){
+				ok.setMyColor();
+			}else if (arg0.getSource()==exit) {
+				exit.setMyColor();
+			}
 			
 		}
 		

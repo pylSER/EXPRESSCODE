@@ -10,5 +10,7 @@ public interface ProfitManagerBLService {
 	
 	public ProfitFormVO getProfitForm(String date);
 	
+	public boolean removeProfitForm(int index);
+	
 	public boolean exportExcel(ProfitFormVO profit);
 }

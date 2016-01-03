@@ -154,6 +154,19 @@ public class RepoInfoPO implements Serializable{
 		repoPosition.remove(index);
 	}
 	public void deleteRepoPosition(RepoPosition position){
-		repoPosition.remove(position);
+		
+		int index = 0;
+		String id = position.getOrderID();
+		if(repoPosition.size()>0){
+			
+			for(RepoPosition rp : repoPosition){
+				if(rp.getOrderID().equals(id)){
+					break;
+				}
+				index++;
+			}
+		}
+		repoPosition.remove(index);
+		System.out.println(index);
 	}
 }

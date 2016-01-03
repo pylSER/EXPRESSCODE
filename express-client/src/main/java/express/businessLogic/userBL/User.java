@@ -10,12 +10,15 @@ import express.businessLogic.infoManageBL.StaffForManager;
 import express.businesslogicService.managerBLService.OrgManageBLService;
 import express.businesslogicService.managerBLService.StaffManageBLService;
 import express.businesslogicService.signBLService.LogInBLService;
+import express.dataService.ipandname.IPDataService;
 import express.dataService.userDataService.AdminUserDataService;
 import express.dataService.userDataService.SignUserDataService;
 import express.dataService.userDataService.UserDataService;
+import express.po.IPPO;
 import express.po.UserInfoAdminPO;
 import express.po.UserInfoPO;
 import express.po.UserPO;
+import express.rmi.AboutSystem;
 import express.rmi.RMIClient;
 import express.vo.OrganizationVO;
 import express.vo.SignInVO;
@@ -23,55 +26,62 @@ import express.vo.UserInfoAdminVO;
 import express.vo.UserInfoSignVO;
 import express.vo.UserInfoVO;
 
-public class User implements LogInBLService{
-	
+public class User implements LogInBLService {
+
 	SignUserDataService sign;
-	
-	public User(){
-		sign=RMIClient.getUserSignObject();
+
+	public User() {
+		sign = RMIClient.getUserSignObject();
 	}
 
 	public SignInVO signIn(String id, String password) {
-		
-		AdminUserDataService adminUser=RMIClient.getUserAdminObject();
-		StaffManageBLService staffManager=new StaffForManager();
-		OrgManageBLService orgManager=new OrgForManager();
-		
+
+		AdminUserDataService adminUser = RMIClient.getUserAdminObject();
+		StaffManageBLService staffManager = new StaffForManager();
+		OrgManageBLService orgManager = new OrgForManager();
+
 		try {
-			ArrayList<UserInfoAdminPO> userList=adminUser.getAllUserAdmin();
-			if(userList!=null){
-				for(UserInfoAdminPO user:userList){
-					//查找id和password
-					if(user.getID().equals(id)&&user.getPassword().equals(password)){
-						//如果id正确，且password正确
-						if(sign.checkLogIn(id))
-							//如果已登录
+			ArrayList<UserInfoAdminPO> userList = adminUser.getAllUserAdmin();
+			if (userList != null) {
+				for (UserInfoAdminPO user : userList) {
+					// 查找id和password
+					if (user.getID().equals(id)
+							&& user.getPassword().equals(password)) {
+						// 如果id正确，且password正确
+						if (sign.checkLogIn(id))
+							// 如果已登录
 							return SignInVO.SIGNED;
-						else{
-							//如果未登录
-							UserPO u=new UserPO(user.getID(),user.getPosition());
-							
+						else {
+							// 如果未登录
+							UserPO u = new UserPO(user.getID(),
+									user.getPosition());
+
 							sign.logInRegister(u);
-							//标记为登录
+							// 标记为登录
 							IDKeeper.setID(id);
-//							UserInfoVO userInfo=staffManager.getUser(id);
-//							String orgID=userInfo.getCity();
-//							IDKeeper.setOrgID(orgID);
-//							
-//							OrganizationVO org=orgManager.getOrgInfo(orgID);
-//							String city=org.getCity();
-//							IDKeeper.setCity(city);
-							//保存id
+							String orgID = "";
+							UserInfoVO userInfo = staffManager.getUser(id);
+							if (userInfo != null) {
+								orgID = userInfo.getCity();
+								IDKeeper.setOrgID(orgID);
+							}
+
+							OrganizationVO org = orgManager.getOrgInfo(orgID);
+							if (org != null) {
+								String city = org.getCity();
+								IDKeeper.setCity(city);
+							}
+							// 保存id
 							return SignInVO.PERMIT;
 						}
-					}
-					else if(user.getID().equals(id)&&!user.getPassword().equals(password)){
-						//如果id正确，但password不正确
+					} else if (user.getID().equals(id)
+							&& !user.getPassword().equals(password)) {
+						// 如果id正确，但password不正确
 						return SignInVO.PASSWORD_ERROR;
 					}
 				}
 			}
-			//如果没找到id，说明id不存在
+			// 如果没找到id，说明id不存在
 			return SignInVO.ID_ERROR;
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
@@ -81,12 +91,13 @@ public class User implements LogInBLService{
 	}
 
 	public UserInfoSignVO getUserInfo(String id) {
-		
-		Admin adminUser=new Admin();
-		UserInfoAdminVO user=adminUser.getUser(id);
-		
-		if(user!=null)
-			return new UserInfoSignVO(user.getName(),user.getID(),user.getPosition());
+
+		Admin adminUser = new Admin();
+		UserInfoAdminVO user = adminUser.getUser(id);
+
+		if (user != null)
+			return new UserInfoSignVO(user.getName(), user.getID(),
+					user.getPosition());
 		else
 			return null;
 	}
@@ -94,6 +105,9 @@ public class User implements LogInBLService{
 	public boolean SignOut(String id) {
 
 		try {
+			IPDataService iprmi = RMIClient.getIPObject();
+			IPPO ip = new IPPO(AboutSystem.getMyIp(), AboutSystem.getMyName());
+			iprmi.minusIP(ip);
 			return sign.logOutRegister(id);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block

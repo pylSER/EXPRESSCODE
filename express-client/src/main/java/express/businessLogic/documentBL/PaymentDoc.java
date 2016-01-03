@@ -6,17 +6,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import express.businessLogic.infoManageBL.BankAccount;
 import express.businessLogic.infoManageBL.SalaryManager;
 import express.businessLogic.infoManageBL.StaffForManager;
 import express.businessLogic.syslogBL.SysLog;
 import express.businesslogicService.businessSaleBLService.BusinessSaleShipmentDocumentblService;
 import express.businesslogicService.businessSaleBLService.GetReceiveDocBLService;
+import express.businesslogicService.financialBLService.BankAccountBLService;
 import express.businesslogicService.financialBLService.PaymentBLService;
 import express.businesslogicService.managerBLService.SalaryManagerBLService;
 import express.businesslogicService.managerBLService.StaffManageBLService;
 import express.businesslogicService.transcenterSaleBLService.TransCenterSaleShipmentDocblService;
 import express.businesslogicService.transcenterSaleBLService.TransCenterTransferDocblService;
 import express.dataService.documentDataService.PaymentDocDataService;
+import express.po.BankAccountPO;
 import express.po.DocumentPO;
 import express.po.PaymentDocPO;
 import express.po.PaymentItem;
@@ -29,6 +32,7 @@ import express.po.TransferDocPO;
 import express.po.UserInfoPO;
 import express.po.UserRole;
 import express.rmi.RMIClient;
+import express.vo.BankAccountVO;
 import express.vo.PaymentDocVO;
 
 public class PaymentDoc implements PaymentBLService {
@@ -267,11 +271,25 @@ public class PaymentDoc implements PaymentBLService {
 	@Override
 	public boolean changePaymentDoc(PaymentDocVO vo, String id) {
 
+		PaymentItem item = vo.getPaymentList();
+		double sum = item.getSum();
+		if(sum>0.0){
+			BankAccountBLService bank = new BankAccount();
+			BankAccountPO po = bank.getBankAccount(item.getAccount());
+			BankAccountVO bvo = new BankAccountVO(po.getName(), po.getIncome(),
+					po.getOutcome(), po.getBalance());
+			bvo.addOutcome(sum);
+			bank.changeBankAccount(bvo, item.getName());
+			bank.recordBankAccount();
+			// 将总额加到对应银行账户的收入中
+		}
 		PaymentDocPO po = new PaymentDocPO(vo.getPaymentList(),
 				vo.getPaymentID());
-
+		po.setState(true);
 		try {
-			return pay.changePaymentDoc(po, id);
+			boolean succ = pay.changePaymentDoc(po, id);
+			pay.writeAllPaymentDoc();
+			return succ;
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

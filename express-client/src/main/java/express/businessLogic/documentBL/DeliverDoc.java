@@ -116,6 +116,7 @@ public class DeliverDoc implements BusinessSaleDeliverDocumentblService{
 	
 	public boolean changeDeliverDoc(DeliverDocVO vo){
 		DeliverDocPO po=new DeliverDocPO(vo.getArriveDate(), vo.getOrderID(), vo.getDeliverManID());
+		po.setState(true);
 		try{
 			rmiObj.changeDeliverDoc(po);
 			return true;

@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -24,6 +26,7 @@ public class ResultUI {
 	JButton exitbutton= new JButton(new ImageIcon("picture/x.png"));
 	String orderID;
 	JLabel id=new JLabel("");
+	JTextField orderid; 
 	
 	JLabel status1=new JLabel("");
 	JLabel status2=new JLabel("");
@@ -85,9 +88,10 @@ public class ResultUI {
 		confirm.setBorderPainted(false);
 		buttonPanel.add(confirm);
 		
-		final JTextField orderid= new JTextField();
+		orderid= new JTextField();
 		orderid.setSize(570,48);
 		orderid.setLocation(10,23);
+		orderid.addKeyListener(new Keylistener());
 		pane.add(orderid);
 		
 
@@ -172,32 +176,48 @@ public class ResultUI {
 			}
 		});
 		
-confirm.addActionListener(new ActionListener() {
+		confirm.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(orderid.getText().equals("")){
-					errortip.setText("请输入订单条形码号");
-
-				}
-				else{
-					if(checkOrder(orderid.getText())){
-						
-					}
-					else{
-						errortip.setText("订单不存在");
-					}
-				}
+				yesClicked();
 			}
 		});
-		
-		
-		
-		
-		
-		
 		return pane;
 	}
+	
+	
+	
+	
+	public void yesClicked(){
+		if(orderid.getText().equals("")){
+			errortip.setText("请输入订单条形码号");
+
+		}
+		else{
+			if(checkOrder(orderid.getText())){
+				
+			}
+			else{
+				errortip.setText("订单不存在");
+			}
+		}
+	}
+	
+	
+	private class Keylistener extends KeyAdapter {
+
+		public void keyPressed(KeyEvent e) {
+
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				yesClicked();
+			}
+		}
+	}
+	
+	
+	
+	
 	
 	
 	public boolean checkOrder(String orderid){

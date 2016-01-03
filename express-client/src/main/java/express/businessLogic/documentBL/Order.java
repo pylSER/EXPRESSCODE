@@ -58,7 +58,7 @@ public class Order {
 			rmiObj.createOrder(po);
 			
 			GoodTransStatusPO statuspo=new GoodTransStatusPO();
-			statuspo.addStatus("快递已收件");
+			statuspo.addStatus("快递已被揽件");
 			statuspo.setOrderID(ID);
 			
 			
@@ -279,6 +279,7 @@ public class Order {
 		po.setGoodsInfo(vo.getNumberOfGoods(), vo.getWeight(), vo.getVolume(), vo.getNameOfGoods(), vo.getType(), vo.getPackageType());
 		po.setReceiverInfo(vo.getReceiverName(), vo.getReceiverAddress(), vo.getReceiverWorkPlace(), vo.getReceiverCellPhoneNum(), vo.getReceiverTelephoneNum(), vo.getEndCity());
 		po.setSenderInfo(vo.getSenderName(), vo.getSenderAddress(), vo.getSenderWorkPlace(), vo.getSenderCellPhoneNum(), vo.getSenderTelephoneNum(), vo.getStartCity());
+		po.setState(true);
 		try{
 			rmiObj.changeOrder(po);
 			return true;

@@ -1,5 +1,6 @@
 package express.presentation.adminUI;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -15,12 +16,15 @@ import javax.swing.table.DefaultTableModel;
 import express.businessLogic.infoManageBL.Admin;
 import express.businesslogicService.adminBLService.AdminBLService;
 import express.po.UserRole;
+import express.presentation.mainUI.MyOtherBlueLabel;
+import express.presentation.mainUI.MyOtherRedLabel;
 import express.vo.UserInfoAdminVO;
 
 public class AdminAddUI extends JDialog {
 
 	private JTextField nametf, idtf, keytf;
-	private JButton ok, exit;
+	private MyOtherBlueLabel ok;
+	private MyOtherRedLabel exit;
 	private JComboBox positioncb;
 	private String name, position, id, key;
 	private UserRole posit;
@@ -32,10 +36,11 @@ public class AdminAddUI extends JDialog {
 		this.setLayout(null);
 		this.setSize(300, 250);
 		this.setLocationRelativeTo(null);
-
+		this.getContentPane().setBackground(Color.white);
 		tmodel = tablemodel;
-		Font font = new Font("楷体", Font.PLAIN, 18);
-		Font f = new Font("仿宋", Font.PLAIN, 16);
+		Font font = new Font("幼圆", Font.PLAIN, 20);
+		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
+		Font buttonf = new Font("隶书", Font.PLAIN, 18);
 
 		String[] pos = { "快递员", "管理员", "总经理", "普通财务人员", "最高权限财务人员",
 				"中转中心仓库管理人员", "中转中心业务员", "营业厅业务员" };
@@ -57,7 +62,7 @@ public class AdminAddUI extends JDialog {
 		this.add(positionl);
 
 		positioncb = new JComboBox(pos);
-		positioncb.setBounds(70, 45, 120, 30);
+		positioncb.setBounds(70, 45, 180, 30);
 		positioncb.setFont(f);
 		this.add(positioncb);
 
@@ -81,15 +86,13 @@ public class AdminAddUI extends JDialog {
 		keytf.setFont(f);
 		this.add(keytf);
 
-		ok = new JButton("确认");
+		ok = new MyOtherBlueLabel("确认");
 		ok.setBounds(30, 170, 100, 30);
-		ok.setFont(font);
 		ok.addMouseListener(lis);
 		this.add(ok);
 
-		exit = new JButton("取消");
+		exit = new MyOtherRedLabel("取消");
 		exit.setBounds(150, 170, 100, 30);
-		exit.setFont(font);
 		exit.addMouseListener(lis);
 		this.add(exit);
 	}
@@ -106,6 +109,9 @@ public class AdminAddUI extends JDialog {
 				id = idtf.getText();
 				key = keytf.getText();
 				Object[] temp = { false, name, position, id, key };
+				
+				System.out.println("添加时："+position);
+				
 				values = temp;
 				
 				if (name.isEmpty() || id.isEmpty() || key.isEmpty()) {
@@ -113,7 +119,12 @@ public class AdminAddUI extends JDialog {
 							JOptionPane.ERROR_MESSAGE);
 				} else {	
 					
-					posit = UserRole.values()[positioncb.getSelectedIndex()];
+					posit = UserRole.values()[positioncb.getSelectedIndex()+1];
+					
+					System.out.println("positioncb.getSelectedIndex()："+positioncb.getSelectedIndex());
+					
+					
+					
 					UserInfoAdminVO vo = new UserInfoAdminVO(name, id, posit,
 							key);
 					AdminBLService abs = new Admin();
@@ -146,16 +157,23 @@ public class AdminAddUI extends JDialog {
 		}
 
 		@Override
-		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+		public void mousePressed(MouseEvent e) {
+			if(e.getSource()==ok){
+				ok.whenPressed();
+			}else if (e.getSource()==exit) {
+				exit.whenPressed();
+			}
 
 		}
 
 		@Override
-		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+		public void mouseReleased(MouseEvent e) {
+			if(e.getSource()==ok){
+				ok.setMyColor();
+			}else if (e.getSource()==exit) {
+				exit.setMyColor();
 
 		}
-
 	}
+   }
 }

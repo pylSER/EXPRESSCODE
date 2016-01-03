@@ -10,6 +10,8 @@ public interface InDocblService {
 	public boolean addInDoc(InDocVO vo);
 
 	public InDocVO getInDoc(String orderID);
+	
+	public boolean changeInDoc(InDocVO vo);
 
 	public boolean isOrderIDavailable(String id);
 	

@@ -67,6 +67,18 @@ public class OperateStatistic implements OperateFinanceBLService {
 		}
 		return null;
 	}
+	
+	public boolean removeOperateForm(int index){
+		try {
+			boolean succ = operate.removeOperateForm(index);
+			operate.writeAllOperateForm();
+			return succ;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 	public OperateFormVO createOperateForm(String beginDate, String endDate) {
 		GetReceiveDocBLService r = new SumReceiveDoc();

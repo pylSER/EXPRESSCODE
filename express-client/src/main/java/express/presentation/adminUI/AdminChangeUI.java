@@ -1,5 +1,6 @@
 package express.presentation.adminUI;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -16,13 +17,18 @@ import express.businessLogic.infoManageBL.Admin;
 import express.businesslogicService.adminBLService.AdminBLService;
 import express.businesslogicService.adminBLService.RemoveUserBLService;
 import express.po.UserRole;
+import express.presentation.mainUI.MyOtherBlueLabel;
+import express.presentation.mainUI.MyOtherGreenLabel;
+import express.presentation.mainUI.MyOtherRedLabel;
 import express.vo.UserInfoAdminVO;
 import express.vo.UserInfoVO;
 
 public class AdminChangeUI extends JDialog {
 
 	private JTextField nametf, idtf, keytf,positiontf;
-	private JButton ok, exit,detele;
+	private MyOtherBlueLabel ok; 
+	private MyOtherGreenLabel exit;
+	private MyOtherRedLabel detele;
 	private String name, position, id, key;
 	private UserRole posit;
 	private DefaultTableModel tmodel;
@@ -34,13 +40,14 @@ public class AdminChangeUI extends JDialog {
 		this.setLayout(null);
 		this.setSize(300, 250);
 		this.setLocationRelativeTo(null);
-
+		this.getContentPane().setBackground(Color.white);
 		this.id = id;
 		abs = new Admin();
 		vo = abs.getUser(id);
 		tmodel = tablemodel;
-		Font font = new Font("楷体", Font.PLAIN, 18);
-		Font f = new Font("仿宋", Font.PLAIN, 16);
+		Font font = new Font("幼圆", Font.PLAIN, 20);
+		Font f = new Font("方正隶变简体", Font.PLAIN, 18);
+		Font buttonf = new Font("隶书", Font.PLAIN, 18);
 
 		JListener lis = new JListener();
 
@@ -64,7 +71,15 @@ public class AdminChangeUI extends JDialog {
 //		String[] pos = { "快递员", "管理员", "总经理", "普通财务人员", "最高权限财务人员",
 //		"中转中心仓库管理人员", "中转中心业务员", "营业厅业务员" };
     	posit = vo.getPosition();
+    	System.out.println("vo.getPosition()："+vo.getPosition());
+    	System.out.println("posit:"+posit);
+    	
+    	
     	position = new UserInfoVO().transposition(posit);
+    	
+    	System.out.println("查询时："+position);
+    	
+    	
 //    	if(posit.equals(UserRole.Admin))
 //    		position = "管理员";
 //    	else if(posit.equals(UserRole.BusinessSale))
@@ -83,7 +98,7 @@ public class AdminChangeUI extends JDialog {
 //    		position = "中转中心业务员";
     	
 		positiontf = new JTextField(position);
-		positiontf.setBounds(70, 45, 120, 30);
+		positiontf.setBounds(70, 45, 180, 30);
 		positiontf.setFont(f);
 		positiontf.setEditable(false);
 		this.add(positiontf);
@@ -110,21 +125,18 @@ public class AdminChangeUI extends JDialog {
 		keytf.setFont(f);
 		this.add(keytf);
 
-		ok = new JButton("修改");
-		ok.setBounds(10, 170,70, 30);
-		ok.setFont(font);
+		ok = new MyOtherBlueLabel("修改");
+		ok.setBounds(10, 170,80, 30);
 		ok.addMouseListener(lis);
 		this.add(ok);
 		
-		detele = new JButton("删除");
-		detele.setBounds(100, 170,70, 30);
-		detele.setFont(font);
+		detele = new MyOtherRedLabel("删除");
+		detele.setBounds(100, 170,80, 30);
 		detele.addMouseListener(lis);
 		this.add(detele);
 
-		exit = new JButton("取消");
-		exit.setBounds(190, 170, 70, 30);
-		exit.setFont(font);
+		exit = new MyOtherGreenLabel("取消");
+		exit.setBounds(190, 170, 80, 30);
 		exit.addMouseListener(lis);
 		this.add(exit);
 		
@@ -177,14 +189,25 @@ public class AdminChangeUI extends JDialog {
 		}
 
 		@Override
-		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
+		public void mousePressed(MouseEvent e) {
+			if(e.getSource()==ok){
+				ok.whenPressed();
+			}else if (e.getSource()==exit) {
+				exit.whenPressed();
+			}else if (e.getSource()==detele) {
+				detele.whenPressed();
+			}
 		}
 
 		@Override
-		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+		public void mouseReleased(MouseEvent e) {
+			if(e.getSource()==ok){
+				ok.setMyColor();
+			}else if (e.getSource()==exit) {
+				exit.setMyColor();
+			}else if (e.getSource()==detele) {
+				detele.setMyColor();
+			}
 			
 		}
 		
